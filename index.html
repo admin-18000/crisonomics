@@ -51,6 +51,24 @@ body.light .sg.sy{background:#fff5d6;border-color:#f0d97a;color:#8a6900}
 body.light .sg.sg{background:#dcf4e8;border-color:#a3deba;color:#006e44}
 /* Inputs textes mode clair */
 body.light input[type=text],body.light input[type=password],body.light input[type=number]{background:#fff;color:var(--t);border:1px solid var(--brd)}
+/* ═══════ Visibilité des traits fins en mode clair ═══════ */
+/* Track des sliders : plus visible que --brd qui se confond avec le blanc */
+body.light input[type=range]{background:#cdd5e2;height:5px;border-radius:3px}
+/* Bordure du thumb : remplacer la bordure invisible par un trait foncé */
+body.light input[type=range]::-webkit-slider-thumb{border:2px solid #ffffff;box-shadow:0 0 0 1px #b0bcd0,0 2px 4px rgba(20,30,60,.15)}
+body.light input[type=range]::-moz-range-thumb{border:2px solid #ffffff;box-shadow:0 0 0 1px #b0bcd0,0 2px 4px rgba(20,30,60,.15)}
+/* Track de la barre Monte-Carlo en haut */
+body.light .mctrack{background:#cdd5e2}
+/* Petits encarts d'indicateurs (.ln) : fond plus visible + bordure */
+body.light .ln{background:#f0f3f8;border:1px solid #c8d2e0}
+/* Marques sous les sliders : foncées au lieu de --d clair */
+body.light .slmarks{color:#7a89a6}
+/* Flèches entre indicateurs */
+body.light .larr{color:#9aa8c0}
+/* Encarts d'information (.ibox) */
+body.light .ibox{background:#f0f3f8;border:1px solid #c8d2e0}
+/* Tooltips */
+body.light .mtt{background:#ffffff;border:1px solid #c8d2e0;color:var(--t);box-shadow:0 4px 12px rgba(20,30,60,.12)}
 /* Bouton toggle Clair/Sombre */
 .theme-toggle{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;margin-left:10px;border-radius:6px;background:transparent;border:1px solid var(--brd);color:var(--t);font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .2s}
 .theme-toggle:hover{border-color:var(--c);color:var(--c)}
