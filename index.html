@@ -2364,10 +2364,10 @@ function exportPDF(){
     var cur=calcScenario(ST.I,ST.tau,ST.Ip);
     var W=210; var mg=16; var y=18;
 
-    // Fond noir
-    doc.setFillColor(3,5,13); doc.rect(0,0,W,297,'F');
+    // Fond blanc
+    doc.setFillColor(255,255,255); doc.rect(0,0,W,297,'F');
     // Header band
-    doc.setFillColor(7,9,26); doc.rect(0,0,W,40,'F');
+    doc.setFillColor(248,249,252); doc.rect(0,0,W,40,'F');
     // Accent line
     doc.setDrawColor(0,229,255); doc.setLineWidth(1.2); doc.line(0,0,W*0.5,0);
     doc.setDrawColor(255,140,0); doc.line(W*0.5,0,W,0);
@@ -2378,12 +2378,12 @@ function exportPDF(){
     doc.text('CRISONOMICS - MODELE PHYSICO-FINANCIER - INPI MARS 2026 - CONFIDENTIEL',mg,8);
 
     // Titre
-    doc.setFontSize(15); doc.setTextColor(220,228,240);
+    doc.setFontSize(15); doc.setTextColor(15,23,42);
     doc.text('Theorie de la Coutenance des Risques',mg,17);
 
     // Sous-titre
     doc.setFontSize(7); doc.setFont('helvetica','normal');
-    doc.setTextColor(120,136,168);
+    doc.setTextColor(70,85,115);
     doc.text('NegBin x LogNormale - Copule Gaussienne 7x7 - Monte-Carlo N=1000 - Mahalanobis D2M~chi2(7)',mg,24);
     doc.text('13 regions France - Regime-switching sigmoidal - Hysterese de Markov - tau max GIEC AR6 = 67%',mg,29);
 
@@ -2392,7 +2392,7 @@ function exportPDF(){
     doc.setTextColor(255,140,0);
     doc.text('Thibault NJECKIL',130,17);
     doc.setFont('helvetica','normal'); doc.setFontSize(7);
-    doc.setTextColor(120,136,168);
+    doc.setTextColor(70,85,115);
     doc.text('CRISOnomics - Finance - Budget - Resilience',130,23);
     doc.text('Depot INPI - Mars 2026',130,28);
 
@@ -2407,7 +2407,7 @@ function exportPDF(){
     y=48;
 
     // Séparateur
-    function sep(yy){ doc.setDrawColor(30,45,80); doc.setLineWidth(0.3); doc.line(mg,yy,W-mg,yy); }
+    function sep(yy){ doc.setDrawColor(210,218,230); doc.setLineWidth(0.3); doc.line(mg,yy,W-mg,yy); }
 
     // Section header
     function secTitle(txt, col, yy){
@@ -2421,23 +2421,23 @@ function exportPDF(){
     // Row helper
     function row(label, val, note, color, yy){
       doc.setFont('helvetica','normal'); doc.setFontSize(7.5);
-      doc.setTextColor(120,136,168); doc.text(label,mg+2,yy);
+      doc.setTextColor(70,85,115); doc.text(label,mg+2,yy);
       doc.setFont('helvetica','bold');
       doc.setTextColor(color[0],color[1],color[2]); doc.text(''+val,mg+82,yy);
-      if(note){ doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(60,80,110); doc.text(note,mg+110,yy); }
+      if(note){ doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(130,145,170); doc.text(note,mg+110,yy); }
       return yy+6;
     }
 
     // ── PARAMETRES
     y=secTitle('PARAMETRES DU SCENARIO',[0,229,255],y);
-    y=row('Indice Climatique I', ST.I.toFixed(1), 'Seuil bascule S=5', [220,228,240], y);
-    y=row('Polycrise Ip', ST.Ip.toFixed(2), 'Chocs systemiques exogenes', [220,228,240], y);
+    y=row('Indice Climatique I', ST.I.toFixed(1), 'Seuil bascule S=5', [15,23,42], y);
+    y=row('Polycrise Ip', ST.Ip.toFixed(2), 'Chocs systemiques exogenes', [15,23,42], y);
     y=row('tau Adaptation effectif', Math.min(ST.tau,TAU_MAX)+'%', 'Max GIEC AR6 = 67%', [0,217,122], y);
-    y=row('Capacite Assurantielle kappa', ST.kap+' M€', 'Marche assurantiel', [220,228,240], y);
-    y=row('Taux Transfert Reassurance', (ST.tcouv*100).toFixed(0)+'%', 'Part cedee', [220,228,240], y);
+    y=row('Capacite Assurantielle kappa', ST.kap+' M€', 'Marche assurantiel', [15,23,42], y);
+    y=row('Taux Transfert Reassurance', (ST.tcouv*100).toFixed(0)+'%', 'Part cedee', [15,23,42], y);
     y=row('Investissement Adaptation CA', ST.ca+' M€', 'Budget resilience', [255,215,0], y);
     y=row('Taux Opportunite', ST.opp.toFixed(1)+'%', 'Revenus captes en crise', [77,139,255], y);
-    y=row('Horizon / Taux actualisation', ST.n+' ans / '+(ST.r*100).toFixed(1)+'%', 'VAN', [220,228,240], y);
+    y=row('Horizon / Taux actualisation', ST.n+' ans / '+(ST.r*100).toFixed(1)+'%', 'VAN', [15,23,42], y);
     y+=3;
 
     // ── RESULTATS
@@ -2462,7 +2462,7 @@ function exportPDF(){
       y=secTitle('TRAJECTOIRE 2025-2050',[0,229,255],y);
       // Header tableau
       doc.setFont('helvetica','bold'); doc.setFontSize(7);
-      doc.setTextColor(120,136,168);
+      doc.setTextColor(70,85,115);
       var cols=[mg,mg+30,mg+44,mg+56,mg+76,mg+100,mg+122,mg+146];
       var hdrs=['Scenario','Annee','I','Reg.','E[C] M€','P95 M€','P99 M€','VAN M€'];
       for(var hi=0;hi<hdrs.length;hi++) doc.text(hdrs[hi],cols[hi],y);
@@ -2475,8 +2475,8 @@ function exportPDF(){
         var p992=interpP99(q2.I,ST.tau);
         var van2=ec2*annuity(ST.r,ST.n);
         var isR2=q2.reg===2;
-        if(isR2){ doc.setFillColor(40,8,12); doc.rect(mg,y-4,W-2*mg,6.5,'F'); }
-        var rowC2=isR2?[255,100,100]:[220,228,240];
+        if(isR2){ doc.setFillColor(255,235,235); doc.rect(mg,y-4,W-2*mg,6.5,'F'); }
+        var rowC2=isR2?[200,50,50]:[15,23,42];
         doc.setFont('helvetica',isR2?'bold':'normal'); doc.setFontSize(7);
         doc.setTextColor(rowC2[0],rowC2[1],rowC2[2]);
         var cells=[q2.an,''+q2.yr,''+q2.I,'R'+q2.reg,
@@ -2494,25 +2494,25 @@ function exportPDF(){
     var curSc2=calcScenario(ST.I,ST.tau,ST.Ip);
     {
       doc.addPage(); // Page 2 : recommandations operationnelles toujours generee
-      doc.setFillColor(3,5,13); doc.rect(0,0,W,297,'F');
+      doc.setFillColor(255,255,255); doc.rect(0,0,W,297,'F');
       doc.setFont('helvetica','bold'); doc.setFontSize(10);
       doc.setTextColor(0,229,255);
       doc.text('RECOMMANDATIONS OPERATIONNELLES',mg,20);
       doc.setFont('helvetica','normal'); doc.setFontSize(7);
-      doc.setTextColor(120,136,168);
+      doc.setTextColor(70,85,115);
       doc.text('Generees depuis l etat calculatoire - I='+ST.I.toFixed(1)+' tau='+Math.min(ST.tau,TAU_MAX)+'% R'+(ST.I>=S_SEUIL?2:1),mg,27);
       addRecoToPDF(doc,curSc2,35,mg,W);
-      doc.setFillColor(7,9,26); doc.rect(0,283,W,14,'F');
+      doc.setFillColor(240,242,248); doc.rect(0,283,W,14,'F');
       doc.setFont('helvetica','normal'); doc.setFontSize(6);
-      doc.setTextColor(60,80,110);
+      doc.setTextColor(100,115,145);
       doc.text('CRISOnomics - Theorie de la Coutenance des Risques - T. Njeckil - INPI Mars 2026 - Confidentiel',mg,289);
       doc.setTextColor(0,229,255); doc.text('crisonomics.com',W-mg-26,294);
     }
     // Footer page 1
     doc.setPage(1);
-    doc.setFillColor(7,9,26); doc.rect(0,283,W,14,'F');
+    doc.setFillColor(240,242,248); doc.rect(0,283,W,14,'F');
     doc.setFont('helvetica','normal'); doc.setFontSize(6);
-    doc.setTextColor(60,80,110);
+    doc.setTextColor(100,115,145);
     doc.text('CRISOnomics - Theorie de la Coutenance des Risques - T. Njeckil - INPI Mars 2026 - Confidentiel',mg,289);
     doc.text('Export du '+new Date().toLocaleString('fr-FR'),mg,294);
     doc.setTextColor(0,229,255);
@@ -2891,7 +2891,7 @@ function addRecoToPDF(doc, sc, yStart, mg, W){
   var recs = genRecommandations(sc);
 
   function sep2(yy){
-    doc.setDrawColor(30,45,80); doc.setLineWidth(0.2);
+    doc.setDrawColor(210,218,230); doc.setLineWidth(0.2);
     doc.line(mg,yy,W-mg,yy);
   }
 
@@ -2902,11 +2902,11 @@ function addRecoToPDF(doc, sc, yStart, mg, W){
   for(var pi=0; pi<recs.perils.length && y<270; pi++){
     var p = recs.perils[pi];
     doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
-    doc.setTextColor(220,228,240);
+    doc.setTextColor(15,23,42);
     doc.text(pdfTxt(p.titre)+' ['+p.urgence+']',mg+2,y); y+=5;
     for(var ai=0; ai<p.actions.length && y<270; ai++){
       doc.setFont('helvetica','normal'); doc.setFontSize(7);
-      doc.setTextColor(120,136,168);
+      doc.setTextColor(70,85,115);
       var lines=doc.splitTextToSize(pdfTxt(p.actions[ai]),W-mg*2-8);
       for(var li=0;li<lines.length&&y<270;li++){doc.text(lines[li],mg+6,y);y+=4.5;}
     }
@@ -2926,7 +2926,7 @@ function addRecoToPDF(doc, sc, yStart, mg, W){
     doc.setTextColor(prioC[0],prioC[1],prioC[2]);
     doc.text(pdfTxt(r.priorite)+' — '+pdfTxt(r.region)+' ('+r.ec+' M€ — '+r.part+'%)',mg+2,y); y+=5;
     doc.setFont('helvetica','normal'); doc.setFontSize(7);
-    doc.setTextColor(120,136,168);
+    doc.setTextColor(70,85,115);
     var lines2=doc.splitTextToSize(pdfTxt(r.reco),W-mg*2-6);
     for(var li2=0;li2<lines2.length&&y<270;li2++){doc.text(lines2[li2],mg+6,y);y+=4.5;}
     y+=2;
@@ -2940,7 +2940,7 @@ function addRecoToPDF(doc, sc, yStart, mg, W){
   doc.text('NIVEAU DE RISQUE - POSTURE STRATEGIQUE',mg,y); sep2(y+2); y+=8;
   for(var ri2=0; ri2<Math.min(3,recs.risque.length) && y<270; ri2++){
     doc.setFont('helvetica',ri2===0?'bold':'normal'); doc.setFontSize(7.5);
-    doc.setTextColor(ri2===0?220:120,ri2===0?228:136,ri2===0?240:168);
+    doc.setTextColor(ri2===0?15:70,ri2===0?23:85,ri2===0?42:115);
     var lines3=doc.splitTextToSize(pdfTxt(recs.risque[ri2]),W-mg*2-4);
     for(var li3=0;li3<lines3.length&&y<270;li3++){doc.text(lines3[li3],mg+2,y);y+=4.5;}
     y+=2;
@@ -2954,7 +2954,7 @@ function addRecoToPDF(doc, sc, yStart, mg, W){
   doc.text('RENTABILITE ADAPTATION - BUSINESS CASE',mg,y); sep2(y+2); y+=8;
   for(var ri3=0; ri3<Math.min(3,recs.rentabilite.length) && y<270; ri3++){
     doc.setFont('helvetica',ri3===0?'bold':'normal'); doc.setFontSize(7.5);
-    doc.setTextColor(ri3===0?220:120,ri3===0?228:136,ri3===0?240:168);
+    doc.setTextColor(ri3===0?15:70,ri3===0?23:85,ri3===0?42:115);
     var lines4=doc.splitTextToSize(pdfTxt(recs.rentabilite[ri3]),W-mg*2-4);
     for(var li4=0;li4<lines4.length&&y<270;li4++){doc.text(lines4[li4],mg+2,y);y+=4.5;}
     y+=2;
