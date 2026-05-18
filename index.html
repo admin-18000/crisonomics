@@ -561,6 +561,52 @@ document.addEventListener('DOMContentLoaded',function(){
       <div class="giec-alert" id="giecAlert">⚠ Limite GIEC AR6 — Warszawski et al. (2013) : efficacité max ~67% · Risque résiduel incompressible 33%</div>
     </div>
 
+    <!-- ── BOUCLE HORMÉTIQUE 𝓗 ── -->
+    <div class="sg" style="margin-top:8px;border:1px solid rgba(0,217,122,.3);border-radius:10px;padding:10px 12px;background:rgba(0,217,122,.04)">
+      <div class="slrow" style="margin-bottom:6px">
+        <span class="slname" style="color:#00d97a;font-weight:800">⟳ Boucle Hormétique 𝓗</span>
+        <span style="font-size:8px;color:var(--m);font-style:italic">τ(t) = τ₀ + ∫₀ᵗ 𝓗(CI,I)ds</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:8px;color:var(--d)">Mode :</span>
+        <button id="btnModeClassique" onclick="setHormMode(0)"
+          style="font-size:8px;padding:3px 9px;border-radius:4px;cursor:pointer;border:1px solid var(--brd);background:var(--bg3);color:var(--m)">
+          Classique (τ fixe)
+        </button>
+        <button id="btnModeHormetique" onclick="setHormMode(1)"
+          style="font-size:8px;padding:3px 9px;border-radius:4px;cursor:pointer;border:1px solid #00d97a;background:rgba(0,217,122,.15);color:#00d97a;font-weight:700">
+          Hormétique τ(t)
+        </button>
+      </div>
+      <div id="hormBlock">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <div>
+            <div style="font-size:8px;color:var(--m);margin-bottom:3px">η · Gain hormétique <span id="vEta" style="color:#00d97a">0.0008</span></div>
+            <input type="range" id="sEta" min="0.0001" max="0.005" step="0.0001" value="0.0008" oninput="onSlider()" style="width:100%;accent-color:#00d97a">
+          </div>
+          <div>
+            <div style="font-size:8px;color:var(--m);margin-bottom:3px">C* · Coût optimal (M€) <span id="vCstar" style="color:#ff8c00">40</span></div>
+            <input type="range" id="sCstar" min="10" max="100" step="5" value="40" oninput="onSlider()" style="width:100%;accent-color:#ff8c00">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+          <div>
+            <div style="font-size:8px;color:var(--m);margin-bottom:3px">σ_h · Largeur cloche (M€) <span id="vSigmaH" style="color:#b44dff">25</span></div>
+            <input type="range" id="sSigmaH" min="5" max="60" step="5" value="25" oninput="onSlider()" style="width:100%;accent-color:#b44dff">
+          </div>
+          <div>
+            <div style="font-size:8px;color:var(--m);margin-bottom:3px">C_max · Surcharge (M€) <span id="vCmax" style="color:#ff3355">120</span></div>
+            <input type="range" id="sCmax" min="50" max="300" step="10" value="120" oninput="onSlider()" style="width:100%;accent-color:#ff3355">
+          </div>
+        </div>
+        <div style="background:var(--bg3);border-radius:6px;padding:6px 10px;font-size:8px;color:var(--d);line-height:1.8">
+          𝓗(C) = η·exp(−(C−C*)²/2σ_h²)·𝟙_{C∈[10,C_max]}&nbsp;|&nbsp;
+          τ(25) = <span id="vTauHorm" style="color:#ffd700;font-weight:800">—</span>
+          &nbsp;|&nbsp; τ_max = 67%
+        </div>
+      </div>
+    </div>
+
     <div style="margin-top:6px;display:flex;flex-direction:column;gap:8px">
       <div class="sg sy">
         <div class="slrow"><span class="slname" style="color:#ffd700">CA Adaptation</span><span class="slval" id="vCA" style="color:#ffd700">5</span></div>
@@ -941,6 +987,63 @@ document.addEventListener('DOMContentLoaded',function(){
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px" id="proofPaliersRow"></div>
     </div>
 
+    <!-- ── BLOC LYAPOUNOV ── -->
+    <div class="card" style="margin-bottom:12px;border:1px solid rgba(0,217,122,.3)">
+      <div class="ctitle" style="color:#00d97a">⚖ Stabilité de Lyapounov — Preuve de Cohérence du Système
+        <span class="csub">V(CI) = ln(CI/CI*) · Exposant λ_α · Attracteur Fractal d_H = 1+α</span>
+      </div>
+      <div style="font-size:8.5px;color:var(--d);margin-bottom:12px;line-height:1.8">
+        La fonction de Lyapounov <strong>V(CI) = ln(CI/CI*)</strong> mesure l'écart financier à l'état de résilience optimal CI*.
+        En Régime 1 (λ_α &lt; 0) : le système converge, CI est maîtrisable.
+        En Régime 2 (λ_α &gt; 0) : le système est chaotique, attracteur étrange fractal de dimension d_H = 1+α = 3−2H.
+        La boucle hormétique 𝓗 est la <strong>condition suffisante de stabilité de Lyapounov</strong> :
+        𝒟^α V ≤ −γV + 𝓗.
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+        <div style="background:var(--bg3);border:1px solid rgba(0,229,255,.2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Ordre fractionnaire α</div>
+          <div style="font-size:1.1rem;font-weight:800;color:#00e5ff" id="lyapAlpha">—</div>
+          <div style="font-size:7.5px;color:var(--m);margin-top:3px">α = 2 − 2H</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(0,217,122,.2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Exposant λ_α</div>
+          <div style="font-size:1.1rem;font-weight:800" id="lyapLambda">—</div>
+          <div style="font-size:7.5px;color:var(--m);margin-top:3px" id="lyapRegime">R1 stable / R2 chaotique</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(180,77,255,.2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Dimension fractale d_H</div>
+          <div style="font-size:1.1rem;font-weight:800;color:#b44dff" id="lyapDH">—</div>
+          <div style="font-size:7.5px;color:var(--m);margin-top:3px">d_H = 1 + α = 3 − 2H</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(255,215,0,.2);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Attracteur</div>
+          <div style="font-size:0.85rem;font-weight:800" id="lyapAttracteur">—</div>
+          <div style="font-size:7.5px;color:var(--m);margin-top:3px">R1: point fixe | R2: étrange</div>
+        </div>
+      </div>
+
+      <div class="g2" style="gap:10px;margin-bottom:10px">
+        <div style="background:var(--bg3);border:1px solid rgba(0,217,122,.15);border-radius:8px;padding:12px">
+          <div style="font-size:8.5px;font-weight:700;color:#00d97a;margin-bottom:8px">FONCTION DE LYAPOUNOV V(CI)</div>
+          <div class="cw" style="height:140px"><canvas id="chLyapV"></canvas></div>
+          <div style="font-size:7.5px;color:var(--m);margin-top:6px">V décroît → convergence vers CI* (R1) · V diverge → attracteur étrange (R2)</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(255,51,85,.15);border-radius:8px;padding:12px">
+          <div style="font-size:8.5px;font-weight:700;color:#ff3355;margin-bottom:8px">EXPOSANT λ_α vs INDICE CLIMATIQUE I</div>
+          <div class="cw" style="height:140px"><canvas id="chLyapLambda"></canvas></div>
+          <div style="font-size:7.5px;color:var(--m);margin-top:6px">Bascule λ_α = 0 en I = S = 5 : bifurcation de Lyapounov = tipping point financier</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg3);border-left:3px solid #00d97a;border-radius:0 8px 8px 0;padding:10px 14px;font-size:8px;color:var(--d);line-height:1.8">
+        <strong style="color:#00d97a">Tension dynamique :</strong>
+        P_t (rétroaction positive polycrise) ⟺ 𝓗[τ(t)] (rétroaction négative hormétique)
+        &nbsp;|&nbsp; borne τ_max = 67% = <strong>second principe fractionnaire</strong>
+        (non-intégrabilité du noyau de Caputo en zéro — analogue du rendement de Carnot).
+      </div>
+    </div>
+
     <!-- Références -->
     <div class="card" style="font-size:8px;color:var(--d);line-height:2">
       <div style="font-size:9px;font-weight:700;color:var(--m);margin-bottom:8px">📚 Fondements théoriques</div>
@@ -1060,6 +1163,7 @@ var COLOR_CEIL=17.573;
 var ST={
   I:3.5, Ip:1.1, eps:0.02, regC:0,
   kap:500, tcouv:0.6, tau:0, ca:5, opp:5, n:25, r:0.03,
+  hormMode:1, hormEta:0.0008, hormCstar:40, hormSigma:25, hormCmin:10, hormCmax:120, hormTau0:0.05, tauHorm:0.05,
   w2:0, w1:1, w2m:0, wpc:0,
   EC:0, P95:0, P99:0, sigma:0,
   VAN:0, VCN:0, dette:0, assurable:true,
@@ -1951,6 +2055,156 @@ function setPreset(name){
 // ═══════════════════════════════════════════
 // SLIDER — tout le modèle réagit immédiatement
 // ═══════════════════════════════════════════
+
+// ═══ BOUCLE HORMÉTIQUE 𝓗 ═══════════════════════════════════════════════
+var H_HURST = 0.75; // exposant de Hurst par défaut
+
+function setHormMode(mode){
+  ST.hormMode = mode;
+  var bc = document.getElementById('btnModeClassique');
+  var bh = document.getElementById('btnModeHormetique');
+  var hb = document.getElementById('hormBlock');
+  if(bc && bh){
+    if(mode===0){
+      bc.style.background='rgba(0,229,255,.15)';bc.style.color='#00e5ff';bc.style.borderColor='#00e5ff';
+      bh.style.background='var(--bg3)';bh.style.color='var(--m)';bh.style.borderColor='var(--brd)';
+      if(hb) hb.style.display='none';
+    } else {
+      bh.style.background='rgba(0,217,122,.15)';bh.style.color='#00d97a';bh.style.borderColor='#00d97a';
+      bc.style.background='var(--bg3)';bc.style.color='var(--m)';bc.style.borderColor='var(--brd)';
+      if(hb) hb.style.display='block';
+    }
+  }
+  calcHormese(); onSlider();
+}
+
+function calcHormese(){
+  // 𝓗(C,X) = η·exp(-(C-C*)²/2σ_h²)·𝟙_{C∈[Cmin,Cmax]}
+  var eta = ST.hormEta, Cstar = ST.hormCstar;
+  var sigma_h = ST.hormSigma, Cmin = ST.hormCmin, Cmax = ST.hormCmax;
+  var tauMax = 0.67, dt = 1.0, T = 25;
+  var tau = ST.hormTau0;
+  // C_obs : use current EC if available, else estimate from I
+  var Cobs = (ST.mcDone && ST.EC > 0) ? ST.EC : interpEC(ST.I, 0);
+  for(var t=0;t<T;t++){
+    var H_op = 0;
+    if(Cobs >= Cmin && Cobs <= Cmax){
+      H_op = eta * Math.exp(-Math.pow(Cobs - Cstar, 2) / (2 * sigma_h * sigma_h));
+    }
+    tau = Math.min(tauMax, tau + dt * H_op);
+  }
+  ST.tauHorm = tau;
+  var el = document.getElementById('vTauHorm');
+  if(el) el.textContent = (tau*100).toFixed(1)+'%';
+  return tau;
+}
+
+function getTauEff(){
+  if(ST.hormMode===1) return Math.min(ST.tauHorm*100, 67);
+  return Math.min(ST.tau, 67);
+}
+
+function calcLyapounov(){
+  var I = ST.I, tau = getTauEff()/100;
+  var w2 = 1/(1+Math.exp(-5*(I-5)));
+  var G = 1 + w2*(Math.exp(0.1*w2)-1);
+  var lambda = G*(1-tau) - 1;
+  var alpha = 2 - 2*H_HURST;
+  var dH = 1 + alpha;
+  
+  var elA = document.getElementById('lyapAlpha');
+  var elL = document.getElementById('lyapLambda');
+  var elR = document.getElementById('lyapRegime');
+  var elD = document.getElementById('lyapDH');
+  var elAtt = document.getElementById('lyapAttracteur');
+  
+  if(elA) elA.textContent = alpha.toFixed(2);
+  if(elL){
+    elL.textContent = (lambda>=0?'+':'')+lambda.toFixed(3);
+    elL.style.color = lambda<0?'#00d97a':'#ff3355';
+  }
+  if(elR){
+    elR.textContent = lambda<0?'R1 — Stable':'R2 — Chaotique';
+    elR.style.color = lambda<0?'#00d97a':'#ff3355';
+  }
+  if(elD) elD.textContent = dH.toFixed(2);
+  if(elAtt){
+    elAtt.textContent = lambda<0?'Point fixe stable':'Étrange fractal';
+    elAtt.style.color = lambda<0?'#00d97a':'#ff3355';
+  }
+  return {lambda, alpha, dH};
+}
+
+function drawLyapounovCharts(){
+  var lyo = calcLyapounov();
+  var tau = getTauEff()/100;
+  
+  // Chart V(CI) vs t
+  var cv1 = document.getElementById('chLyapV');
+  if(cv1 && window.Chart){
+    var ctx1 = cv1.getContext('2d');
+    var steps=50, dt=0.5;
+    var labelsT=[], vR1=[], vR2=[];
+    var v1=1.5, v2=1.5, tauR1=tau, tauR2=tau;
+    var gamma=0.05, eta=ST.eta, s0=ST.s0;
+    var sig=function(x){return 1/(1+Math.exp(-3*(x-s0)));};
+    for(var s=0;s<=steps;s++){
+      labelsT.push((s*dt).toFixed(1));
+      var H1 = eta*sig(2.0)*(1-tauR1/0.67);
+      v1 = Math.max(0, v1 + dt*(-gamma*v1 + H1));
+      tauR1 = Math.min(0.67, tauR1 + dt*H1);
+      vR1.push(v1.toFixed(3));
+      var w2=1/(1+Math.exp(-5*(7-5)));
+      var G2=1+w2*(Math.exp(0.1*w2)-1);
+      var H2=eta*sig(7)*(1-tauR2/0.67);
+      var noise=(Math.random()-0.48)*0.05;
+      v2=Math.max(0,Math.min(4,v2+dt*((G2*(1-tauR2)-1)*v2+noise)));
+      tauR2=Math.min(0.67,tauR2+dt*H2);
+      vR2.push(v2.toFixed(3));
+    }
+    if(cv1._lyapChart) cv1._lyapChart.destroy();
+    cv1._lyapChart = new Chart(ctx1,{
+      type:'line',
+      data:{
+        labels:labelsT,
+        datasets:[
+          {label:'R1 → C* (stable)',data:vR1,borderColor:'#00d97a',borderWidth:2,pointRadius:0,tension:0.3},
+          {label:'R2 attracteur étrange',data:vR2,borderColor:'#ff3355',borderWidth:1.5,pointRadius:0,tension:0,borderDash:[4,3]}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8898b8',font:{size:8}}}},
+        scales:{x:{ticks:{color:'#8898b8',maxTicksLimit:6,font:{size:7}},grid:{color:'rgba(255,255,255,.05)'}},
+                y:{ticks:{color:'#8898b8',font:{size:7}},grid:{color:'rgba(255,255,255,.05)'},title:{display:true,text:'V(CI)',color:'#8898b8',font:{size:8}}}}}
+    });
+  }
+  
+  // Chart λ vs I
+  var cv2 = document.getElementById('chLyapLambda');
+  if(cv2 && window.Chart){
+    var ctx2 = cv2.getContext('2d');
+    var labI=[], lamV=[], colors=[];
+    for(var i=0;i<=100;i++){
+      var Iv = i/10;
+      var w2v = 1/(1+Math.exp(-5*(Iv-5)));
+      var Gv = 1+w2v*(Math.exp(0.1*w2v)-1);
+      var lv = Gv*(1-tau)-1;
+      labI.push(Iv.toFixed(1));
+      lamV.push(lv.toFixed(4));
+      colors.push(lv<0?'rgba(0,217,122,0.8)':'rgba(255,51,85,0.8)');
+    }
+    if(cv2._lyapChart) cv2._lyapChart.destroy();
+    cv2._lyapChart = new Chart(ctx2,{
+      type:'bar',
+      data:{labels:labI,datasets:[{label:'λ_α',data:lamV,backgroundColor:colors,borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},annotation:{annotations:[{type:'line',yMin:0,yMax:0,borderColor:'white',borderWidth:1,borderDash:[3,3]}]}},
+        scales:{x:{ticks:{color:'#8898b8',maxTicksLimit:11,font:{size:7}},grid:{display:false},title:{display:true,text:'Indice I',color:'#8898b8',font:{size:8}}},
+                y:{ticks:{color:'#8898b8',font:{size:7}},grid:{color:'rgba(255,255,255,.05)'},title:{display:true,text:'λ_α',color:'#8898b8',font:{size:8}}}}}
+    });
+  }
+}
+// ═══ FIN HORMÉTIQUE / LYAPOUNOV ═══════════════════════════════════════════
+
 function onSlider(){
   ST.I=+document.getElementById('sI').value;
   ST.Ip=+document.getElementById('sP').value;
@@ -1960,6 +2214,11 @@ function onSlider(){
   ST.tcouv=+document.getElementById('sTcouv').value/100;
   ST.tau=+document.getElementById('sTau').value;
   ST.ca=+document.getElementById('sCA').value;
+  var etaEl=document.getElementById('sEta'); if(etaEl){ST.hormEta=+etaEl.value; var ve2=document.getElementById('vEta');if(ve2)ve2.textContent=ST.hormEta.toFixed(4);}
+  var csEl=document.getElementById('sCstar'); if(csEl){ST.hormCstar=+csEl.value; var vcs=document.getElementById('vCstar');if(vcs)vcs.textContent=ST.hormCstar;}
+  var shEl=document.getElementById('sSigmaH'); if(shEl){ST.hormSigma=+shEl.value; var vsh=document.getElementById('vSigmaH');if(vsh)vsh.textContent=ST.hormSigma;}
+  var cmEl=document.getElementById('sCmax'); if(cmEl){ST.hormCmax=+cmEl.value; var vcm=document.getElementById('vCmax');if(vcm)vcm.textContent=ST.hormCmax;}
+  calcHormese();
   ST.opp=+document.getElementById('sOpp').value;
   ST.n=+document.getElementById('sN').value;
   ST.r=+document.getElementById('sR').value/100;
@@ -2983,6 +3242,7 @@ function renderKaTeX(){
 }
 
 function drawProof(){
+  calcLyapounov(); drawLyapounovCharts();
   // ── Démo 1 : Convergence D²M ~ chi²(7) ──────────────────────
   var sub = document.getElementById('proofD2sub');
   var e1  = document.getElementById('pf1-edm2');
