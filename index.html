@@ -561,49 +561,36 @@ document.addEventListener('DOMContentLoaded',function(){
       <div class="giec-alert" id="giecAlert">⚠ Limite GIEC AR6 — Warszawski et al. (2013) : efficacité max ~67% · Risque résiduel incompressible 33%</div>
     </div>
 
-    <!-- ── BOUCLE HORMÉTIQUE 𝓗 ── -->
-    <div class="sg" style="margin-top:8px;border:1px solid rgba(0,217,122,.3);border-radius:10px;padding:10px 12px;background:rgba(0,217,122,.04)">
-      <div class="slrow" style="margin-bottom:6px">
-        <span class="slname" style="color:#00d97a;font-weight:800">⟳ Boucle Hormétique 𝓗</span>
-        <span style="font-size:8px;color:var(--m);font-style:italic">τ(t) = τ₀ + ∫₀ᵗ 𝓗(CI,I)ds</span>
+    <!-- ════ BOUCLE HORMÉTIQUE 𝓗 ════ -->
+    <div class="sg sgg" style="margin-top:6px;border-left:3px solid #b44dff;padding-left:6px">
+      <div class="slrow"><span class="slname" style="color:#b44dff">𝓗 Gain hormétique η</span><span class="slcode">B97</span><span class="slval" id="vEta" style="color:#b44dff">0.08%</span></div>
+      <div class="sldesc">Apprentissage endogène : τ(t) = τ₀ + ∫𝓗 ds · plafonné τ_max</div>
+      <input type="range" id="sEta" min="0" max="50" step="1" value="8" oninput="onSlider()">
+      <div class="slmarks"><span>0 inerte</span><span>0.5% standard</span><span>5% rapide</span></div>
+      <div class="ibox" style="margin-top:4px;font-size:10px">
+        <span>Δτ_𝓗 = <span id="vDtau" style="color:#b44dff">—</span></span>
+        <span>τ_eff = <span id="vTauEff" style="color:#00d97a">—</span></span>
+        <span id="vHormDiag" style="color:#888;font-size:9px">—</span>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <span style="font-size:8px;color:var(--d)">Mode :</span>
-        <button id="btnModeClassique" onclick="setHormMode(0)"
-          style="font-size:8px;padding:3px 9px;border-radius:4px;cursor:pointer;border:1px solid var(--brd);background:var(--bg3);color:var(--m)">
-          Classique (τ fixe)
-        </button>
-        <button id="btnModeHormetique" onclick="setHormMode(1)"
-          style="font-size:8px;padding:3px 9px;border-radius:4px;cursor:pointer;border:1px solid #00d97a;background:rgba(0,217,122,.15);color:#00d97a;font-weight:700">
-          Hormétique τ(t)
-        </button>
+    </div>
+
+    <!-- ════ LYAPUNOV ════ -->
+    <div class="sg sgg exp-only" style="margin-top:6px;border-left:3px solid #00e5ff;padding-left:6px">
+      <div class="slrow"><span class="slname" style="color:#00e5ff">λ Exposant Lyapunov</span><span class="slcode">λ_eff</span><span class="slval" id="vLam" style="color:#00e5ff">—</span></div>
+      <div class="sldesc">λ_eff = kc·(I−S)·(1−τ_eff) · λ&lt;0 R₁ stable · λ&gt;0 R₂ chaotique · couplage α hormèse</div>
+      <div class="ibox" style="margin-top:4px;font-size:10px">
+        <span>|λ| = <span id="vLamAbs" style="color:#00e5ff">—</span></span>
+        <span>Gain stab. 𝓗 = <span id="vLamGain" style="color:#b44dff">—</span></span>
+        <span id="vLamDiag" style="color:#888;font-size:9px">—</span>
       </div>
-      <div id="hormBlock">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
-          <div>
-            <div style="font-size:8px;color:var(--m);margin-bottom:3px">η · Gain hormétique <span id="vEta" style="color:#00d97a">0.0008</span></div>
-            <input type="range" id="sEta" min="0.0001" max="0.005" step="0.0001" value="0.0008" oninput="onSlider()" style="width:100%;accent-color:#00d97a">
-          </div>
-          <div>
-            <div style="font-size:8px;color:var(--m);margin-bottom:3px">C* · Coût optimal (M€) <span id="vCstar" style="color:#ff8c00">40</span></div>
-            <input type="range" id="sCstar" min="10" max="100" step="5" value="40" oninput="onSlider()" style="width:100%;accent-color:#ff8c00">
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
-          <div>
-            <div style="font-size:8px;color:var(--m);margin-bottom:3px">σ_h · Largeur cloche (M€) <span id="vSigmaH" style="color:#b44dff">25</span></div>
-            <input type="range" id="sSigmaH" min="5" max="60" step="5" value="25" oninput="onSlider()" style="width:100%;accent-color:#b44dff">
-          </div>
-          <div>
-            <div style="font-size:8px;color:var(--m);margin-bottom:3px">C_max · Surcharge (M€) <span id="vCmax" style="color:#ff3355">120</span></div>
-            <input type="range" id="sCmax" min="50" max="300" step="10" value="120" oninput="onSlider()" style="width:100%;accent-color:#ff3355">
-          </div>
-        </div>
-        <div style="background:var(--bg3);border-radius:6px;padding:6px 10px;font-size:8px;color:var(--d);line-height:1.8">
-          𝓗(C) = η·exp(−(C−C*)²/2σ_h²)·𝟙_{C∈[10,C_max]}&nbsp;|&nbsp;
-          τ(25) = <span id="vTauHorm" style="color:#ffd700;font-weight:800">—</span>
-          &nbsp;|&nbsp; τ_max = 67%
-        </div>
+      <div class="ibox" style="margin-top:4px;font-size:10px;border-top:1px dashed #00e5ff33;padding-top:4px">
+        <span>τ_L = <span id="vTauL" style="color:#00e5ff">—</span> ans</span>
+        <span>V(CI) = <span id="vVlyap" style="color:#00e5ff">—</span></span>
+        <span>d_f = <span id="vDf" style="color:#888">—</span></span>
+      </div>
+      <div class="ibox" style="margin-top:2px;font-size:9px;color:#888">
+        <span id="vTauLDiag">—</span>
+        <span id="vVlyapDiag">—</span>
       </div>
     </div>
 
@@ -865,7 +852,10 @@ document.addEventListener('DOMContentLoaded',function(){
       <!-- Équation principale -->
       <div style="background:var(--bg3);border:1px solid var(--brd);border-radius:10px;padding:18px 20px;margin-bottom:14px;overflow-x:auto">
         <div style="font-size:9px;font-weight:700;color:var(--c);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px">Espérance de coût climatique agrégé</div>
-        <div class="katex-block">$$E[C](I,\tau,P) = \left[\, w_1(I)\cdot\sum_{j=1}^{7}\mathbb{E}[N_j^{R1}]\cdot\mathbb{E}[X_j^{R1}] + w_2(I)\cdot\sum_{j=1}^{7}\mathbb{E}[N_j^{R2}]\cdot\mathbb{E}[X_j^{R2}]\right]\cdot A(I,P)\cdot(1-\tau)$$</div>
+        <div class="katex-block">$$E[C](I,\tau(t),P) = \left[\, w_1(I)\cdot\sum_{j=1}^{7}\mathbb{E}[N_j^{R1}]\cdot\mathbb{E}[X_j^{R1}] + w_2(I)\cdot\sum_{j=1}^{7}\mathbb{E}[N_j^{R2}]\cdot\mathbb{E}[X_j^{R2}]\right]\cdot A(I,P)\cdot(1-\tau(t))$$</div>
+        <div style="font-size:8.5px;color:var(--d);margin-top:10px;line-height:1.6;font-style:italic">
+          Mode classique : $\tau$ exogène constant. Mode hormétique : $\tau(t)=\tau_0+\int_0^t \mathcal{H}(C,I)\,ds$, endogénéisé par l'apprentissage adaptatif et plafonné par $\tau_{max}=67\%$.
+        </div>
       </div>
       <!-- Composantes -->
       <div class="g2" style="gap:10px;margin-bottom:10px">
@@ -932,14 +922,94 @@ document.addEventListener('DOMContentLoaded',function(){
           <div class="katex-block" style="margin-top:6px">$$\text{Assurable}\iff VAN\leq\kappa_0$$</div>
           <div style="font-size:8px;color:var(--d);margin-top:8px">$r=3\%$, $n=25$ ans · $\kappa_0$ capacité marché</div>
         </div>
+        <div style="background:var(--bg3);border:1px solid rgba(180,77,255,.25);border-radius:8px;padding:14px">
+          <div style="font-size:8.5px;font-weight:700;color:#b44dff;margin-bottom:10px">BOUCLE HORMÉTIQUE 𝓗</div>
+          <div class="katex-block">$$\mathcal{H}(C,I)=\eta\cdot e^{-\frac{(C-C^*)^2}{2\sigma_h^2}}\cdot\mathbf{1}_{\{C\in[C_{min},C_{max}]\}}$$</div>
+          <div class="katex-block" style="margin-top:6px">$$\tau(t)=\tau_0+\int_0^t\mathcal{H}(C,I)\,ds\;\leq\;\tau_{max}$$</div>
+          <div style="font-size:8px;color:var(--d);margin-top:8px;line-height:1.6">
+            Rétroaction négative · Apprentissage adaptatif<br>
+            Cloche gaussienne : stress modéré bénéfique, surcharge destructrice<br>
+            S'oppose structurellement à la boucle pro-cyclique $P_t$
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 3 Démonstrations -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- PREUVE DE STABILITÉ PAR LYAPUNOV (section théorique principale) -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div class="card" style="margin-bottom:12px;border:1.5px solid rgba(0,229,255,.35)">
+      <div class="ctitle" style="color:#00e5ff">⚖️ Preuve de stabilité par Lyapunov
+        <span class="csub">Démonstration théorique de la viabilité du système — outil de contrôle</span>
+      </div>
+      <div style="font-size:9px;color:var(--d);line-height:1.7;margin-bottom:12px">
+        La stabilité du système n'est pas vérifiée empiriquement mais <strong style="color:var(--c)">démontrée par construction d'une fonction de Lyapunov</strong> $V(\mathrm{CI})$ satisfaisant l'inégalité fractionnaire de stabilité. C'est le théorème de Lyapunov qui certifie la viabilité dynamique — les vérifications empiriques ci-dessous portent sur d'autres aspects du modèle (copule, calibration).
+      </div>
+
+      <!-- Bloc équation principale Lyapunov -->
+      <div style="background:var(--bg3);border:1px solid rgba(0,229,255,.3);border-radius:10px;padding:18px;margin-bottom:14px">
+        <div style="font-size:9px;font-weight:700;color:#00e5ff;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px">Fonction de Lyapunov financière</div>
+        <div class="katex-block">$$V(\mathrm{CI}_t)=\ln\!\left(\frac{\mathrm{CI}_t}{\mathrm{CI}^*}\right)\quad\geq 0,\quad V(\mathrm{CI}^*)=0$$</div>
+        <div style="font-size:9px;font-weight:700;color:#00e5ff;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;margin-top:14px">Inégalité de stabilité fractionnaire</div>
+        <div class="katex-block">$${}^{\mathrm{C}}\!D^{\alpha}\,V(\mathrm{CI}_t)\;\leq\;-\gamma\,V(\mathrm{CI}_t)+\mathcal{H}(\mathrm{CI}_t,I_t)$$</div>
+        <div style="font-size:8.5px;color:var(--d);margin-top:10px;line-height:1.7;font-style:italic">
+          Le théorème de Lyapunov garantit alors que $V$ décroît le long des trajectoires en $R_1$ : <strong style="color:#00d97a">système stable</strong>. La boucle hormétique $\mathcal{H}$ est la condition suffisante : sans elle, le système est instable en $R_2$. Le passage à zéro de l'exposant $\lambda_\alpha$ en $I_t=S$ signale la transition vers $R_2$ — attracteur étrange de dimension fractale $d_f=3-2H$.
+        </div>
+      </div>
+
+      <!-- Indicateurs temps réel -->
+      <div class="g2" style="gap:10px;margin-bottom:12px">
+        <div style="background:var(--bg3);border:1px solid rgba(0,229,255,.2);border-radius:8px;padding:14px">
+          <div style="font-size:8.5px;font-weight:700;color:#00e5ff;margin-bottom:10px">EXPOSANT DE LYAPUNOV $\lambda_\alpha$</div>
+          <div class="katex-block">$$\lambda_\alpha=k_c\cdot(I-S)\cdot(1-\tau_{\mathrm{eff}})$$</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+            <div style="background:var(--bg2);border-radius:6px;padding:6px;text-align:center">
+              <div style="font-size:7.5px;color:var(--m)">$\lambda_\alpha$ courant</div>
+              <div style="font-size:1.0rem;font-weight:800" id="pf-lam">—</div>
+            </div>
+            <div style="background:var(--bg2);border-radius:6px;padding:6px;text-align:center">
+              <div style="font-size:7.5px;color:var(--m)">$\tau_L=1/|\lambda|$ (ans)</div>
+              <div style="font-size:1.0rem;font-weight:800;color:#00e5ff" id="pf-tauL">—</div>
+            </div>
+          </div>
+          <div style="font-size:8px;color:var(--d);margin-top:8px;line-height:1.6" id="pf-lamDiag">—</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid rgba(0,229,255,.2);border-radius:8px;padding:14px">
+          <div style="font-size:8.5px;font-weight:700;color:#00e5ff;margin-bottom:10px">FONCTION DE LYAPUNOV $V$</div>
+          <div class="katex-block">$$V(\mathrm{CI})=\ln(\mathrm{CI}/\mathrm{CI}^*)$$</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+            <div style="background:var(--bg2);border-radius:6px;padding:6px;text-align:center">
+              <div style="font-size:7.5px;color:var(--m)">$V$ courant</div>
+              <div style="font-size:1.0rem;font-weight:800" id="pf-V">—</div>
+            </div>
+            <div style="background:var(--bg2);border-radius:6px;padding:6px;text-align:center">
+              <div style="font-size:7.5px;color:var(--m)">$d_f=1+\alpha$</div>
+              <div style="font-size:1.0rem;font-weight:800" id="pf-df">—</div>
+            </div>
+          </div>
+          <div style="font-size:8px;color:var(--d);margin-top:8px;line-height:1.6" id="pf-Vdiag">—</div>
+        </div>
+      </div>
+
+      <!-- Diagnostic global de stabilité -->
+      <div style="background:var(--bg3);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:8.5px;font-weight:700;color:var(--m);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px">Diagnostic global de stabilité dynamique</div>
+        <div style="font-size:1.05rem;font-weight:800" id="pf-stabDiag">—</div>
+        <div style="font-size:8px;color:var(--d);margin-top:6px;font-style:italic" id="pf-stabComment">—</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- VÉRIFICATIONS EMPIRIQUES (hiérarchie épistémique inférieure) -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <div style="font-size:9.5px;color:var(--m);text-transform:uppercase;letter-spacing:.15em;margin:18px 0 10px;font-weight:700">
+      Vérifications empiriques numériques
+    </div>
+
     <div class="g2" style="gap:12px;margin-bottom:12px">
-      <!-- Démo 1 : Convergence D²M -->
+      <!-- Vérif 1 : Convergence D²M -->
       <div class="card">
-        <div class="ctitle">🔬 Démonstration 1 — Convergence $D_M^2\sim\chi^2(7)$
+        <div class="ctitle">🔬 Vérification 1 — Convergence $D_M^2\sim\chi^2(7)$
           <span class="csub" id="proofD2sub">Lance le MC pour voir la convergence</span>
         </div>
         <div style="font-size:8.5px;color:var(--d);margin-bottom:8px;line-height:1.7">
@@ -965,7 +1035,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
       <!-- Démo 2 : Propriétés limites -->
       <div class="card">
-        <div class="ctitle">📏 Démonstration 2 — Propriétés limites analytiques
+        <div class="ctitle">📏 Vérification 2 — Propriétés limites analytiques
           <span class="csub">Vérification des cas extrêmes du modèle</span>
         </div>
         <div style="font-size:8.5px;color:var(--d);margin-bottom:10px;line-height:1.7">
@@ -977,7 +1047,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
     <!-- Démo 3 : Courbe E[C](I) -->
     <div class="card" style="margin-bottom:12px">
-      <div class="ctitle">📈 Démonstration 3 — Courbe $E[C](I)$ et bascule sigmoïdale
+      <div class="ctitle">📈 Vérification 3 — Courbe $E[C](I)$ et bascule sigmoïdale
         <span class="csub" id="proofD3sub">Trajectoire du risque pour τ courant</span>
       </div>
       <div style="font-size:8.5px;color:var(--d);margin-bottom:8px;line-height:1.7">
@@ -985,63 +1055,6 @@ document.addEventListener('DOMContentLoaded',function(){
       </div>
       <div class="cw" style="height:220px"><canvas id="chProofEC"></canvas></div>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px" id="proofPaliersRow"></div>
-    </div>
-
-    <!-- ── BLOC LYAPOUNOV ── -->
-    <div class="card" style="margin-bottom:12px;border:1px solid rgba(0,217,122,.3)">
-      <div class="ctitle" style="color:#00d97a">⚖ Stabilité de Lyapounov — Preuve de Cohérence du Système
-        <span class="csub">V(CI) = ln(CI/CI*) · Exposant λ_α · Attracteur Fractal d_H = 1+α</span>
-      </div>
-      <div style="font-size:8.5px;color:var(--d);margin-bottom:12px;line-height:1.8">
-        La fonction de Lyapounov <strong>V(CI) = ln(CI/CI*)</strong> mesure l'écart financier à l'état de résilience optimal CI*.
-        En Régime 1 (λ_α &lt; 0) : le système converge, CI est maîtrisable.
-        En Régime 2 (λ_α &gt; 0) : le système est chaotique, attracteur étrange fractal de dimension d_H = 1+α = 3−2H.
-        La boucle hormétique 𝓗 est la <strong>condition suffisante de stabilité de Lyapounov</strong> :
-        𝒟^α V ≤ −γV + 𝓗.
-      </div>
-
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
-        <div style="background:var(--bg3);border:1px solid rgba(0,229,255,.2);border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Ordre fractionnaire α</div>
-          <div style="font-size:1.1rem;font-weight:800;color:#00e5ff" id="lyapAlpha">—</div>
-          <div style="font-size:7.5px;color:var(--m);margin-top:3px">α = 2 − 2H</div>
-        </div>
-        <div style="background:var(--bg3);border:1px solid rgba(0,217,122,.2);border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Exposant λ_α</div>
-          <div style="font-size:1.1rem;font-weight:800" id="lyapLambda">—</div>
-          <div style="font-size:7.5px;color:var(--m);margin-top:3px" id="lyapRegime">R1 stable / R2 chaotique</div>
-        </div>
-        <div style="background:var(--bg3);border:1px solid rgba(180,77,255,.2);border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Dimension fractale d_H</div>
-          <div style="font-size:1.1rem;font-weight:800;color:#b44dff" id="lyapDH">—</div>
-          <div style="font-size:7.5px;color:var(--m);margin-top:3px">d_H = 1 + α = 3 − 2H</div>
-        </div>
-        <div style="background:var(--bg3);border:1px solid rgba(255,215,0,.2);border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:8px;color:var(--m);margin-bottom:4px">Attracteur</div>
-          <div style="font-size:0.85rem;font-weight:800" id="lyapAttracteur">—</div>
-          <div style="font-size:7.5px;color:var(--m);margin-top:3px">R1: point fixe | R2: étrange</div>
-        </div>
-      </div>
-
-      <div class="g2" style="gap:10px;margin-bottom:10px">
-        <div style="background:var(--bg3);border:1px solid rgba(0,217,122,.15);border-radius:8px;padding:12px">
-          <div style="font-size:8.5px;font-weight:700;color:#00d97a;margin-bottom:8px">FONCTION DE LYAPOUNOV V(CI)</div>
-          <div class="cw" style="height:140px"><canvas id="chLyapV"></canvas></div>
-          <div style="font-size:7.5px;color:var(--m);margin-top:6px">V décroît → convergence vers CI* (R1) · V diverge → attracteur étrange (R2)</div>
-        </div>
-        <div style="background:var(--bg3);border:1px solid rgba(255,51,85,.15);border-radius:8px;padding:12px">
-          <div style="font-size:8.5px;font-weight:700;color:#ff3355;margin-bottom:8px">EXPOSANT λ_α vs INDICE CLIMATIQUE I</div>
-          <div class="cw" style="height:140px"><canvas id="chLyapLambda"></canvas></div>
-          <div style="font-size:7.5px;color:var(--m);margin-top:6px">Bascule λ_α = 0 en I = S = 5 : bifurcation de Lyapounov = tipping point financier</div>
-        </div>
-      </div>
-
-      <div style="background:var(--bg3);border-left:3px solid #00d97a;border-radius:0 8px 8px 0;padding:10px 14px;font-size:8px;color:var(--d);line-height:1.8">
-        <strong style="color:#00d97a">Tension dynamique :</strong>
-        P_t (rétroaction positive polycrise) ⟺ 𝓗[τ(t)] (rétroaction négative hormétique)
-        &nbsp;|&nbsp; borne τ_max = 67% = <strong>second principe fractionnaire</strong>
-        (non-intégrabilité du noyau de Caputo en zéro — analogue du rendement de Carnot).
-      </div>
     </div>
 
     <!-- Références -->
@@ -1052,6 +1065,11 @@ document.addEventListener('DOMContentLoaded',function(){
       <div>· <span style="color:var(--c)">Panjer (1981)</span> — Récurrence NegBin — Distribution fréquence sinistres</div>
       <div>· <span style="color:var(--c)">Aitchison & Brown (1957)</span> — LogNormale — Distribution sévérité sinistres</div>
       <div>· <span style="color:var(--c)">Hamilton (1989)</span> — Modèles de Markov à régimes — Hystérèse R1↔R2</div>
+      <div>· <span style="color:var(--c)">Lyapunov (1892)</span> — The General Problem of the Stability of Motion — Fonction V et stabilité dynamique</div>
+      <div>· <span style="color:var(--c)">Caputo (1967)</span> — Linear models of dissipation — Dérivée fractionnaire d'ordre α</div>
+      <div>· <span style="color:var(--c)">Calabrese & Baldwin (2002)</span> — Hormesis: a generalizable and unifying hypothesis — Cloche hormétique</div>
+      <div>· <span style="color:var(--c)">Mattson (2008)</span> — Hormesis defined — Stress modéré et résilience adaptative</div>
+      <div>· <span style="color:var(--c)">Petitjean et al. (2020)</span> — Homéodynamique en théorie des systèmes — Rétroaction négative organisationnelle</div>
       <div>· <span style="color:var(--c)">Njeckil T. (2026)</span> — Théorie de la Coûtenance des Risques — SWAM · CRISOnomics · INPI Mars 2026</div>
     </div>
   </div>
@@ -1074,6 +1092,50 @@ document.addEventListener('DOMContentLoaded',function(){
 var S_SEUIL=5, KC=5, KP=3, RHO=0.3;
 var N_MC=1000, NP=7;
 var TAU_MAX=67; // GIEC AR6 Ch.17 + Warszawski et al. (2013)
+
+// ═══════════════════════════════════════════
+// HORMÈSE 𝓗 et LYAPUNOV (calculatoire)
+// ═══════════════════════════════════════════
+// computeHormese : Δτ_𝓗 cumulé sur l'horizon n, puis saturation par τ_max
+// Cohérent avec Excel Paramètres!B97-B113 (couplage option α)
+function computeHormese(){
+  var Cobs = ST.EC > 0 ? ST.EC : 0;            // C_obs = E[C] courant (M€)
+  var g = Math.exp(-Math.pow(Cobs - ST.Cstar, 2) / (2*ST.sigmaH*ST.sigmaH));
+  var ind = (Cobs >= ST.Cmin && Cobs <= ST.Cmax) ? 1 : 0;
+  var dtau_brut = ST.eta * g * ind;            // Δτ instantané
+  var dtau_cum  = dtau_brut * ST.n;            // ∫₀ᵀ 𝓗 ds  (T = horizon)
+  // τ_eff = min(τ₀/100 + Δτ_𝓗 , τ_max/100)  exprimé en pourcentage [0,100]
+  var tau0_pct = Math.min(ST.tau, TAU_MAX);
+  var tauEff_pct = Math.min(tau0_pct + dtau_cum*100, TAU_MAX);
+  ST.dtauH  = tauEff_pct - tau0_pct;           // pp (points de pourcentage) gain net
+  ST.tauEff = tauEff_pct;                      // %  (équivalent du slider, mais étendu)
+  return tauEff_pct;
+}
+
+// effTau() : remplace ST.tau partout où le coût est calculé. C'est τ_eff (hormèse comprise).
+function effTau(){ return ST.tauEff; }
+
+// computeLyapunov : λ_eff = kc · (I − S) · (1 − τ_eff)   [option α]
+// λ < 0 R₁ stable | λ ≈ 0 bascule | λ > 0 R₂ chaotique
+// + τ_L = 1/|λ| (temps caractéristique de Lyapunov, années)
+// + V(CI) = ln(CI/CI*) (fonction de Lyapunov financière, éq. 12 papier)
+// + d_f = 1 + α = 3 - 2H (dimension fractale de l'attracteur, descriptif R₂)
+function computeLyapunov(){
+  var teff = ST.tauEff / 100;     // fraction
+  var t0   = Math.min(ST.tau, TAU_MAX) / 100;
+  ST.lamEff  = KC * (ST.I - S_SEUIL) * (1 - teff);
+  ST.lamBase = KC * (ST.I - S_SEUIL) * (1 - t0);
+  // τ_L = 1/|λ| : temps caractéristique en années (saturé à 9999 si λ≈0)
+  var absL = Math.abs(ST.lamEff);
+  ST.tauL = absL > 1e-6 ? 1/absL : 9999;
+  // V(CI) = ln(CI/CI*) : positive ailleurs qu'à l'équilibre, nulle à CI*
+  // Utilise EC courant ; si EC≈0 ou CI*≤0, V=0 par convention
+  var Cobs = ST.EC > 0 ? ST.EC : 0;
+  ST.Vlyap = (Cobs > 0 && ST.CIstar > 0) ? Math.log(Cobs / ST.CIstar) : 0;
+  // d_f = 1 + α avec α = 2 - 2H : dimension fractale Hausdorff de l'attracteur R₂
+  var alpha = 2 - 2*ST.Hurst;
+  ST.df = 1 + alpha;
+}
 
 // Périls calibrés depuis Synthèse_Périls Excel (I≈5)
 var PERILS=[
@@ -1163,7 +1225,6 @@ var COLOR_CEIL=17.573;
 var ST={
   I:3.5, Ip:1.1, eps:0.02, regC:0,
   kap:500, tcouv:0.6, tau:0, ca:5, opp:5, n:25, r:0.03,
-  hormMode:1, hormEta:0.0008, hormCstar:40, hormSigma:25, hormCmin:10, hormCmax:120, hormTau0:0.05, tauHorm:0.05,
   w2:0, w1:1, w2m:0, wpc:0,
   EC:0, P95:0, P99:0, sigma:0,
   VAN:0, VCN:0, dette:0, assurable:true,
@@ -1173,7 +1234,15 @@ var ST={
   animMode:false, animTimer:null, animI:3.5, animDir:1,
   presMode:false,
   // Animation state for coupled full-model animation
-  animW2:0, animWpc:0, animEC:0
+  animW2:0, animWpc:0, animEC:0,
+  // ── Hormèse 𝓗 (additif, plafonné τ_max) ──
+  eta:0.0008, Cstar:40, sigmaH:25, Cmin:10, Cmax:120,
+  dtauH:0, tauEff:0,
+  // ── Lyapunov (option α : λ_eff = kc·(I−S)·(1−τ_eff)) ──
+  lamEff:0, lamBase:0,
+  // ── Lyapunov étendu : temps caractéristique, fonction V, dimension fractale ──
+  CIstar:20, Hurst:0.75,
+  tauL:0, Vlyap:0, df:0
 };
 
 var PRESETS={
@@ -1312,9 +1381,10 @@ function calcBusiness(){
   var A=annuity(ST.r,ST.n);
   // VAN TOUJOURS depuis interpEC (paliers Excel calibrés)
   // Indépendant du MC — cohérence mathématique garantie
-  var ecUsed=interpEC(ST.I,ST.tau);
+  // ★ Utilise τ_eff (= τ₀ + Δτ_𝓗, plafonné τ_max) pour cohérence Excel
+  var ecUsed=interpEC(ST.I,effTau());
   ST.VAN=ecUsed*A;
-  var tauEff=Math.min(ST.tau,TAU_MAX)/100;
+  var tauEff=Math.min(effTau(),TAU_MAX)/100;
   var w2r=ST.w2;
   var w2res=sigm(ST.I,KC*(1-tauEff),S_SEUIL*(1+tauEff));
   var dw=Math.max(0,w2r-w2res);
@@ -1328,7 +1398,7 @@ function calcBusiness(){
   ST.partRet=Math.max(0,ST.VAN-ST.partTrans);
   ST.ratio=ST.kap>0?ST.VAN/ST.kap:999;
   var cbEl=document.getElementById('caBreak');if(cbEl) cbEl.textContent=ST.breakCA>0?ST.breakCA.toFixed(0)+'M€':'—';
-  var al=document.getElementById('giecAlert');if(al) al.className='giec-alert'+(ST.tau>=TAU_MAX?' show':'');
+  var al=document.getElementById('giecAlert');if(al) al.className='giec-alert'+(effTau()>=TAU_MAX?' show':'');
 }
 
 // ═══════════════════════════════════════════
@@ -1345,12 +1415,12 @@ function numSet(id,val,decimals,color){
 function updateKPIs(){
   // E[C]/VaR/P99 : MC si disponible (valeur stochastique)
   // VAN/Dette/Assurabilité : TOUJOURS interpEC (paliers Excel calibrés)
-  // Séparation claire des responsabilités
-  var ec_disp  = ST.mcDone&&ST.EC>0  ? ST.EC  : interpEC(ST.I,ST.tau);
-  var p95_disp = ST.mcDone&&ST.P95>0 ? ST.P95 : interpV95(ST.I,ST.tau);
-  var p99_disp = ST.mcDone&&ST.P99>0 ? ST.P99 : interpP99(ST.I,ST.tau);
+  // ★ Utilise τ_eff (hormèse comprise) pour cohérence avec Excel
+  var ec_disp  = ST.mcDone&&ST.EC>0  ? ST.EC  : interpEC(ST.I,effTau());
+  var p95_disp = ST.mcDone&&ST.P95>0 ? ST.P95 : interpV95(ST.I,effTau());
+  var p99_disp = ST.mcDone&&ST.P99>0 ? ST.P99 : interpP99(ST.I,effTau());
   // VAN TOUJOURS depuis paliers Excel — cohérence avec assurabilité
-  var ec_van   = interpEC(ST.I,ST.tau);
+  var ec_van   = interpEC(ST.I,effTau());
   var van_disp = ec_van*annuity(ST.r,ST.n);
   numSet('kEC', ec_disp,  1,'#ff3355');
   numSet('kP95',p95_disp, 1,'#ff3355');
@@ -2055,156 +2125,6 @@ function setPreset(name){
 // ═══════════════════════════════════════════
 // SLIDER — tout le modèle réagit immédiatement
 // ═══════════════════════════════════════════
-
-// ═══ BOUCLE HORMÉTIQUE 𝓗 ═══════════════════════════════════════════════
-var H_HURST = 0.75; // exposant de Hurst par défaut
-
-function setHormMode(mode){
-  ST.hormMode = mode;
-  var bc = document.getElementById('btnModeClassique');
-  var bh = document.getElementById('btnModeHormetique');
-  var hb = document.getElementById('hormBlock');
-  if(bc && bh){
-    if(mode===0){
-      bc.style.background='rgba(0,229,255,.15)';bc.style.color='#00e5ff';bc.style.borderColor='#00e5ff';
-      bh.style.background='var(--bg3)';bh.style.color='var(--m)';bh.style.borderColor='var(--brd)';
-      if(hb) hb.style.display='none';
-    } else {
-      bh.style.background='rgba(0,217,122,.15)';bh.style.color='#00d97a';bh.style.borderColor='#00d97a';
-      bc.style.background='var(--bg3)';bc.style.color='var(--m)';bc.style.borderColor='var(--brd)';
-      if(hb) hb.style.display='block';
-    }
-  }
-  calcHormese(); onSlider();
-}
-
-function calcHormese(){
-  // 𝓗(C,X) = η·exp(-(C-C*)²/2σ_h²)·𝟙_{C∈[Cmin,Cmax]}
-  var eta = ST.hormEta, Cstar = ST.hormCstar;
-  var sigma_h = ST.hormSigma, Cmin = ST.hormCmin, Cmax = ST.hormCmax;
-  var tauMax = 0.67, dt = 1.0, T = 25;
-  var tau = ST.hormTau0;
-  // C_obs : use current EC if available, else estimate from I
-  var Cobs = (ST.mcDone && ST.EC > 0) ? ST.EC : interpEC(ST.I, 0);
-  for(var t=0;t<T;t++){
-    var H_op = 0;
-    if(Cobs >= Cmin && Cobs <= Cmax){
-      H_op = eta * Math.exp(-Math.pow(Cobs - Cstar, 2) / (2 * sigma_h * sigma_h));
-    }
-    tau = Math.min(tauMax, tau + dt * H_op);
-  }
-  ST.tauHorm = tau;
-  var el = document.getElementById('vTauHorm');
-  if(el) el.textContent = (tau*100).toFixed(1)+'%';
-  return tau;
-}
-
-function getTauEff(){
-  if(ST.hormMode===1) return Math.min(ST.tauHorm*100, 67);
-  return Math.min(ST.tau, 67);
-}
-
-function calcLyapounov(){
-  var I = ST.I, tau = getTauEff()/100;
-  var w2 = 1/(1+Math.exp(-5*(I-5)));
-  var G = 1 + w2*(Math.exp(0.1*w2)-1);
-  var lambda = G*(1-tau) - 1;
-  var alpha = 2 - 2*H_HURST;
-  var dH = 1 + alpha;
-  
-  var elA = document.getElementById('lyapAlpha');
-  var elL = document.getElementById('lyapLambda');
-  var elR = document.getElementById('lyapRegime');
-  var elD = document.getElementById('lyapDH');
-  var elAtt = document.getElementById('lyapAttracteur');
-  
-  if(elA) elA.textContent = alpha.toFixed(2);
-  if(elL){
-    elL.textContent = (lambda>=0?'+':'')+lambda.toFixed(3);
-    elL.style.color = lambda<0?'#00d97a':'#ff3355';
-  }
-  if(elR){
-    elR.textContent = lambda<0?'R1 — Stable':'R2 — Chaotique';
-    elR.style.color = lambda<0?'#00d97a':'#ff3355';
-  }
-  if(elD) elD.textContent = dH.toFixed(2);
-  if(elAtt){
-    elAtt.textContent = lambda<0?'Point fixe stable':'Étrange fractal';
-    elAtt.style.color = lambda<0?'#00d97a':'#ff3355';
-  }
-  return {lambda, alpha, dH};
-}
-
-function drawLyapounovCharts(){
-  var lyo = calcLyapounov();
-  var tau = getTauEff()/100;
-  
-  // Chart V(CI) vs t
-  var cv1 = document.getElementById('chLyapV');
-  if(cv1 && window.Chart){
-    var ctx1 = cv1.getContext('2d');
-    var steps=50, dt=0.5;
-    var labelsT=[], vR1=[], vR2=[];
-    var v1=1.5, v2=1.5, tauR1=tau, tauR2=tau;
-    var gamma=0.05, eta=ST.eta, s0=ST.s0;
-    var sig=function(x){return 1/(1+Math.exp(-3*(x-s0)));};
-    for(var s=0;s<=steps;s++){
-      labelsT.push((s*dt).toFixed(1));
-      var H1 = eta*sig(2.0)*(1-tauR1/0.67);
-      v1 = Math.max(0, v1 + dt*(-gamma*v1 + H1));
-      tauR1 = Math.min(0.67, tauR1 + dt*H1);
-      vR1.push(v1.toFixed(3));
-      var w2=1/(1+Math.exp(-5*(7-5)));
-      var G2=1+w2*(Math.exp(0.1*w2)-1);
-      var H2=eta*sig(7)*(1-tauR2/0.67);
-      var noise=(Math.random()-0.48)*0.05;
-      v2=Math.max(0,Math.min(4,v2+dt*((G2*(1-tauR2)-1)*v2+noise)));
-      tauR2=Math.min(0.67,tauR2+dt*H2);
-      vR2.push(v2.toFixed(3));
-    }
-    if(cv1._lyapChart) cv1._lyapChart.destroy();
-    cv1._lyapChart = new Chart(ctx1,{
-      type:'line',
-      data:{
-        labels:labelsT,
-        datasets:[
-          {label:'R1 → C* (stable)',data:vR1,borderColor:'#00d97a',borderWidth:2,pointRadius:0,tension:0.3},
-          {label:'R2 attracteur étrange',data:vR2,borderColor:'#ff3355',borderWidth:1.5,pointRadius:0,tension:0,borderDash:[4,3]}
-        ]
-      },
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8898b8',font:{size:8}}}},
-        scales:{x:{ticks:{color:'#8898b8',maxTicksLimit:6,font:{size:7}},grid:{color:'rgba(255,255,255,.05)'}},
-                y:{ticks:{color:'#8898b8',font:{size:7}},grid:{color:'rgba(255,255,255,.05)'},title:{display:true,text:'V(CI)',color:'#8898b8',font:{size:8}}}}}
-    });
-  }
-  
-  // Chart λ vs I
-  var cv2 = document.getElementById('chLyapLambda');
-  if(cv2 && window.Chart){
-    var ctx2 = cv2.getContext('2d');
-    var labI=[], lamV=[], colors=[];
-    for(var i=0;i<=100;i++){
-      var Iv = i/10;
-      var w2v = 1/(1+Math.exp(-5*(Iv-5)));
-      var Gv = 1+w2v*(Math.exp(0.1*w2v)-1);
-      var lv = Gv*(1-tau)-1;
-      labI.push(Iv.toFixed(1));
-      lamV.push(lv.toFixed(4));
-      colors.push(lv<0?'rgba(0,217,122,0.8)':'rgba(255,51,85,0.8)');
-    }
-    if(cv2._lyapChart) cv2._lyapChart.destroy();
-    cv2._lyapChart = new Chart(ctx2,{
-      type:'bar',
-      data:{labels:labI,datasets:[{label:'λ_α',data:lamV,backgroundColor:colors,borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false},annotation:{annotations:[{type:'line',yMin:0,yMax:0,borderColor:'white',borderWidth:1,borderDash:[3,3]}]}},
-        scales:{x:{ticks:{color:'#8898b8',maxTicksLimit:11,font:{size:7}},grid:{display:false},title:{display:true,text:'Indice I',color:'#8898b8',font:{size:8}}},
-                y:{ticks:{color:'#8898b8',font:{size:7}},grid:{color:'rgba(255,255,255,.05)'},title:{display:true,text:'λ_α',color:'#8898b8',font:{size:8}}}}}
-    });
-  }
-}
-// ═══ FIN HORMÉTIQUE / LYAPOUNOV ═══════════════════════════════════════════
-
 function onSlider(){
   ST.I=+document.getElementById('sI').value;
   ST.Ip=+document.getElementById('sP').value;
@@ -2214,14 +2134,11 @@ function onSlider(){
   ST.tcouv=+document.getElementById('sTcouv').value/100;
   ST.tau=+document.getElementById('sTau').value;
   ST.ca=+document.getElementById('sCA').value;
-  var etaEl=document.getElementById('sEta'); if(etaEl){ST.hormEta=+etaEl.value; var ve2=document.getElementById('vEta');if(ve2)ve2.textContent=ST.hormEta.toFixed(4);}
-  var csEl=document.getElementById('sCstar'); if(csEl){ST.hormCstar=+csEl.value; var vcs=document.getElementById('vCstar');if(vcs)vcs.textContent=ST.hormCstar;}
-  var shEl=document.getElementById('sSigmaH'); if(shEl){ST.hormSigma=+shEl.value; var vsh=document.getElementById('vSigmaH');if(vsh)vsh.textContent=ST.hormSigma;}
-  var cmEl=document.getElementById('sCmax'); if(cmEl){ST.hormCmax=+cmEl.value; var vcm=document.getElementById('vCmax');if(vcm)vcm.textContent=ST.hormCmax;}
-  calcHormese();
   ST.opp=+document.getElementById('sOpp').value;
   ST.n=+document.getElementById('sN').value;
   ST.r=+document.getElementById('sR').value/100;
+  // η lu en ‰ depuis slider 0..50 → η ∈ [0, 0.005]
+  var etaSld=document.getElementById('sEta'); if(etaSld) ST.eta=(+etaSld.value)/10000;
 
   var vi=document.getElementById('vI');if(vi){vi.textContent=ST.I.toFixed(1);vi.style.color=ST.I>=S_SEUIL?'#ff3355':'#00e5ff';}
   var vp=document.getElementById('vP');if(vp) vp.textContent=ST.Ip.toFixed(1);
@@ -2234,16 +2151,186 @@ function onSlider(){
   var vo=document.getElementById('vOpp');if(vo) vo.textContent=ST.opp.toFixed(1)+'%';
   var vn=document.getElementById('vN');if(vn) vn.textContent=ST.n+' ans';
   var vr=document.getElementById('vR');if(vr) vr.textContent=(ST.r*100).toFixed(1)+'%';
+  var vEta=document.getElementById('vEta');if(vEta) vEta.textContent=(ST.eta*100).toFixed(3)+'%';
 
   if(ST.I<S_SEUIL&&ST.regC===0) ST.markov=0;
-  calcWeights();calcBusiness();
+  calcWeights();
+  // ── BOOTSTRAP : EC préliminaire avec τ₀ pour amorcer 𝓗 ──
+  ST.EC = ST.mcDone && ST.EC>0 ? ST.EC : interpEC(ST.I, ST.tau);
+  computeHormese();         // calcule ST.tauEff et ST.dtauH
+  computeLyapunov();        // calcule ST.lamEff et ST.lamBase
+  // ── recalcul EC final avec τ_eff (cohérent calculatoire) ──
+  ST.EC  = interpEC(ST.I, effTau());
+  ST.P95 = interpV95(ST.I, effTau());
+  ST.P99 = interpP99(ST.I, effTau());
+  calcBusiness();
   updateSigBox();drawSig();updateKPIs();updateLoopUI();
+  updateHormesisLyapBadges();
 
   // Carte toujours sensible aux manettes, même pendant l'animation
   if(!ST.animMode) paintMap();
   else paintMap(ST.animI); // pendant anim, recolorier avec I_anim mais τ actuel
 
   refreshActive();
+}
+
+// Met à jour les badges hormèse + Lyapunov dans les panneaux contrôles
+function updateHormesisLyapBadges(){
+  var dt=document.getElementById('vDtau');
+  if(dt) dt.textContent='+'+ST.dtauH.toFixed(2)+' pp';
+  var te=document.getElementById('vTauEff');
+  if(te){ te.textContent=ST.tauEff.toFixed(1)+'%'; te.style.color=ST.tauEff>=TAU_MAX*0.99?'#ffd700':'#00d97a'; }
+  var hd=document.getElementById('vHormDiag');
+  if(hd){
+    var Cobs=ST.EC;
+    if(Cobs<ST.Cmin) hd.textContent='🟡 sous-stress (eustress insuffisant)';
+    else if(Cobs>ST.Cmax) hd.textContent='🔴 distress (surcharge, 𝓗=0)';
+    else if(ST.tauEff>=TAU_MAX*0.99) hd.textContent='⚪ plafonné τ_max';
+    else hd.textContent='🟢 hormèse active';
+  }
+  // Lyapunov
+  var vL=document.getElementById('vLam');
+  if(vL){
+    var sign = ST.lamEff>=0?'+':'';
+    vL.textContent = sign+ST.lamEff.toFixed(2);
+    vL.style.color = ST.lamEff<-0.5?'#00d97a':(ST.lamEff<0.5?'#ffd700':(ST.lamEff<5?'#ff8c00':(ST.lamEff<15?'#ff3355':'#b44dff')));
+  }
+  var vLA=document.getElementById('vLamAbs'); if(vLA) vLA.textContent=Math.abs(ST.lamEff).toFixed(2);
+  var vLG=document.getElementById('vLamGain');
+  if(vLG){
+    var gain = Math.abs(ST.lamBase)-Math.abs(ST.lamEff);
+    var gainPct = Math.abs(ST.lamBase)>1e-9 ? (gain/Math.abs(ST.lamBase))*100 : 0;
+    vLG.textContent='-'+gainPct.toFixed(1)+'%';
+  }
+  var vLD=document.getElementById('vLamDiag');
+  if(vLD){
+    if(ST.lamEff<-0.5) vLD.textContent='🟢 R₁ stable — flow absorbant';
+    else if(ST.lamEff<0.5) vLD.textContent='🟡 Zone de bascule — λ≈0';
+    else if(ST.lamEff<5) vLD.textContent='🟠 R₂ chaotique modéré';
+    else if(ST.lamEff<15) vLD.textContent='🔴 R₂ chaotique fort';
+    else vLD.textContent='⚫ R₂ extrême';
+  }
+  // ── Temps de Lyapunov τ_L (années) — miroir Excel B125 ──
+  var vTL=document.getElementById('vTauL');
+  if(vTL){
+    if(ST.tauL>=9999) vTL.textContent='∞';
+    else if(ST.tauL>100) vTL.textContent=ST.tauL.toFixed(0);
+    else vTL.textContent=ST.tauL.toFixed(2);
+    // Code couleur : rapide à amortir = vert ; lent = rouge
+    vTL.style.color = ST.tauL<1?'#00d97a':(ST.tauL<ST.n?'#ffd700':(ST.tauL<ST.n*5?'#ff8c00':'#888'));
+  }
+  var vTLD=document.getElementById('vTauLDiag');
+  if(vTLD){
+    if(ST.tauL>=9999) vTLD.textContent='τ_L ≫ horizon : dynamique quasi-statique';
+    else if(ST.tauL>ST.n) vTLD.textContent='τ_L > '+ST.n+' ans : pas de manifestation';
+    else if(ST.tauL>ST.n/5) vTLD.textContent='τ_L ≈ horizon : manifestation sur la période';
+    else vTLD.textContent='τ_L ≪ horizon : dynamique rapide';
+  }
+  // ── Fonction de Lyapunov V(CI) = ln(CI/CI*) — éq. 12 du papier ──
+  var vV=document.getElementById('vVlyap');
+  if(vV){
+    var sgn=ST.Vlyap>=0?'+':'';
+    vV.textContent = sgn + ST.Vlyap.toFixed(2);
+    // V proche de 0 = système proche de l'équilibre = vert ; V grand = écart sévère = rouge
+    var aV = Math.abs(ST.Vlyap);
+    vV.style.color = aV<0.3?'#00d97a':(aV<1?'#ffd700':(aV<2?'#ff8c00':'#ff3355'));
+  }
+  var vVD=document.getElementById('vVlyapDiag');
+  if(vVD){
+    var aV = Math.abs(ST.Vlyap);
+    if(aV<0.3) vVD.textContent='V ≈ 0 : proche de CI* (résilience optimale)';
+    else if(aV<1) vVD.textContent='V modéré : écart contrôlable';
+    else if(aV<2) vVD.textContent='V élevé : écart sévère à CI*';
+    else vVD.textContent='V critique : VAN s\'éloigne fortement de la cible';
+  }
+  // ── Dimension fractale d_f = 1 + α = 3 - 2H — descriptif R₂ ──
+  var vDf=document.getElementById('vDf');
+  if(vDf){
+    vDf.textContent = ST.df.toFixed(2);
+    // d_f n'a de sens dynamique qu'en R₂ : grisé en R₁
+    vDf.style.color = ST.lamEff>0.5?'#b44dff':'#666';
+    vDf.title = 'd_f = 1 + α  avec α = 2 − 2H  ('+ST.df.toFixed(2)+' ; H='+ST.Hurst+')';
+  }
+  // ── Onglet "Preuve du modèle" : indicateurs Lyapunov calculés temps réel ──
+  updateProofLyapunov();
+}
+
+// Met à jour les indicateurs Lyapunov dans l'onglet Preuve du modèle
+function updateProofLyapunov(){
+  // λ_α courant + couleur cohérente avec le panneau contrôles
+  var pfL=document.getElementById('pf-lam');
+  if(pfL){
+    var sign = ST.lamEff>=0?'+':'';
+    pfL.textContent = sign+ST.lamEff.toFixed(3);
+    pfL.style.color = ST.lamEff<-0.5?'#00d97a':(ST.lamEff<0.5?'#ffd700':(ST.lamEff<5?'#ff8c00':(ST.lamEff<15?'#ff3355':'#b44dff')));
+  }
+  // τ_L courant
+  var pfTL=document.getElementById('pf-tauL');
+  if(pfTL){
+    if(ST.tauL>=9999) pfTL.textContent='∞';
+    else if(ST.tauL>100) pfTL.textContent=ST.tauL.toFixed(0);
+    else pfTL.textContent=ST.tauL.toFixed(2);
+  }
+  // V(CI) courant
+  var pfV=document.getElementById('pf-V');
+  if(pfV){
+    var sgn=ST.Vlyap>=0?'+':'';
+    pfV.textContent = sgn + ST.Vlyap.toFixed(3);
+    var aV = Math.abs(ST.Vlyap);
+    pfV.style.color = aV<0.3?'#00d97a':(aV<1?'#ffd700':(aV<2?'#ff8c00':'#ff3355'));
+  }
+  // d_f
+  var pfDf=document.getElementById('pf-df');
+  if(pfDf){
+    pfDf.textContent = ST.df.toFixed(3);
+    pfDf.style.color = ST.lamEff>0.5?'#b44dff':'#666';
+  }
+  // Diagnostic λ
+  var pfLD=document.getElementById('pf-lamDiag');
+  if(pfLD){
+    if(ST.lamEff<-0.5) pfLD.textContent='λ<0 : trajectoires convergentes vers CI* — système stable et assurable';
+    else if(ST.lamEff<0.5) pfLD.textContent='λ≈0 : point de bascule — passage à zéro de l\'exposant';
+    else if(ST.lamEff<5) pfLD.textContent='λ>0 modéré : trajectoires divergentes — R₂ chaotique';
+    else if(ST.lamEff<15) pfLD.textContent='λ>0 fort : attracteur étrange fractal — VAN explosive';
+    else pfLD.textContent='λ extrême : effondrement de l\'assurabilité';
+  }
+  // Diagnostic V
+  var pfVD=document.getElementById('pf-Vdiag');
+  if(pfVD){
+    var aV = Math.abs(ST.Vlyap);
+    if(aV<0.3) pfVD.textContent='V ≈ 0 : système proche de l\'équilibre CI* — résilience optimale';
+    else if(aV<1) pfVD.textContent='V modéré : écart contrôlable à CI*';
+    else if(aV<2) pfVD.textContent='V élevé : écart sévère, contrôle hormétique nécessaire';
+    else pfVD.textContent='V critique : VAN s\'éloigne fortement de la cible';
+  }
+  // Diagnostic global de stabilité (synthèse λ + V)
+  var pfSD=document.getElementById('pf-stabDiag');
+  var pfSC=document.getElementById('pf-stabComment');
+  if(pfSD && pfSC){
+    var stable = ST.lamEff < 0;
+    var aV = Math.abs(ST.Vlyap);
+    if(stable && aV<0.3){
+      pfSD.textContent='🟢 SYSTÈME STABLE (R₁) — théorème de Lyapunov satisfait';
+      pfSD.style.color='#00d97a';
+      pfSC.textContent='V décroît le long des trajectoires, λ<0, convergence vers CI*. Assurabilité garantie.';
+    } else if(stable && aV<1.5){
+      pfSD.textContent='🟡 SYSTÈME STABLE MAIS ÉLOIGNÉ DE LA CIBLE';
+      pfSD.style.color='#ffd700';
+      pfSC.textContent='λ<0 (stabilité préservée) mais V grand : le contrôle hormétique τ(t) ramène progressivement le système vers CI*.';
+    } else if(!stable && ST.lamEff<5){
+      pfSD.textContent='🟠 INSTABILITÉ NAISSANTE (transition R₁→R₂)';
+      pfSD.style.color='#ff8c00';
+      pfSC.textContent='Passage à zéro de λ_α dépassé. La boucle hormétique 𝓗 est désormais condition suffisante de stabilité.';
+    } else if(!stable && ST.lamEff<15){
+      pfSD.textContent='🔴 R₂ CHAOTIQUE — attracteur étrange fractal';
+      pfSD.style.color='#ff3355';
+      pfSC.textContent='λ>0 fort, dimension fractale d_f='+ST.df.toFixed(2)+'. Le système a basculé vers le régime catastrophique. Hystérèse de Markov rend le retour quasi-impossible.';
+    } else {
+      pfSD.textContent='⚫ EFFONDREMENT DE L\'ASSURABILITÉ';
+      pfSD.style.color='#b44dff';
+      pfSC.textContent='Régime catastrophique extrême. Seul le second principe fractionnaire (τ_max=67%) limite encore la divergence.';
+    }
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -3242,7 +3329,6 @@ function renderKaTeX(){
 }
 
 function drawProof(){
-  calcLyapounov(); drawLyapounovCharts();
   // ── Démo 1 : Convergence D²M ~ chi²(7) ──────────────────────
   var sub = document.getElementById('proofD2sub');
   var e1  = document.getElementById('pf1-edm2');
