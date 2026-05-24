@@ -621,6 +621,46 @@ document.addEventListener('DOMContentLoaded',function(){
         <div class="slmarks"><span>1%</span><span>3%</span><span>10%</span></div>
       </div>
     </div>
+
+    <!-- ── EXTENSION FRACTALE-FRACTIONNAIRE (commutable) ── -->
+    <div class="mg2 exp-only" style="margin-top:8px">
+      <div class="sg" style="border:1px solid var(--p);border-radius:5px;padding:7px">
+        <div class="slrow" style="margin-bottom:5px">
+          <span class="slname" style="color:var(--p);font-size:10px;font-weight:700">⚛ MOTEUR FRACTIONNAIRE</span>
+          <button class="toggle-btn" id="tbFrac" onclick="toggleFrac()"
+            style="padding:3px 10px;font-size:10px;background:transparent;border:1px solid var(--p);color:var(--p)">CLASSIQUE</button>
+        </div>
+        <div style="font-size:9px;color:var(--m);line-height:1.5;margin-bottom:4px">
+          Actualisation de Mittag-Leffler E<sub>α</sub>(−λtᵅ) au lieu de (1−(1+r)⁻ⁿ)/r.
+          OFF = sorties classiques inchangées.
+        </div>
+        <div id="fracControls" style="display:none">
+          <div class="sg sc" style="margin-top:4px">
+            <div class="slrow"><span class="slname" style="color:#00d97a;font-size:9px">H₁ — Hurst R1 (sévérité)</span><span class="slval" id="vH1" style="color:#00d97a;font-size:11px">0,75</span></div>
+            <input type="range" id="sH1" min="0.51" max="0.99" step="0.01" value="0.75" oninput="onSlider()">
+          </div>
+          <div class="sg sr" style="margin-top:4px">
+            <div class="slrow"><span class="slname" style="color:#ff3355;font-size:9px">H₂ — Hurst R2 (sévérité)</span><span class="slval" id="vH2" style="color:#ff3355;font-size:11px">0,85</span></div>
+            <input type="range" id="sH2" min="0.51" max="0.99" step="0.01" value="0.85" oninput="onSlider()">
+          </div>
+          <div class="sg sc" style="margin-top:4px">
+            <div class="slrow"><span class="slname" style="color:#00d97a;font-size:9px">β₁ — Support R1 (fréquence)</span><span class="slval" id="vB1" style="color:#00d97a;font-size:11px">0,90</span></div>
+            <input type="range" id="sB1" min="0.30" max="1.00" step="0.01" value="0.90" oninput="onSlider()">
+          </div>
+          <div class="sg sr" style="margin-top:4px">
+            <div class="slrow"><span class="slname" style="color:#ff3355;font-size:9px">β₂ — Support R2 (fréquence)</span><span class="slval" id="vB2" style="color:#ff3355;font-size:11px">0,55</span></div>
+            <input type="range" id="sB2" min="0.30" max="1.00" step="0.01" value="0.55" oninput="onSlider()">
+          </div>
+          <div class="ibox" style="margin-top:5px">
+            <span style="color:var(--p)">α actif = <span id="fracAlpha">—</span></span>
+            <span style="color:var(--p)">β actif = <span id="fracBeta">—</span></span>
+            <span style="color:#ff8c00">Facteur ML = <span id="fracFactor">—</span></span>
+            <span style="color:var(--m)">vs classique = <span id="fracClass">—</span></span>
+            <span style="color:#ffd700">écart = <span id="fracDelta">—</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- SIGMA (expert only) -->
@@ -1233,6 +1273,8 @@ var ST={
   markov:0, autoMode:false, autoTimer:null,
   animMode:false, animTimer:null, animI:3.5, animDir:1,
   presMode:false,
+  // ── Extension fractale-fractionnaire (commutable) ──
+  fracMode:false, H1:0.75, H2:0.85, beta1:0.90, beta2:0.55,
   // Animation state for coupled full-model animation
   animW2:0, animWpc:0, animEC:0,
   // ── Hormèse 𝓗 (additif, plafonné τ_max) ──
@@ -1301,7 +1343,58 @@ function mahal2(Z){
   for(var i=0;i<Z.length;i++) for(var j=0;j<Z.length;j++) d+=Z[i]*R_INV[i][j]*Z[j];
   return d;
 }
-function annuity(r,n){return (1-Math.pow(1+r,-n))/r;}
+// ── Actualisation : classique OU fractionnaire (commutable) ──
+function gammaFn(x){
+  // Lanczos — suffisant pour α∈]0,1] et arguments αk+1
+  var g=7,c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,
+    771.32342877765313,-176.61502916214059,12.507343278686905,
+    -0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(x<0.5) return Math.PI/(Math.sin(Math.PI*x)*gammaFn(1-x));
+  x-=1;var a=c[0],t=x+g+0.5;
+  for(var i=1;i<g+2;i++) a+=c[i]/(x+i);
+  return Math.sqrt(2*Math.PI)*Math.pow(t,x+0.5)*Math.exp(-t)*a;
+}
+// Facteur de Mittag-Leffler : D(T)=∫₀ᵀ E_α(−λtᵅ)dt, série tronquée 25 termes
+function mlFactor(alpha,lambda,T){
+  var s=0;
+  for(var k=0;k<25;k++){
+    s += Math.pow(-lambda,k)/gammaFn(alpha*k+1)*Math.pow(T,alpha*k+1)/(alpha*k+1);
+  }
+  return s;
+}
+// α / β actifs selon le régime courant
+function fracAlpha(){
+  var H=(ST.I>=S_SEUIL||ST.regC===1)?ST.H2:ST.H1;
+  return Math.min(Math.max(2-2*H,0.02),1);
+}
+function fracBeta(){
+  return (ST.I>=S_SEUIL||ST.regC===1)?ST.beta2:ST.beta1;
+}
+function annuityClassic(r,n){return (1-Math.pow(1+r,-n))/r;}
+function annuity(r,n){
+  if(!ST.fracMode) return annuityClassic(r,n);
+  // mode fractionnaire : actualisation de Mittag-Leffler sur l'horizon réel n.
+  // L'ordre α (axe sévérité / mémoire du coût) gouverne la décroissance.
+  // β (axe fréquence / support des événements) ne touche PAS l'actualisation :
+  // il caractérise la géométrie d'occurrence, lu séparément (fracBeta).
+  var lambda=Math.log(1+r);
+  return mlFactor(fracAlpha(),lambda,n);
+}
+function toggleFrac(){
+  ST.fracMode=!ST.fracMode;
+  var btn=document.getElementById('tbFrac');
+  var ctl=document.getElementById('fracControls');
+  if(ST.fracMode){
+    btn.textContent='FRACTIONNAIRE';
+    btn.style.background='var(--p)';btn.style.color='#fff';
+    if(ctl) ctl.style.display='block';
+  }else{
+    btn.textContent='CLASSIQUE';
+    btn.style.background='transparent';btn.style.color='var(--p)';
+    if(ctl) ctl.style.display='none';
+  }
+  onSlider();
+}
 
 // ═══════════════════════════════════════════
 // WEIGHTS & BUSINESS
@@ -2152,6 +2245,25 @@ function onSlider(){
   var vn=document.getElementById('vN');if(vn) vn.textContent=ST.n+' ans';
   var vr=document.getElementById('vR');if(vr) vr.textContent=(ST.r*100).toFixed(1)+'%';
   var vEta=document.getElementById('vEta');if(vEta) vEta.textContent=(ST.eta*100).toFixed(3)+'%';
+
+  // ── lecture des manettes fractionnaires (si présentes) ──
+  var sH1=document.getElementById('sH1'); if(sH1) ST.H1=+sH1.value;
+  var sH2=document.getElementById('sH2'); if(sH2) ST.H2=+sH2.value;
+  var sB1=document.getElementById('sB1'); if(sB1) ST.beta1=+sB1.value;
+  var sB2=document.getElementById('sB2'); if(sB2) ST.beta2=+sB2.value;
+  var vH1=document.getElementById('vH1'); if(vH1) vH1.textContent=ST.H1.toFixed(2).replace('.',',');
+  var vH2=document.getElementById('vH2'); if(vH2) vH2.textContent=ST.H2.toFixed(2).replace('.',',');
+  var vB1=document.getElementById('vB1'); if(vB1) vB1.textContent=ST.beta1.toFixed(2).replace('.',',');
+  var vB2=document.getElementById('vB2'); if(vB2) vB2.textContent=ST.beta2.toFixed(2).replace('.',',');
+  if(ST.fracMode){
+    var aA=document.getElementById('fracAlpha'); if(aA) aA.textContent=fracAlpha().toFixed(2).replace('.',',');
+    var aB=document.getElementById('fracBeta');  if(aB) aB.textContent=fracBeta().toFixed(2).replace('.',',');
+    var fF=document.getElementById('fracFactor');var fC=document.getElementById('fracClass');var fD=document.getElementById('fracDelta');
+    var mlf=annuity(ST.r,ST.n), clf=annuityClassic(ST.r,ST.n);
+    if(fF) fF.textContent=mlf.toFixed(2).replace('.',',');
+    if(fC) fC.textContent=clf.toFixed(2).replace('.',',');
+    if(fD) fD.textContent=(clf>0?((mlf/clf-1)*100>=0?'+':'')+((mlf/clf-1)*100).toFixed(1)+'%':'—');
+  }
 
   if(ST.I<S_SEUIL&&ST.regC===0) ST.markov=0;
   calcWeights();
