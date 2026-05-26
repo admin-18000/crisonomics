@@ -663,6 +663,31 @@ document.addEventListener('DOMContentLoaded',function(){
         </div>
       </div>
     </div>
+
+    <!-- ── COMPOSANTE PRÉCOCITÉ (triplet F × S × V) ── -->
+    <div class="mg2 exp-only" style="margin-top:8px">
+      <div class="sg" style="border:1px solid #ff8c00;border-radius:5px;padding:7px">
+        <div class="slrow" style="margin-bottom:5px">
+          <span class="slname" style="color:#ff8c00;font-size:10px;font-weight:700">🗓 COMPOSANTE PRÉCOCITÉ — V</span>
+          <button class="toggle-btn" id="tbPrec" onclick="togglePrec()"
+            style="padding:3px 10px;font-size:10px;background:transparent;border:1px solid #ff8c00;color:#ff8c00">INACTIF</button>
+        </div>
+        <div style="font-size:9px;color:var(--m);line-height:1.5;margin-bottom:4px">
+          Triplet F × S × V. V est un facteur de stress de vulnérabilité (saisi),
+          pas une modélisation endogène. OFF = sorties inchangées.
+        </div>
+        <div id="precControls" style="display:none">
+          <div class="sg" style="margin-top:4px">
+            <div class="slrow"><span class="slname" style="color:#ff8c00;font-size:9px">V — Facteur de précocité</span><span class="slval" id="vV" style="color:#ff8c00;font-size:11px">1,00</span></div>
+            <input type="range" id="sV" min="1.00" max="1.80" step="0.05" value="1.00" oninput="onSlider()">
+          </div>
+          <div class="ibox" style="margin-top:5px">
+            <span style="color:#ff8c00">V appliqué = <span id="precFactor">1,00</span></span>
+            <span style="color:var(--m)">VAN × V — emplacement structurel du 3ᵉ terme</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- SIGMA (expert only) -->
@@ -1277,6 +1302,7 @@ var ST={
   presMode:false,
   // ── Extension fractale-fractionnaire (commutable) ──
   fracMode:false, H1:0.75, H2:0.85, beta1:0.90, beta2:0.55,
+  precMode:false, V:1.0,
   // Animation state for coupled full-model animation
   animW2:0, animWpc:0, animEC:0,
   // ── Hormèse 𝓗 (additif, plafonné τ_max) ──
@@ -1373,6 +1399,12 @@ function fracBeta(){
   return (ST.I>=S_SEUIL||ST.regC===1)?ST.beta2:ST.beta1;
 }
 function annuityClassic(r,n){return (1-Math.pow(1+r,-n))/r;}
+// ── Facteur de précocité V (triplet F × S × V) ──
+// Voie 1 : facteur de stress commutable. V multiplie la charge agrégée.
+// N'est PAS une modélisation endogène — le simulateur n'a pas d'axe calendaire.
+function precocityFactor(){
+  return ST.precMode ? ST.V : 1;
+}
 function annuity(r,n){
   if(!ST.fracMode) return annuityClassic(r,n);
   // mode fractionnaire : actualisation de Mittag-Leffler sur l'horizon réel n.
@@ -1393,6 +1425,22 @@ function toggleFrac(){
   }else{
     btn.textContent='CLASSIQUE';
     btn.style.background='transparent';btn.style.color='var(--p)';
+    if(ctl) ctl.style.display='none';
+  }
+  onSlider();
+}
+
+function togglePrec(){
+  ST.precMode=!ST.precMode;
+  var btn=document.getElementById('tbPrec');
+  var ctl=document.getElementById('precControls');
+  if(ST.precMode){
+    btn.textContent='ACTIF';
+    btn.style.background='#ff8c00';btn.style.color='#fff';
+    if(ctl) ctl.style.display='block';
+  }else{
+    btn.textContent='INACTIF';
+    btn.style.background='transparent';btn.style.color='#ff8c00';
     if(ctl) ctl.style.display='none';
   }
   onSlider();
@@ -1478,7 +1526,7 @@ function calcBusiness(){
   // Indépendant du MC — cohérence mathématique garantie
   // ★ Utilise τ_eff (= τ₀ + Δτ_𝓗, plafonné τ_max) pour cohérence Excel
   var ecUsed=interpEC(ST.I,effTau());
-  ST.VAN=ecUsed*A;
+  ST.VAN=ecUsed*A*precocityFactor();
   var tauEff=Math.min(effTau(),TAU_MAX)/100;
   var w2r=ST.w2;
   var w2res=sigm(ST.I,KC*(1-tauEff),S_SEUIL*(1+tauEff));
@@ -1516,7 +1564,7 @@ function updateKPIs(){
   var p99_disp = ST.mcDone&&ST.P99>0 ? ST.P99 : interpP99(ST.I,effTau());
   // VAN TOUJOURS depuis paliers Excel — cohérence avec assurabilité
   var ec_van   = interpEC(ST.I,effTau());
-  var van_disp = ec_van*annuity(ST.r,ST.n);
+  var van_disp = ec_van*annuity(ST.r,ST.n)*precocityFactor();
   numSet('kEC', ec_disp,  1,'#ff3355');
   numSet('kP95',p95_disp, 1,'#ff3355');
   numSet('kP99',p99_disp, 1,'#ff3355');
@@ -2265,6 +2313,14 @@ function onSlider(){
     if(fF) fF.textContent=mlf.toFixed(2).replace('.',',');
     if(fC) fC.textContent=clf.toFixed(2).replace('.',',');
     if(fD) fD.textContent=(clf>0?((mlf/clf-1)*100>=0?'+':'')+((mlf/clf-1)*100).toFixed(1)+'%':'—');
+  }
+
+  // ── lecture de la manette précocité (si présente) ──
+  var sV=document.getElementById('sV'); if(sV) ST.V=+sV.value;
+  var vV=document.getElementById('vV'); if(vV) vV.textContent=ST.V.toFixed(2).replace('.',',');
+  if(ST.precMode){
+    var pF=document.getElementById('precFactor');
+    if(pF) pF.textContent=precocityFactor().toFixed(2).replace('.',',');
   }
 
   if(ST.I<S_SEUIL&&ST.regC===0) ST.markov=0;
