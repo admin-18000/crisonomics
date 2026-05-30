@@ -475,6 +475,7 @@ document.addEventListener('DOMContentLoaded',function(){
     <button class="toggle-btn" id="tbPres" onclick="setMode(true)">📊 Présentation</button>
     <button class="toggle-btn expert on" id="tbExp" onclick="setMode(false)">⚙ Expert</button>
     <button class="theme-toggle" id="tbTheme" onclick="toggleTheme()" title="Basculer clair / sombre">🌙 Sombre</button>
+    <button class="theme-toggle" id="tbAbout" onclick="document.getElementById('aboutModal').style.display='flex'" title="Préambule épistémologique du cadre" style="border-color:var(--c);color:var(--c)">ⓘ À propos du cadre</button>
   </div>
   <span class="mode-hint" id="modeHint">Vue complète · Tous les paramètres · Monte-Carlo · Mahalanobis</span>
 </div>
@@ -3803,5 +3804,43 @@ function drawProof(){
   }catch(e){}
 })();
 </script>
+<!-- ════════ Modale "À propos du cadre" — Préambule épistémologique ════════ -->
+<div id="aboutModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,5,15,.78);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--panel);max-width:780px;width:100%;max-height:92vh;overflow-y:auto;border-radius:14px;padding:34px 38px;box-shadow:0 24px 70px rgba(0,0,0,.6);border:1px solid var(--brd2);position:relative;font-family:var(--font)">
+    <button onclick="document.getElementById('aboutModal').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;font-size:24px;color:var(--m);cursor:pointer;line-height:1;padding:4px 10px;border-radius:6px;font-family:inherit" onmouseover="this.style.background='var(--bg3)';this.style.color='var(--t)'" onmouseout="this.style.background='none';this.style.color='var(--m)'">×</button>
+
+    <div style="color:var(--c);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:8px">Préambule épistémologique</div>
+
+    <h2 style="font-size:23px;font-weight:700;color:var(--t);margin:0 0 4px 0;line-height:1.25;font-family:var(--font)">CRISOnomics — Quantifier le coût de l'inaction face à la polycrise</h2>
+
+    <div style="font-size:13px;font-style:italic;color:var(--m);margin-bottom:22px;border-bottom:1px solid var(--brd);padding-bottom:14px">Une physique-mathématique financière du risque climatique</div>
+
+    <div style="font-size:13.5px;line-height:1.72;color:var(--t)">
+
+      <p style="margin:0 0 12px 0">Le coût du risque climatique est aujourd'hui largement traité comme une <em>moyenne actuarielle stable</em> : on additionne des fréquences moyennes et des intensités moyennes, comme si le climat se comportait en régime stationnaire.</p>
+
+      <p style="margin:0 0 12px 0">Cette lecture est partielle. Le système climat-économie n'est ni stationnaire, ni linéaire, ni sans mémoire. Il est <strong style="color:var(--c)">thermodynamique</strong> — au sens propre : il a des états, des seuils, des transitions de phase, et des trajectoires qui dépendent du chemin parcouru.</p>
+
+      <p style="margin:0 0 12px 0">Quatre signatures caractérisent cette physique du coût climatique :</p>
+
+      <ul style="margin:0 0 14px 0;padding-left:22px;list-style:none">
+        <li style="margin-bottom:8px;position:relative"><span style="position:absolute;left:-18px;color:var(--c)">▸</span><strong>L'hystérésis</strong> — le coût ne revient pas à son niveau initial après un choc, même si l'aléa disparaît : la trajectoire <em>garde la mémoire</em> de ce qui s'est produit.</li>
+        <li style="margin-bottom:8px;position:relative"><span style="position:absolute;left:-18px;color:var(--c)">▸</span><strong>L'hormèse</strong> — une exposition modérée peut renforcer la résilience plutôt que la dégrader. Tout stress n'aggrave pas mécaniquement.</li>
+        <li style="margin-bottom:8px;position:relative"><span style="position:absolute;left:-18px;color:var(--c)">▸</span><strong>Les boucles de rétroaction</strong> — un coût climatique dégrade les marges, qui dégradent la capacité d'investissement, qui aggrave le coût futur. Le système se renforce ou s'effondre <em>par lui-même</em>.</li>
+        <li style="margin-bottom:0;position:relative"><span style="position:absolute;left:-18px;color:var(--c)">▸</span><strong>Les attracteurs</strong> — il existe des régimes stables (nominal) et des régimes catastrophiques (effondrement), avec des bascules entre les deux. Le coût ne dérive pas continûment : il <em>saute</em> d'un régime à l'autre.</li>
+      </ul>
+
+      <p style="margin:0 0 12px 0">Au cœur du cadre, une <strong style="color:var(--c)">équation événementielle</strong> indifférente à la cause du choc — qu'il soit climatique, géopolitique, cyber ou humain — exprime le coût d'un événement sous une forme commune et universelle, opérationnelle pour la comptabilité, l'assurance et le contentieux.</p>
+
+      <p style="margin:0 0 12px 0">Au-dessus, le moteur stochastique de <strong>CRISOnomics</strong> orchestre les quatre signatures thermodynamiques pour quantifier ce que coûte l'inaction sur des horizons longs, à travers des régimes hétérogènes.</p>
+
+      <p style="margin:0 0 0 0">C'est cette <strong>non-réduction du risque à une moyenne stationnaire</strong> qui rend le cadre pertinent pour mesurer, provisionner et anticiper les coûts d'un monde devenu <em>polycritique</em>.</p>
+
+    </div>
+
+    <div style="margin-top:24px;padding-top:14px;border-top:1px solid var(--brd);font-size:11px;color:var(--m);text-align:right;font-family:var(--mono)">© Thibault Njeckil · Dépôt INPI 2026</div>
+  </div>
+</div>
+
 </body>
 </html>
