@@ -2154,6 +2154,39 @@ function drawBP(){
 // MONTE CARLO
 // ═══════════════════════════════════════════
 var mcRunning=false;
+
+// === Cholesky live + Mahalanobis blanchie (alignement avec Excel corrigé) ===
+var R1_BASE = [
+  [1.000000,0.150000,0.250000,0.300000,0.200000,0.350000,0.180000],
+  [0.150000,1.000000,0.650000,0.100000,0.750000,0.200000,0.700000],
+  [0.250000,0.650000,1.000000,0.150000,0.800000,0.300000,0.600000],
+  [0.300000,0.100000,0.150000,1.000000,0.050000,0.400000,0.080000],
+  [0.200000,0.750000,0.800000,0.050000,1.000000,0.250000,0.850000],
+  [0.350000,0.200000,0.300000,0.400000,0.250000,1.000000,0.220000],
+  [0.180000,0.700000,0.600000,0.080000,0.850000,0.220000,1.000000]
+];
+var ALPHA_AMP = 0.12; // amplification corrélations en R2 (cf. Paramètres!B52 Excel)
+function cholesky7(R){
+  var L=[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]];
+  for(var i=0;i<7;i++){
+    for(var j=0;j<=i;j++){
+      var s=R[i][j];
+      for(var k=0;k<j;k++) s -= L[i][k]*L[j][k];
+      if(i===j) L[i][j] = Math.sqrt(Math.max(0,s));
+      else L[i][j] = (L[j][j]===0)?0:s/L[j][j];
+    }
+  }
+  return L;
+}
+function buildLdyn(w2){
+  var R=[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]];
+  for(var i=0;i<7;i++) for(var j=0;j<7;j++){
+    R[i][j] = R1_BASE[i][j] + w2*ALPHA_AMP*(1 - R1_BASE[i][j]); // amplifie vers 1 ; pour i=j (R1=1) reste à 1
+  }
+  return cholesky7(R);
+}
+// === Fin de l'amélioration ===
+
 async function runMC(){
   if(mcRunning) return;
   mcRunning=true;
@@ -2162,6 +2195,8 @@ async function runMC(){
   var lbl=document.getElementById('mclbl');if(lbl) lbl.textContent='Simulation…';
   calcWeights();
   var w2m=ST.w2m,wpc2=ST.wpc,At=1+wpc2*(Math.exp(0.1*w2m)-1);
+  // Cholesky dynamique recalculée selon w2 (alignement Excel corrigé)
+  var L_dyn = buildLdyn(w2m);
   // BASE calibré: MC(I=3.5) → E[C]≈21.04 M€ (PALIERS[0], Excel)
 var tau=Math.min(ST.tau,TAU_MAX)/100,BASE=0.955;
   var params=[];
@@ -2178,9 +2213,9 @@ var tau=Math.min(ST.tau,TAU_MAX)/100,BASE=0.955;
       await new Promise(function(res){setTimeout(res,0);});
     }
     var eps_raw=[];for(var i=0;i<NP;i++) eps_raw.push(normInv(Math.random()));
-    var Z=[];for(var i=0;i<NP;i++){var z=0;for(var j=0;j<=i;j++) z+=L_MAT[i][j]*eps_raw[j];Z.push(z);}
+    var Z=[];for(var i=0;i<NP;i++){var z=0;for(var j=0;j<=i;j++) z+=L_dyn[i][j]*eps_raw[j];Z.push(z);}
     var U=[];for(var i=0;i<NP;i++) U.push(normCDF(Z[i]));
-    var D2=mahal2(Z),DM=Math.sqrt(Math.max(0,D2));
+    var D2=0;for(var ii=0;ii<NP;ii++) D2+=eps_raw[ii]*eps_raw[ii]; var DM=Math.sqrt(Math.max(0,D2)); // Mahalanobis blanchie : D²=Σε²~χ²(7) exact en tout régime
     var pval=1-chi2cdf(D2,7),pretour=pval>0?Math.round(1/pval):99999;
     var sev2,tens2;
     if(pretour>=200) sev2='Extrême';else if(pretour>=50) sev2='Sévère';else if(pretour>=10) sev2='Modéré';else sev2='Courant';
