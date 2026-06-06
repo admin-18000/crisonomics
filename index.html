@@ -564,6 +564,32 @@ document.addEventListener('DOMContentLoaded',function(){
       <div class="giec-alert" id="giecAlert">⚠ Limite GIEC AR6 — Warszawski et al. (2013) : efficacité max ~67% · Risque résiduel incompressible 33%</div>
     </div>
 
+    <!-- ════ INDICE DE DÉNI Dₜ (latence de réponse) ════ -->
+    <div class="sg sgg" style="margin-top:6px;border-left:3px solid #ff3355;padding-left:6px">
+      <div class="slrow"><span class="slname" style="color:#ff3355">Dₜ Indice de déni</span><span class="slcode">B16</span><span class="slval" id="vDeni" style="color:#ff3355">0%</span></div>
+      <div class="sldesc">Latence de réponse : désinformation, coupes science, blocages, recul coopération · étrangle τ_eff</div>
+      <input type="range" id="sDeni" min="0" max="100" step="1" value="0" oninput="onSlider()">
+      <div class="slmarks"><span>0% réponse intacte</span><span>50%</span><span>100% paralysie</span></div>
+      <div class="ibox" style="margin-top:4px;font-size:10px">
+        <span>τ_eff après déni = <span id="vTauEffDeni" style="color:#00d97a">—</span></span>
+        <span>Coût perdu = <span id="vCoutDeni" style="color:#ff3355">—</span> M€</span>
+      </div>
+    </div>
+
+    <!-- ════ SENSIBILITÉ AUX LIMITES PLANÉTAIRES ════ -->
+    <div class="sg sgg" style="margin-top:6px;border-left:3px solid #00d97a;padding-left:6px">
+      <div class="slrow"><span class="slname" style="color:#00d97a">Σ Sensibilité aux limites planétaires</span><span class="slcode">B163</span><span class="slval" id="vSig" style="color:#00d97a">0,00</span></div>
+      <div class="sldesc">Pente d'amplification du coût à l'approche des seuils écologiques · A_Σ = exp(Σ·Π)</div>
+      <input type="range" id="sSig" min="0" max="2" step="0.05" value="0" oninput="onSlider()">
+      <div class="slrow" style="margin-top:6px"><span class="slname" style="color:#00d97a">Π Proximité aux limites planétaires</span><span class="slcode">B164</span><span class="slval" id="vProx" style="color:#00d97a">0,00</span></div>
+      <div class="sldesc">Distance aux seuils (biosphère, cycles biogéochimiques…) — distinct du climat I</div>
+      <input type="range" id="sProx" min="0" max="1" step="0.05" value="0" oninput="onSlider()">
+      <div class="ibox" style="margin-top:4px;font-size:10px">
+        <span style="color:#00d97a">A_Σ appliqué = <span id="vASig">1,00</span></span>
+        <span style="color:var(--m)">amplifie le coût brut · neutre si Σ=0</span>
+      </div>
+    </div>
+
     <!-- ════ BOUCLE HORMÉTIQUE 𝓗 ════ -->
     <div class="sg sgg" style="margin-top:6px;border-left:3px solid #b44dff;padding-left:6px">
       <div class="slrow"><span class="slname" style="color:#b44dff">𝓗 Gain hormétique η</span><span class="slcode">B97</span><span class="slval" id="vEta" style="color:#b44dff">0.08%</span></div>
@@ -1173,9 +1199,11 @@ function computeHormese(){
   var dtau_brut = ST.eta * g * ind;            // Δτ instantané
   var dtau_cum  = dtau_brut * ST.n;            // ∫₀ᵀ 𝓗 ds  (T = horizon)
   // τ_eff = min(τ₀/100 + Δτ_𝓗 , τ_max/100)  exprimé en pourcentage [0,100]
+  // τ_eff = min( (1−déni)·(τ₀ + Δτ_𝓗) , τ_max )   [Excel B111 : déni étrangle socle ET apprentissage]
+  var deni = ST.deni;                          // ∈ [0,1] : 0 = réponse intacte, 1 = paralysie
   var tau0_pct = Math.min(ST.tau, TAU_MAX);
-  var tauEff_pct = Math.min(tau0_pct + dtau_cum*100, TAU_MAX);
-  ST.dtauH  = tauEff_pct - tau0_pct;           // pp (points de pourcentage) gain net
+  var tauEff_pct = Math.min((1-deni)*(tau0_pct + dtau_cum*100), TAU_MAX);
+  ST.dtauH  = (1-deni)*dtau_cum*100;            // apprentissage pur atténué (≥ 0) [Excel B113]
   ST.tauEff = tauEff_pct;                      // %  (équivalent du slider, mais étendu)
   return tauEff_pct;
 }
@@ -1304,6 +1332,10 @@ var ST={
   // ── Extension fractale-fractionnaire (commutable) ──
   fracMode:false, H1:0.75, H2:0.85, beta1:0.90, beta2:0.55,
   precMode:false, V:1.0,
+  // ── Indice de déni Dₜ (latence de réponse) : étrangle τ_eff ──
+  deni:0,
+  // ── Sensibilité aux limites planétaires : A_Σ = exp(Σ·Π), distinct du climat ──
+  sigmaLim:0, proxLim:0, aSigma:1,
   // Animation state for coupled full-model animation
   animW2:0, animWpc:0, animEC:0,
   // ── Hormèse 𝓗 (additif, plafonné τ_max) ──
@@ -1405,6 +1437,12 @@ function annuityClassic(r,n){return (1-Math.pow(1+r,-n))/r;}
 // N'est PAS une modélisation endogène — le simulateur n'a pas d'axe calendaire.
 function precocityFactor(){
   return ST.precMode ? ST.V : 1;
+}
+// Sensibilité aux limites planétaires : A_Σ = exp(Σ·Π), Π distinct du climat (biosphère, cycles biogéochimiques…)
+// Σ=0 ⇒ A_Σ=1 (neutre, restitue le modèle d'origine). Amplifie le coût brut comme un facteur de vulnérabilité contextuelle.
+function planetaryFactor(){
+  ST.aSigma = Math.exp(ST.sigmaLim * ST.proxLim);
+  return ST.aSigma;
 }
 function annuity(r,n){
   if(!ST.fracMode) return annuityClassic(r,n);
@@ -1527,7 +1565,7 @@ function calcBusiness(){
   // Indépendant du MC — cohérence mathématique garantie
   // ★ Utilise τ_eff (= τ₀ + Δτ_𝓗, plafonné τ_max) pour cohérence Excel
   var ecUsed=interpEC(ST.I,effTau());
-  ST.VAN=ecUsed*A*precocityFactor();
+  ST.VAN=ecUsed*A*precocityFactor()*planetaryFactor();
   var tauEff=Math.min(effTau(),TAU_MAX)/100;
   var w2r=ST.w2;
   var w2res=sigm(ST.I,KC*(1-tauEff),S_SEUIL*(1+tauEff));
@@ -1565,7 +1603,7 @@ function updateKPIs(){
   var p99_disp = ST.mcDone&&ST.P99>0 ? ST.P99 : interpP99(ST.I,effTau());
   // VAN TOUJOURS depuis paliers Excel — cohérence avec assurabilité
   var ec_van   = interpEC(ST.I,effTau());
-  var van_disp = ec_van*annuity(ST.r,ST.n)*precocityFactor();
+  var van_disp = ec_van*annuity(ST.r,ST.n)*precocityFactor()*planetaryFactor();
   numSet('kEC', ec_disp,  1,'#ff3355');
   numSet('kP95',p95_disp, 1,'#ff3355');
   numSet('kP99',p99_disp, 1,'#ff3355');
@@ -2359,6 +2397,17 @@ function onSlider(){
     if(pF) pF.textContent=precocityFactor().toFixed(2).replace('.',',');
   }
 
+  // ── lecture indice de déni Dₜ (étrangle τ_eff) ──
+  var sDeni=document.getElementById('sDeni'); if(sDeni) ST.deni=(+sDeni.value)/100;
+  var vDeni=document.getElementById('vDeni'); if(vDeni) vDeni.textContent=(ST.deni*100).toFixed(0)+'%';
+
+  // ── lecture sensibilité aux limites planétaires (A_Σ = exp(Σ·Π)) ──
+  var sSig=document.getElementById('sSig');   if(sSig)  ST.sigmaLim=+sSig.value;
+  var sProx=document.getElementById('sProx'); if(sProx) ST.proxLim=+sProx.value;
+  var vSig=document.getElementById('vSig');   if(vSig)  vSig.textContent=ST.sigmaLim.toFixed(2).replace('.',',');
+  var vProx=document.getElementById('vProx'); if(vProx) vProx.textContent=ST.proxLim.toFixed(2).replace('.',',');
+  var vASig=document.getElementById('vASig'); if(vASig) vASig.textContent=planetaryFactor().toFixed(2).replace('.',',');
+
   if(ST.I<S_SEUIL&&ST.regC===0) ST.markov=0;
   calcWeights();
   // ── BOOTSTRAP : EC préliminaire avec τ₀ pour amorcer 𝓗 ──
@@ -2393,6 +2442,17 @@ function updateHormesisLyapBadges(){
     else if(Cobs>ST.Cmax) hd.textContent='🔴 distress (surcharge, 𝓗=0)';
     else if(ST.tauEff>=TAU_MAX*0.99) hd.textContent='⚪ plafonné τ_max';
     else hd.textContent='🟢 hormèse active';
+  }
+  // ── badges déni : τ_eff résultant + coût d'adaptation perdu (M€) ──
+  var tED=document.getElementById('vTauEffDeni');
+  if(tED){ tED.textContent=ST.tauEff.toFixed(1)+'%'; }
+  var cD=document.getElementById('vCoutDeni');
+  if(cD){
+    // coût perdu = part d'adaptation détruite par le déni × coût brut actualisé
+    var tau0=Math.min(ST.tau,TAU_MAX)/100;
+    var coutBrut=interpEC(ST.I,0)*annuity(ST.r,ST.n)*precocityFactor()*planetaryFactor();
+    var perdu=coutBrut*ST.deni*tau0;
+    cD.textContent=perdu.toFixed(1);
   }
   // Lyapunov
   var vL=document.getElementById('vLam');
