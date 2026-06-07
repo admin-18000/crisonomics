@@ -590,6 +590,30 @@ document.addEventListener('DOMContentLoaded',function(){
       </div>
     </div>
 
+    <!-- ════ SURCOUCHE 1 — INCERTITUDE PROFONDE (knightienne) ════ -->
+    <div class="sg sgg" style="margin-top:6px;border-left:3px solid #f5a623;padding-left:6px">
+      <div class="slrow"><span class="slname" style="color:#f5a623">U Incertitude profonde</span><span class="slcode">B169</span><span class="slval" id="vIncU" style="color:#f5a623">0,00</span></div>
+      <div class="sldesc">Ignorance sur les lois elles-mêmes (couplages, seuils, espèces inconnus) · distinct de la variance Monte-Carlo</div>
+      <input type="range" id="sIncU" min="0" max="1" step="0.05" value="0" oninput="onSlider()">
+      <div class="slrow" style="margin-top:6px"><span class="slname" style="color:#f5a623">λ_U Sensibilité à l'ambiguïté</span><span class="slcode">B168</span><span class="slval" id="vLamU" style="color:#f5a623">0,00</span></div>
+      <input type="range" id="sLamU" min="0" max="2" step="0.05" value="0" oninput="onSlider()">
+      <div class="ibox" style="margin-top:4px;font-size:10px">
+        <span style="color:#f5a623">A_U (prime robustesse) = <span id="vAU">1,00</span></span>
+        <span style="color:var(--m)">prime min-max · neutre si λ_U=0</span>
+      </div>
+    </div>
+
+    <!-- ════ SURCOUCHE 2 — DÉRIVE CHRONIQUE (slow-onset) ════ -->
+    <div class="sg sgg" style="margin-top:6px;border-left:3px solid #4a90d9;padding-left:6px">
+      <div class="slrow"><span class="slname" style="color:#4a90d9">g Dérive chronique (%/an)</span><span class="slcode">B173</span><span class="slval" id="vGch" style="color:#4a90d9">0,0%</span></div>
+      <div class="sldesc">Dégradation lente cumulative (niveau marin, acidification, stress thermique) · escalade temporelle, distincte de Σ</div>
+      <input type="range" id="sGch" min="0" max="2.9" step="0.1" value="0" oninput="onSlider()">
+      <div class="ibox" style="margin-top:4px;font-size:10px">
+        <span style="color:#4a90d9">M_chron (escalade) = <span id="vMch">1,00</span></span>
+        <span style="color:var(--m)">annuité croissante · neutre si g=0</span>
+      </div>
+    </div>
+
     <!-- ════ BOUCLE HORMÉTIQUE 𝓗 ════ -->
     <div class="sg sgg" style="margin-top:6px;border-left:3px solid #b44dff;padding-left:6px">
       <div class="slrow"><span class="slname" style="color:#b44dff">𝓗 Gain hormétique η</span><span class="slcode">B97</span><span class="slval" id="vEta" style="color:#b44dff">0.08%</span></div>
@@ -1336,6 +1360,10 @@ var ST={
   deni:0,
   // ── Sensibilité aux limites planétaires : A_Σ = exp(Σ·Π), distinct du climat ──
   sigmaLim:0, proxLim:0, aSigma:1,
+  // ── Surcouche 1 : incertitude profonde (knightienne) : A_U = 1 + λ_U·U ──
+  lambdaU:0, incU:0, aU:1,
+  // ── Surcouche 2 : dérive chronique (slow-onset) : annuité croissante ──
+  gChron:0, mChron:1,
   // Animation state for coupled full-model animation
   animW2:0, animWpc:0, animEC:0,
   // ── Hormèse 𝓗 (additif, plafonné τ_max) ──
@@ -1443,6 +1471,20 @@ function precocityFactor(){
 function planetaryFactor(){
   ST.aSigma = Math.exp(ST.sigmaLim * ST.proxLim);
   return ST.aSigma;
+}
+// Surcouche incertitude profonde : prime de robustesse A_U = 1 + λ_U·U (épistémique, distinct de la variance MC)
+function ambiguityFactor(){
+  ST.aU = 1 + ST.lambdaU * ST.incU;
+  return ST.aU;
+}
+// Surcouche dérive chronique : rapport annuité croissante / annuité plate (g_chron ≠ r)
+function chronicFactor(){
+  var r = ST.r, g = ST.gChron, n = ST.n;
+  if(Math.abs(r-g) < 1e-9){ ST.mChron = 1; return 1; }   // garde-fou g≈r
+  var growing = (1/(r-g))*(1 - Math.pow((1+g)/(1+r), n));
+  var flat    = (1/r)*(1 - Math.pow(1+r, -n));
+  ST.mChron = (flat !== 0) ? growing/flat : 1;
+  return ST.mChron;
 }
 function annuity(r,n){
   if(!ST.fracMode) return annuityClassic(r,n);
@@ -1565,7 +1607,7 @@ function calcBusiness(){
   // Indépendant du MC — cohérence mathématique garantie
   // ★ Utilise τ_eff (= τ₀ + Δτ_𝓗, plafonné τ_max) pour cohérence Excel
   var ecUsed=interpEC(ST.I,effTau());
-  ST.VAN=ecUsed*A*precocityFactor()*planetaryFactor();
+  ST.VAN=ecUsed*A*precocityFactor()*planetaryFactor()*ambiguityFactor()*chronicFactor();
   var tauEff=Math.min(effTau(),TAU_MAX)/100;
   var w2r=ST.w2;
   var w2res=sigm(ST.I,KC*(1-tauEff),S_SEUIL*(1+tauEff));
@@ -1603,7 +1645,7 @@ function updateKPIs(){
   var p99_disp = ST.mcDone&&ST.P99>0 ? ST.P99 : interpP99(ST.I,effTau());
   // VAN TOUJOURS depuis paliers Excel — cohérence avec assurabilité
   var ec_van   = interpEC(ST.I,effTau());
-  var van_disp = ec_van*annuity(ST.r,ST.n)*precocityFactor()*planetaryFactor();
+  var van_disp = ec_van*annuity(ST.r,ST.n)*precocityFactor()*planetaryFactor()*ambiguityFactor()*chronicFactor();
   numSet('kEC', ec_disp,  1,'#ff3355');
   numSet('kP95',p95_disp, 1,'#ff3355');
   numSet('kP99',p99_disp, 1,'#ff3355');
@@ -2407,6 +2449,18 @@ function onSlider(){
   var vSig=document.getElementById('vSig');   if(vSig)  vSig.textContent=ST.sigmaLim.toFixed(2).replace('.',',');
   var vProx=document.getElementById('vProx'); if(vProx) vProx.textContent=ST.proxLim.toFixed(2).replace('.',',');
   var vASig=document.getElementById('vASig'); if(vASig) vASig.textContent=planetaryFactor().toFixed(2).replace('.',',');
+
+  // ── lecture surcouche incertitude profonde (A_U) ──
+  var sIncU=document.getElementById('sIncU'); if(sIncU) ST.incU=+sIncU.value;
+  var sLamU=document.getElementById('sLamU'); if(sLamU) ST.lambdaU=+sLamU.value;
+  var vIncU=document.getElementById('vIncU'); if(vIncU) vIncU.textContent=ST.incU.toFixed(2).replace('.',',');
+  var vLamU=document.getElementById('vLamU'); if(vLamU) vLamU.textContent=ST.lambdaU.toFixed(2).replace('.',',');
+  var vAU=document.getElementById('vAU');     if(vAU)   vAU.textContent=ambiguityFactor().toFixed(2).replace('.',',');
+
+  // ── lecture surcouche dérive chronique (M_chron) ──
+  var sGch=document.getElementById('sGch'); if(sGch) ST.gChron=(+sGch.value)/100;
+  var vGch=document.getElementById('vGch'); if(vGch) vGch.textContent=(ST.gChron*100).toFixed(1).replace('.',',')+'%';
+  var vMch=document.getElementById('vMch'); if(vMch) vMch.textContent=chronicFactor().toFixed(2).replace('.',',');
 
   if(ST.I<S_SEUIL&&ST.regC===0) ST.markov=0;
   calcWeights();
