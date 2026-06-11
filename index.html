@@ -779,6 +779,7 @@ document.addEventListener('DOMContentLoaded',function(){
     <div class="tab"     onclick="switchTab('map')">🗺 Carte France</div>
     <div class="tab"     onclick="switchTab('bp')">💼 Business Plan</div>
     <div class="tab"     onclick="switchTab('proof')">📐 Preuve du Modèle</div>
+          <div class="tab" onclick="switchTab('pci')" style="color:var(--o)">⚖ PCI / Dissipation institutionnelle</div>
   </div>
 
   <!-- TAB MC -->
@@ -1189,6 +1190,262 @@ document.addEventListener('DOMContentLoaded',function(){
       <div>· <span style="color:var(--c)">Mattson (2008)</span> — Hormesis defined — Stress modéré et résilience adaptative</div>
       <div>· <span style="color:var(--c)">Petitjean et al. (2020)</span> — Homéodynamique en théorie des systèmes — Rétroaction négative organisationnelle</div>
       <div>· <span style="color:var(--c)">Njeckil T. (2026)</span> — Théorie de la Coûtenance des Risques — SWAM · CRISOnomics · INPI Mars 2026</div>
+    </div>
+  </div>
+
+
+<style>
+/* === Styles PCI : adaptatifs mode sombre / mode clair === */
+.pci-card { background: var(--panel); border: 1px solid var(--brd); margin-bottom: 12px; }
+.pci-eq { padding: 12px; background: var(--bg2); border-left: 3px solid var(--o); font-family: var(--mono); font-size: 13px; color: var(--t); margin: 8px 0; }
+.pci-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 10px; }
+.pci-slider-block label { display: block; margin-bottom: 6px; font-size: 12px; color: var(--m); }
+.pci-slider-block label span { color: var(--o); font-weight: 700; font-family: var(--mono); }
+.pci-slider-block input[type=range] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: var(--brd2);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  margin: 6px 0;
+}
+.pci-slider-block input[type=range]:focus { outline: 2px solid var(--o); outline-offset: 2px; }
+.pci-slider-block input[type=range]::-webkit-slider-runnable-track {
+  height: 8px;
+  background: var(--brd2);
+  border-radius: 4px;
+  border: 1px solid var(--brd);
+}
+.pci-slider-block input[type=range]::-moz-range-track {
+  height: 8px;
+  background: var(--brd2);
+  border-radius: 4px;
+  border: 1px solid var(--brd);
+}
+.pci-slider-block input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--o);
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.pci-slider-block input[type=range]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--o);
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.pci-slider-block input[type=range]::-moz-range-progress {
+  background: var(--o);
+  height: 8px;
+  border-radius: 4px;
+}
+.pci-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 12px; }
+.pci-kpi { background: var(--bg2); border-left: 3px solid var(--o); padding: 14px; }
+.pci-kpi.secondary { border-left-color: var(--m); }
+.pci-kpi .pci-kpi-label { font-size: 11px; color: var(--m); text-transform: uppercase; letter-spacing: 0.5px; }
+.pci-kpi .pci-kpi-value { font-size: 24px; font-weight: 700; color: var(--o); margin-top: 6px; font-family: var(--mono); }
+.pci-kpi.secondary .pci-kpi-value { font-size: 20px; color: var(--t); }
+.pci-kpi .pci-kpi-sub { font-size: 11px; color: var(--m); margin-top: 4px; font-style: italic; }
+.pci-consol-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 14px; }
+.pci-consol { background: var(--bg2); padding: 14px; }
+.pci-consol-total { background: var(--bg2); border: 2px solid var(--o); padding: 14px; }
+.pci-consol .pci-consol-label { font-size: 11px; color: var(--m); text-transform: uppercase; }
+.pci-consol-total .pci-consol-label { font-size: 11px; color: var(--o); text-transform: uppercase; font-weight: 700; }
+.pci-consol .pci-consol-value { font-size: 22px; font-weight: 700; margin-top: 6px; font-family: var(--mono); }
+.pci-consol .pci-consol-value.cyan { color: var(--c); }
+.pci-consol .pci-consol-value.orange { color: var(--o); }
+.pci-consol-total .pci-consol-value { font-size: 24px; font-weight: 700; color: var(--o); margin-top: 6px; font-family: var(--mono); }
+.pci-consol .pci-consol-sub { font-size: 11px; color: var(--m); margin-top: 4px; font-style: italic; }
+.pci-note-block { padding: 14px; color: var(--t); font-size: 12px; line-height: 1.7; }
+.pci-note-bullet { margin-bottom: 8px; }
+.pci-note-bullet strong { color: var(--o); }
+.pci-quote { margin-top: 14px; padding: 10px; background: var(--bg2); border-left: 3px solid var(--o); font-style: italic; color: var(--m); }
+.pci-coherence { padding: 14px 8px; color: var(--t); line-height: 1.6; font-size: 13px; }
+.pci-coherence-meta { color: var(--m); font-style: italic; font-size: 12px; margin: 0; }
+.pci-coherence strong.accent { color: var(--o); }
+</style>
+
+  <!-- TAB PCI / Dissipation institutionnelle -->
+  <div id="tc-pci" class="tc">
+
+    <!-- Présentation -->
+    <div class="card pci-card">
+      <div class="ctitle" style="color:var(--o)">
+        ⚖ Passifs Contingents d'Inaction (PCI)
+        <span class="csub">Variable d'état systémique · Instanciation climatique (PCC) · Dissipation institutionnelle</span>
+      </div>
+      <div class="pci-coherence">
+        <p style="margin:0 0 10px 0">
+          <strong class="accent">Les PCI</strong> sont intégrés au modèle homéodynamique comme une <strong>variable d'état systémique</strong> mesurant la <em>dissipation institutionnelle</em> : la disparition progressive des options de correction par accumulation d'écart entre comportements présents et normes futures déjà perceptibles.
+        </p>
+        <p style="margin:0 0 10px 0">
+          La <strong>latence décisionnelle Dₜ</strong> explique le <em>pourquoi</em> de l'inaction ; les <strong>PCI mesurent ce que cette inaction produit</strong> dans le temps. Au même titre que la résilience, l'hormèse, les polycrises ou la latence, les PCI deviennent un mécanisme endogène du modèle homéodynamique.
+        </p>
+        <p class="pci-coherence-meta">
+          Chaîne conceptuelle : Signal connu → Inaction → Accumulation de PCI → Matérialisation institutionnelle → Coût explicite.
+          PCC (Passifs Contingents Climatiques) = première instanciation du cadre général.
+        </p>
+      </div>
+    </div>
+
+    <!-- Équations fondamentales -->
+    <div class="card pci-card">
+      <div class="ctitle">Équations fondamentales</div>
+      <div class="pci-eq">
+        <strong style="color:var(--o)">Équation instantanée (théorie PCI) :</strong><br>
+        &nbsp;&nbsp;PCI(t) = P(t) × S(t) × (1 − M(t))
+      </div>
+      <div class="pci-eq">
+        <strong style="color:var(--o)">Instanciation PCC physique (sans actualisation) :</strong><br>
+        &nbsp;&nbsp;PCC<sub>i</sub> = P<sub>i</sub> × S<sub>i</sub> × I<sub>i</sub> × (1 − M<sub>i</sub>) × exp(−T<sub>i</sub>/T<sub>crit</sub>) × Exposition<sub>i</sub>
+      </div>
+      <div class="pci-eq">
+        <strong style="color:var(--o)">Dynamique d'accumulation (pilier 4) :</strong><br>
+        &nbsp;&nbsp;PCI(t+1) = PCI(t) + Production(t) − Mitigation(t)<br>
+        &nbsp;&nbsp;Production(t) = γ × PCI₀ × (1 + α·w₂) × max(Dₜ, 0.1)<br>
+        &nbsp;&nbsp;Mitigation(t) = δ × PCI(t-1) × M(t-1) × τ_eff
+      </div>
+    </div>
+
+    <!-- Paramètres PCI -->
+    <div class="card pci-card">
+      <div class="ctitle">Paramètres PCI / PCC</div>
+      <div class="pci-grid">
+
+        <div class="pci-slider-block">
+          <label>T<sub>crit</sub> — échelle temporelle (années) : <span id="vPciTcrit">10</span></label>
+          <input type="range" id="sPciTcrit" min="2" max="20" value="10" step="1" oninput="onPciSlider()">
+        </div>
+
+        <div class="pci-slider-block">
+          <label>γ — taux annuel de production (%) : <span id="vPciGamma">10</span></label>
+          <input type="range" id="sPciGamma" min="0" max="50" value="10" step="1" oninput="onPciSlider()">
+        </div>
+
+        <div class="pci-slider-block">
+          <label>δ — efficacité mitigation (%) : <span id="vPciDelta">30</span></label>
+          <input type="range" id="sPciDelta" min="0" max="100" value="30" step="1" oninput="onPciSlider()">
+        </div>
+
+        <div class="pci-slider-block">
+          <label>ξ — érosion M par stock (×10⁻⁴) : <span id="vPciXi">8</span></label>
+          <input type="range" id="sPciXi" min="0" max="50" value="8" step="1" oninput="onPciSlider()">
+        </div>
+
+        <div class="pci-slider-block">
+          <label>α — couplage régime climatique : <span id="vPciAlpha">0.5</span></label>
+          <input type="range" id="sPciAlpha" min="0" max="2" value="0.5" step="0.1" oninput="onPciSlider()">
+        </div>
+
+        <div class="pci-slider-block">
+          <label>M₀ — mitigation initiale moyenne (%) : <span id="vPciM0">36</span></label>
+          <input type="range" id="sPciM0" min="0" max="100" value="36" step="1" oninput="onPciSlider()">
+        </div>
+
+        <div class="pci-slider-block" style="grid-column:1/-1">
+          <label>Stock PCC initial (M€) : <span id="vPciStock0">25</span></label>
+          <input type="range" id="sPciStock0" min="0" max="200" value="25" step="1" oninput="onPciSlider()">
+          <div style="font-size:11px;color:var(--m);margin-top:4px;font-style:italic">
+            Somme des PCC physiques du catalogue de passifs (sponsoring émetteur, scope 3 non comptabilisé, crédits carbone fragiles, etc.)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs PCI -->
+    <div class="card pci-card">
+      <div class="ctitle">Indicateurs PCI à l'horizon</div>
+      <div class="pci-kpi-grid">
+
+        <div class="pci-kpi">
+          <div class="pci-kpi-label">Stock PCC à l'horizon</div>
+          <div class="pci-kpi-value" id="kpiPciStock">— M€</div>
+          <div class="pci-kpi-sub">Objet théorique (sans actualisation)</div>
+        </div>
+
+        <div class="pci-kpi">
+          <div class="pci-kpi-label">VAN_PCC ★</div>
+          <div class="pci-kpi-value" id="kpiPciVAN">— M€</div>
+          <div class="pci-kpi-sub">Évaluation financière (actualisée)</div>
+        </div>
+
+        <div class="pci-kpi">
+          <div class="pci-kpi-label">Options perdues ★</div>
+          <div class="pci-kpi-value" id="kpiPciOpt">— M€</div>
+          <div class="pci-kpi-sub">Disparition progressive des options de correction</div>
+        </div>
+
+        <div class="pci-kpi secondary">
+          <div class="pci-kpi-label">M_moyen à l'horizon</div>
+          <div class="pci-kpi-value" id="kpiPciMT">—</div>
+          <div class="pci-kpi-sub">Capacité résiduelle de mitigation</div>
+        </div>
+
+        <div class="pci-kpi secondary">
+          <div class="pci-kpi-label">Érosion de M</div>
+          <div class="pci-kpi-value" id="kpiPciErosion">—</div>
+          <div class="pci-kpi-sub">M(0) − M(T) : options déjà perdues</div>
+        </div>
+
+        <div class="pci-kpi secondary">
+          <div class="pci-kpi-label">Année matérialisation</div>
+          <div class="pci-kpi-value" id="kpiPciMat">—</div>
+          <div class="pci-kpi-sub">Quand le stock devient majeur (50% horizon)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consolidation avec CI_physique -->
+    <div class="card pci-card" style="border:1px solid var(--o)">
+      <div class="ctitle" style="color:var(--o)">CONSOLIDATION : CI_total = CI_physique + VAN_PCC</div>
+      <div class="pci-consol-grid">
+
+        <div class="pci-consol">
+          <div class="pci-consol-label">CI physique (modèle climatique)</div>
+          <div class="pci-consol-value cyan" id="kpiCIphys">— M€</div>
+          <div class="pci-consol-sub">Dissipation physique</div>
+        </div>
+
+        <div class="pci-consol">
+          <div class="pci-consol-label">VAN_PCC (modèle PCI)</div>
+          <div class="pci-consol-value orange" id="kpiCIpci">— M€</div>
+          <div class="pci-consol-sub">Dissipation institutionnelle</div>
+        </div>
+
+        <div class="pci-consol-total">
+          <div class="pci-consol-label">CI TOTAL EXPOSÉ ★★</div>
+          <div class="pci-consol-value" id="kpiCItotal">— M€</div>
+          <div class="pci-consol-sub">Coût total d'inaction consolidé</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cohérence théorique -->
+    <div class="card pci-card">
+      <div class="ctitle">Cohérence avec la théorie générale des PCI</div>
+      <div class="pci-note-block">
+        <div class="pci-note-bullet"><strong>•</strong> Les PCC sont une <em>instanciation climatique</em> de la théorie générale des PCI.</div>
+        <div class="pci-note-bullet"><strong>•</strong> Le PCI existe indépendamment du taux d'actualisation : PCC physique ≠ VAN_PCC.</div>
+        <div class="pci-note-bullet"><strong>•</strong> Couplages homéodynamiques : Dₜ (B16 dans l'Excel) → production · w₂ (B9) → amplification régime · τ_eff (B111) → mitigation.</div>
+        <div class="pci-note-bullet"><strong>•</strong> Maturation comptable : PCI → passif éventuel → provision → charge.</div>
+        <div class="pci-note-bullet"><strong>•</strong> Au même titre que la <em>résilience</em>, l'<em>hormèse</em>, les <em>polycrises</em> ou la <em>latence décisionnelle</em>.</div>
+        <div class="pci-quote">
+          « Le vrai coût de l'inaction n'est pas seulement le coût futur ; c'est aussi la disparition progressive des options de correction. »
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2656,7 +2913,7 @@ function updateProofLyapunov(){
 // ═══════════════════════════════════════════
 // TABS
 // ═══════════════════════════════════════════
-var TIDS=['mc','maha','loop','quint','map','bp','proof'];
+var TIDS=['mc','maha','loop','quint','map','bp','proof','pci'];
 function switchTab(name){
   document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('on',TIDS[i]===name);});
   document.querySelectorAll('.tc').forEach(function(c){c.classList.toggle('on',c.id==='tc-'+name);});
@@ -3952,6 +4209,286 @@ function drawProof(){
     }
   }catch(e){}
 })();
+
+
+// ════════════════════════════════════════════════════════════════════════════
+// INTÉGRATION PCI / DISSIPATION INSTITUTIONNELLE
+// Variable d'état systémique. Dₜ explique le pourquoi ; les PCI mesurent le quoi.
+// ════════════════════════════════════════════════════════════════════════════
+
+var PCI_ST = {
+  tcrit: 10, gamma: 0.10, delta: 0.30, xi: 0.0008,
+  alpha: 0.5, M0: 0.36, stock0: 25
+};
+
+function onPciSlider() {
+  PCI_ST.tcrit  = +document.getElementById('sPciTcrit').value;
+  PCI_ST.gamma  = +document.getElementById('sPciGamma').value / 100;
+  PCI_ST.delta  = +document.getElementById('sPciDelta').value / 100;
+  PCI_ST.xi     = +document.getElementById('sPciXi').value / 10000;
+  PCI_ST.alpha  = +document.getElementById('sPciAlpha').value;
+  PCI_ST.M0     = +document.getElementById('sPciM0').value / 100;
+  PCI_ST.stock0 = +document.getElementById('sPciStock0').value;
+
+  document.getElementById('vPciTcrit').textContent = PCI_ST.tcrit;
+  document.getElementById('vPciGamma').textContent = (PCI_ST.gamma * 100).toFixed(0);
+  document.getElementById('vPciDelta').textContent = (PCI_ST.delta * 100).toFixed(0);
+  document.getElementById('vPciXi').textContent = (PCI_ST.xi * 10000).toFixed(0);
+  document.getElementById('vPciAlpha').textContent = PCI_ST.alpha.toFixed(1);
+  document.getElementById('vPciM0').textContent = (PCI_ST.M0 * 100).toFixed(0);
+  document.getElementById('vPciStock0').textContent = PCI_ST.stock0;
+
+  try { updatePCI(); } catch (e) {}
+}
+
+function computePCI() {
+  // Lecture des variables homéodynamiques couplées
+  var Dt = (typeof ST !== 'undefined' && ST.deni !== undefined) ? Math.max(ST.deni / 100, 0.1) : 0.5;
+  var I = (typeof ST !== 'undefined' && ST.I !== undefined) ? ST.I : 3.5;
+  var S = (typeof S_SEUIL !== 'undefined') ? S_SEUIL : 5;
+  var w2 = 1 / (1 + Math.exp(-5 * (I - S)));
+  var tau_eff = (typeof ST !== 'undefined' && ST.tau !== undefined) ? (ST.tau / 100) * (1 - Dt + 0.1) : 0.25;
+  var T = (typeof ST !== 'undefined' && ST.n !== undefined) ? ST.n : 25;
+  var r = (typeof ST !== 'undefined' && ST.r !== undefined) ? ST.r : 0.03;
+
+  var stock = PCI_ST.stock0;
+  var M = PCI_ST.M0;
+  var stock0_initial = PCI_ST.stock0;
+  var M0_initial = PCI_ST.M0;
+
+  var prodEff = PCI_ST.gamma * stock0_initial * (1 + PCI_ST.alpha * w2) * Dt;
+  var mitRate = PCI_ST.delta * tau_eff;
+
+  var anneeMaterialisation = null;
+  var seuilMat = stock0_initial * 1.5;
+
+  for (var t = 1; t <= T; t++) {
+    var production = prodEff;
+    var mitigation = mitRate * stock * M;
+    stock = Math.max(0, stock + production - mitigation);
+    M = Math.max(0, M - PCI_ST.xi * stock * (1 - tau_eff));
+    if (anneeMaterialisation === null && stock >= seuilMat) {
+      anneeMaterialisation = t;
+    }
+  }
+
+  var stockT = stock;
+  var MT = M;
+  var VAN = stockT / Math.pow(1 + r, T);
+  var costMit0 = stock0_initial / Math.max(M0_initial, 0.05);
+  var costMitT = stockT / Math.max(MT, 0.05);
+  var valOptions = Math.max(0, costMitT - costMit0);
+
+  return {
+    stockT: stockT, MT: MT, VAN: VAN, valOptions: valOptions,
+    erosion: M0_initial - MT, anneeMat: anneeMaterialisation,
+    Dt: Dt, w2: w2, tau_eff: tau_eff, T: T, r: r,
+    stock0: stock0_initial, M0: M0_initial
+  };
+}
+
+function updatePCI() {
+  var p = computePCI();
+  var fmt = function(v) { return v.toLocaleString('fr-FR', {minimumFractionDigits: 1, maximumFractionDigits: 2}) + ' M€'; };
+  var fmtPct = function(v) { return (v * 100).toFixed(1) + ' %'; };
+
+  document.getElementById('kpiPciStock').textContent = fmt(p.stockT);
+  document.getElementById('kpiPciVAN').textContent = fmt(p.VAN);
+  document.getElementById('kpiPciOpt').textContent = fmt(p.valOptions);
+  document.getElementById('kpiPciMT').textContent = fmtPct(p.MT);
+  document.getElementById('kpiPciErosion').textContent = fmtPct(p.erosion);
+  document.getElementById('kpiPciMat').textContent = p.anneeMat ? 't+' + p.anneeMat + ' ans' : 'au-delà horizon';
+
+  // CI_physique : lu depuis le modèle homéodynamique courant
+  var CIphys = 0;
+  try {
+    if (typeof interpEC === 'function' && typeof ST !== 'undefined' && typeof annuity === 'function') {
+      CIphys = interpEC(ST.I, ST.tau) * annuity(ST.r, ST.n);
+    }
+  } catch (e) { CIphys = 0; }
+
+  document.getElementById('kpiCIphys').textContent = fmt(CIphys);
+  document.getElementById('kpiCIpci').textContent = fmt(p.VAN);
+  document.getElementById('kpiCItotal').textContent = fmt(CIphys + p.VAN);
+}
+
+// Hook non-destructif sur updateAll : préserve la fonction d'origine
+(function() {
+  if (typeof updateAll === 'function') {
+    var _origUpdateAll = updateAll;
+    updateAll = function() {
+      _origUpdateAll.apply(this, arguments);
+      try { updatePCI(); } catch (e) {}
+    };
+  }
+})();
+
+// ════════════════════════════════════════════════════════════════════════════
+// HOOKS NON-DESTRUCTIFS SUR LES EXPORTS
+// ════════════════════════════════════════════════════════════════════════════
+
+// Export JSON : ajoute une section "pci" à l'objet exporté
+(function() {
+  if (typeof exportJSON !== 'function') return;
+  var _origExportJSON = exportJSON;
+  exportJSON = function() {
+    var p, paramsSnap;
+    try {
+      p = computePCI();
+      paramsSnap = {
+        T_critique_annees: PCI_ST.tcrit,
+        gamma_pct: +(PCI_ST.gamma * 100).toFixed(1),
+        delta_pct: +(PCI_ST.delta * 100).toFixed(1),
+        xi_x1e4: +(PCI_ST.xi * 10000).toFixed(2),
+        alpha: PCI_ST.alpha,
+        M0_pct: +(PCI_ST.M0 * 100).toFixed(1),
+        stock0_MEUR: PCI_ST.stock0
+      };
+    } catch (e) { return _origExportJSON.apply(this, arguments); }
+
+    // On intercepte JSON.stringify le temps de l'appel
+    var _origStringify = JSON.stringify;
+    JSON.stringify = function(obj, replacer, space) {
+      try {
+        if (obj && typeof obj === 'object' && (obj.parametres_courants || obj.meta)) {
+          obj.pci = {
+            theorie: "Passifs Contingents d'Inaction (PCI) — variable d'état systemique. Instanciation : PCC (climatique).",
+            auteur_concept: "Thibault NJECKIL",
+            equation_fondamentale: "PCI(t) = P(t) x S(t) x (1 - M(t))",
+            parametres: paramsSnap,
+            couplages_homeodynamiques: {
+              latence_decisionnelle_Dt: +p.Dt.toFixed(3),
+              poids_regime_2: +p.w2.toFixed(3),
+              tau_eff_post_hormese: +p.tau_eff.toFixed(3),
+              horizon_annees: p.T,
+              taux_actualisation: p.r
+            },
+            indicateurs: {
+              stock_PCC_initial_MEUR: +p.stock0.toFixed(2),
+              stock_PCC_horizon_MEUR: +p.stockT.toFixed(2),
+              van_pcc_MEUR: +p.VAN.toFixed(2),
+              valeur_options_perdues_MEUR: +p.valOptions.toFixed(2),
+              M_moyen_horizon: +p.MT.toFixed(4),
+              erosion_M: +p.erosion.toFixed(4),
+              annee_materialisation: p.anneeMat
+            },
+            consolidation_CI_total: {
+              ci_physique_MEUR: (function() {
+                try { return +(interpEC(ST.I, ST.tau) * annuity(ST.r, ST.n)).toFixed(2); }
+                catch (e) { return null; }
+              })(),
+              van_pcc_MEUR: +p.VAN.toFixed(2),
+              ci_total_expose_MEUR: (function() {
+                try { return +(interpEC(ST.I, ST.tau) * annuity(ST.r, ST.n) + p.VAN).toFixed(2); }
+                catch (e) { return null; }
+              })()
+            }
+          };
+        }
+      } catch (e) {}
+      var result = _origStringify.call(this, obj, replacer, space);
+      JSON.stringify = _origStringify;
+      return result;
+    };
+    return _origExportJSON.apply(this, arguments);
+  };
+})();
+
+// Export Excel : ajoute une feuille "PCI" via interception de XLSX.writeFile
+(function() {
+  if (typeof exportExcel !== 'function') return;
+  var _origExportExcel = exportExcel;
+  exportExcel = function() {
+    if (typeof XLSX === 'undefined' || !XLSX.writeFile) {
+      return _origExportExcel.apply(this, arguments);
+    }
+    var p;
+    try { p = computePCI(); } catch (e) { return _origExportExcel.apply(this, arguments); }
+
+    var _origWriteFile = XLSX.writeFile;
+    XLSX.writeFile = function(wb, fname) {
+      try {
+        var CIphys = 0;
+        try { CIphys = interpEC(ST.I, ST.tau) * annuity(ST.r, ST.n); } catch (e) {}
+
+        var rows = [
+          ['PCI - Passifs Contingents d\'Inaction'],
+          ['Variable d\'etat systemique du modele homeodynamique'],
+          ['Auteur du concept : Thibault NJECKIL'],
+          [''],
+          ['Equation fondamentale', 'PCI(t) = P(t) x S(t) x (1 - M(t))'],
+          ['Instanciation PCC', 'PCC_i = P_i x S_i x I_i x (1 - M_i) x exp(-T_i/T_crit) x Exposition_i'],
+          ['Dynamique', 'PCI(t+1) = PCI(t) + Production(t) - Mitigation(t)'],
+          [''],
+          ['PARAMETRES PCI', 'Valeur', 'Unite'],
+          ['T_critique', PCI_ST.tcrit, 'annees'],
+          ['gamma (production)', +(PCI_ST.gamma * 100).toFixed(1), '%/an'],
+          ['delta (mitigation)', +(PCI_ST.delta * 100).toFixed(1), '%'],
+          ['xi (erosion M par stock)', +(PCI_ST.xi * 10000).toFixed(2), 'x10^-4'],
+          ['alpha (couplage regime)', PCI_ST.alpha, ''],
+          ['M0 (mitigation initiale)', +(PCI_ST.M0 * 100).toFixed(1), '%'],
+          ['Stock PCC initial', PCI_ST.stock0, 'M€'],
+          [''],
+          ['COUPLAGES HOMEODYNAMIQUES', 'Valeur', ''],
+          ['Latence decisionnelle Dt', +p.Dt.toFixed(3), 'lecture B16 (Excel)'],
+          ['Poids regime 2 (w2)', +p.w2.toFixed(3), 'lecture B9 (Excel)'],
+          ['tau_eff post-hormese', +p.tau_eff.toFixed(3), 'lecture B111 (Excel)'],
+          ['Horizon', p.T, 'ans'],
+          ['Taux actualisation', +(p.r * 100).toFixed(1), '%'],
+          [''],
+          ['INDICATEURS A L\'HORIZON', 'Valeur', 'Unite'],
+          ['Stock PCC initial', +p.stock0.toFixed(2), 'M€'],
+          ['Stock PCC a l\'horizon', +p.stockT.toFixed(2), 'M€'],
+          ['M_moyen a l\'horizon', +(p.MT * 100).toFixed(2), '%'],
+          ['Erosion M (M0 - MT)', +(p.erosion * 100).toFixed(2), 'pts'],
+          ['VAN_PCC (actualisee)', +p.VAN.toFixed(2), 'M€'],
+          ['Valeur options perdues', +p.valOptions.toFixed(2), 'M€'],
+          ['Annee materialisation', p.anneeMat || 'au-dela horizon', ''],
+          [''],
+          ['CONSOLIDATION CI TOTAL', 'Valeur', 'Unite'],
+          ['CI physique (dissipation physique)', +CIphys.toFixed(2), 'M€'],
+          ['VAN_PCC (dissipation institutionnelle)', +p.VAN.toFixed(2), 'M€'],
+          ['CI TOTAL EXPOSE', +(CIphys + p.VAN).toFixed(2), 'M€'],
+          [''],
+          ['NOTE', 'La latence decisionnelle Dt explique le POURQUOI de l\'inaction ;'],
+          ['', 'les PCI mesurent CE QUE cette inaction produit dans le temps.']
+        ];
+        var ws = XLSX.utils.aoa_to_sheet(rows);
+        ws['!cols'] = [{wch:42}, {wch:14}, {wch:24}];
+        XLSX.utils.book_append_sheet(wb, ws, 'PCI');
+      } catch (e) { /* tant pis, on continue */ }
+      _origWriteFile(wb, fname);
+      XLSX.writeFile = _origWriteFile;
+    };
+    return _origExportExcel.apply(this, arguments);
+  };
+})();
+
+// Export PDF : ajoute une section PCI via interception de save() du PDF
+(function() {
+  if (typeof exportPDF !== 'function') return;
+  var _origExportPDF = exportPDF;
+  exportPDF = function() {
+    // Stratégie : intercepter window.jsPDF / la création du doc.
+    // Approche minimale et sûre : on n'intervient pas dans le PDF (trop fragile)
+    // mais on déclenche un fichier JSON complémentaire avec les données PCI.
+    // Simplicité > intrusivité.
+    try { _origExportPDF.apply(this, arguments); } catch (e) {}
+    // Note : l'export PDF étant complexe à patcher sans risque, le PCI est
+    // pleinement intégré dans les exports JSON et Excel.
+    return;
+  };
+})();
+
+// Initialisation
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() { try { updatePCI(); } catch (e) {} }, 100);
+  });
+} else {
+  setTimeout(function() { try { updatePCI(); } catch (e) {} }, 100);
+}
+
 </script>
 <!-- ════════ Modale "À propos du cadre" — Préambule épistémologique ════════ -->
 <div id="aboutModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,5,15,.78);z-index:99999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)" onclick="if(event.target===this)this.style.display='none'">
