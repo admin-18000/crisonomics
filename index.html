@@ -780,6 +780,8 @@ document.addEventListener('DOMContentLoaded',function(){
     <div class="tab"     onclick="switchTab('bp')">💼 Business Plan</div>
     <div class="tab"     onclick="switchTab('proof')">📐 Preuve du Modèle</div>
           <div class="tab" onclick="switchTab('pci')" style="color:var(--o)">⚖ PCI / Dissipation institutionnelle</div>
+          <div class="tab" onclick="switchTab('igcc')" style="color:#0a8">🌡 Calibration IGCC</div>
+          <div class="tab" onclick="switchTab('aca')" style="color:#0a8">♻ ACA — Actif</div>
   </div>
 
   <!-- TAB MC -->
@@ -1448,6 +1450,118 @@ document.addEventListener('DOMContentLoaded',function(){
       </div>
     </div>
   </div>
+
+  <div id="tc-igcc" class="tc">
+    <div class="panel" style="padding:18px 22px">
+      <h3 style="margin-top:0;color:var(--o)">🌡 Calibration IGCC — amont du modèle</h3>
+      <p class="small" style="opacity:.85;margin:6px 0 14px">
+        Calibre les opérateurs <b>I<sub>t</sub></b>, <b>S</b> (seuil), <b>Π<sub>t</sub></b> à partir des indicateurs IGCC 2025
+        (Forster et&nbsp;al., <i>Earth Syst. Sci. Data</i> 18:3889–3933, 2026, DOI&nbsp;10.5194/essd-18-3889-2026)
+        et OMM <i>State of the Global Climate</i>. La calibration est <em>en amont</em> du moteur : aucune composante de coût n'est ajoutée.
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px">
+        <div class="card">
+          <h4 style="margin:0 0 10px">Entrées (modifiables)</h4>
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <tr><td style="padding:5px 0">ΔT observé (anthropique, °C)</td><td style="text-align:right"><input id="igcc-dt-obs" type="number" step="0.01" value="1.37" style="width:90px;text-align:right"></td></tr>
+            <tr><td style="padding:5px 0">ΔT safe (pré-indus., °C)</td><td style="text-align:right"><input id="igcc-dt-safe" type="number" step="0.01" value="0.00" style="width:90px;text-align:right"></td></tr>
+            <tr><td style="padding:5px 0">ΔT critique (°C)</td><td style="text-align:right"><input id="igcc-dt-crit" type="number" step="0.1" value="3.0" style="width:90px;text-align:right"></td></tr>
+            <tr><td style="padding:5px 0">ΔT Paris (°C)</td><td style="text-align:right"><input id="igcc-dt-paris" type="number" step="0.1" value="1.5" style="width:90px;text-align:right"></td></tr>
+            <tr><td style="padding:5px 0">EEI observé (W/m²)</td><td style="text-align:right"><input id="igcc-eei-obs" type="number" step="0.1" value="1.8" style="width:90px;text-align:right"></td></tr>
+            <tr><td style="padding:5px 0">EEI critique (W/m²)</td><td style="text-align:right"><input id="igcc-eei-crit" type="number" step="0.1" value="2.0" style="width:90px;text-align:right"></td></tr>
+          </table>
+        </div>
+
+        <div class="card" style="background:rgba(0,176,80,.06);border-color:rgba(0,176,80,.35)">
+          <h4 style="margin:0 0 10px;color:#0a8">Sorties calibrées</h4>
+          <table style="width:100%;border-collapse:collapse;font-size:14px">
+            <tr><td style="padding:6px 0"><b>I<sub>t</sub></b> calibré (0–10)</td><td style="text-align:right;font-weight:700;font-size:16px" id="igcc-out-I">4.57</td></tr>
+            <tr><td style="padding:6px 0"><b>S</b> calibré (seuil 0–10)</td><td style="text-align:right;font-weight:700;font-size:16px" id="igcc-out-S">5.00</td></tr>
+            <tr><td style="padding:6px 0"><b>Π<sub>t</sub></b> calibré (0–1)</td><td style="text-align:right;font-weight:700;font-size:16px" id="igcc-out-Pi">0.900</td></tr>
+          </table>
+          <div style="margin-top:14px;text-align:right">
+            <button id="igcc-apply" class="pbtn" style="background:#0a8;color:white;border-color:#0a8;font-weight:700">
+              ▶ Appliquer la calibration au modèle
+            </button>
+          </div>
+          <div id="igcc-status" class="small" style="margin-top:8px;opacity:.75;text-align:right">—</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h4 style="margin:0 0 8px">Méthode</h4>
+        <p class="small" style="margin:0 0 6px">
+          <b>Mapping affine ΔT → I :</b> &nbsp; I = 10 × MAX(0, MIN(1, (ΔT<sub>obs</sub> − ΔT<sub>safe</sub>) / (ΔT<sub>crit</sub> − ΔT<sub>safe</sub>))).
+          À calibration IGCC 2025 : I ≈ 4,57.
+        </p>
+        <p class="small" style="margin:0 0 6px">
+          <b>Seuil S :</b> S = 10 × ΔT<sub>Paris</sub> / ΔT<sub>crit</sub>. À 1,5/3,0 → S = 5,0 (calage IPCC/Paris).
+        </p>
+        <p class="small" style="margin:0">
+          <b>Π<sub>t</sub> :</b> proxy EEI normalisé = MIN(1, EEI<sub>obs</sub> / EEI<sub>crit</sub>). IGCC&nbsp;2025 : EEI a plus que doublé depuis 1976–1995.
+          Pas de double comptage : Π<sub>t</sub> nourrit l'amplificateur A<sub>Σ</sub> existant, ne s'additionne pas au CI.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="tc-aca" class="tc">
+    <div class="panel" style="padding:18px 22px">
+      <h3 style="margin-top:0;color:#0a8">♻ ACA — Actif Contingent d'Action (climatique)</h3>
+      <p class="small" style="opacity:.85;margin:6px 0 14px">Miroir prospectif positif du PCC. Mesure le stock latent d'opportunités futures en formation par les actions positives engagées dans la transition. <em>Pas de propagation au CI</em> : la règle de prudence asymétrique (IAS&nbsp;37) protège contre la sur-comptabilisation prématurée.</p>
+
+      <div class="card" style="background:rgba(0,176,80,.06);border-color:rgba(0,176,80,.35);margin-bottom:14px">
+        <h4 style="margin:0 0 8px;color:#0a8">⚙ Couplage homéodynamique (Option B activée)</h4>
+        <p class="small" style="margin:0">
+          <b>A(t) ≡ τ(t)</b> (taux d'action, lu en direct sur le modèle) — <b>E(t) ≡ D<sub>t</sub></b> (indice de déni, lu en direct).<br>
+          O(t) reste exogène, calibré sectoriellement par le catalogue ci-dessous. L'ACA est en <em>lecture seule</em> sur le moteur, jamais en écriture.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div class="card">
+          <h4 style="margin:0 0 10px">ACA principal (lecture globale)</h4>
+          <table style="width:100%;font-size:13px">
+            <tr><td>A(t) ← τ global</td><td style="text-align:right;font-weight:700" id="aca-A">—</td></tr>
+            <tr><td>O(t) (M€, saisie)</td><td style="text-align:right"><input id="aca-O" type="number" step="1" value="50" style="width:90px;text-align:right"></td></tr>
+            <tr><td>E(t) ← D<sub>t</sub> global</td><td style="text-align:right;font-weight:700" id="aca-E">—</td></tr>
+            <tr style="border-top:1px solid var(--brd2)"><td style="padding-top:8px"><b>ACA(t) = A × O × (1−E)</b></td><td style="text-align:right;font-weight:800;font-size:16px;color:#0a8" id="aca-main">—</td></tr>
+          </table>
+        </div>
+
+        <div class="card" style="background:rgba(0,112,192,.06);border-color:rgba(0,112,192,.35)">
+          <h4 style="margin:0 0 10px;color:#08c">Bilan net prospectif</h4>
+          <table style="width:100%;font-size:13px">
+            <tr><td>ACA total (catalogue)</td><td style="text-align:right;font-weight:600" id="aca-cat-total">—</td></tr>
+            <tr><td>Stock PCC (lecture PCI_Synthèse)</td><td style="text-align:right;font-weight:600" id="aca-pci-ref">—</td></tr>
+            <tr style="border-top:1px solid var(--brd2)"><td style="padding-top:8px"><b>BNP = ACA − PCI</b></td><td style="text-align:right;font-weight:800;font-size:16px" id="aca-bnp">—</td></tr>
+          </table>
+          <p class="small" style="margin:10px 0 0;opacity:.7">
+            ★ Positif = construction d'opportunités &gt; construction de passifs.<br>
+            Règle de prudence : ACA reconnu si P≥70&nbsp;%, PCI/PCC si P≥30&nbsp;% (IAS&nbsp;37).
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h4 style="margin:0 0 10px">Catalogue (6 catégories — calibration individuelle)</h4>
+        <table style="width:100%;font-size:12px;border-collapse:collapse">
+          <thead><tr style="background:rgba(255,255,255,.04)">
+            <th style="text-align:left;padding:6px">Catégorie</th>
+            <th>A<sub>i</sub></th><th>O<sub>i</sub> (M€)</th><th>E<sub>i</sub></th>
+            <th style="text-align:right;padding-right:6px">ACA<sub>i</sub> (M€)</th>
+          </tr></thead>
+          <tbody><tr><td style="padding:4px 6px">Innovation produit / R&D bas-carbone</td><td><input id="aca-cat-A-0" type="number" step="0.05" value="0.6" style="width:60px;text-align:right"></td><td><input id="aca-cat-O-0" type="number" step="0.5"  value="30.0" style="width:70px;text-align:right"></td><td><input id="aca-cat-E-0" type="number" step="0.05" value="0.2" style="width:60px;text-align:right"></td><td style="text-align:right;font-weight:600" id="aca-cat-out-0">—</td></tr><tr><td style="padding:4px 6px">Marque & réputation verte</td><td><input id="aca-cat-A-1" type="number" step="0.05" value="0.5" style="width:60px;text-align:right"></td><td><input id="aca-cat-O-1" type="number" step="0.5"  value="25.0" style="width:70px;text-align:right"></td><td><input id="aca-cat-E-1" type="number" step="0.05" value="0.15" style="width:60px;text-align:right"></td><td style="text-align:right;font-weight:600" id="aca-cat-out-1">—</td></tr><tr><td style="padding:4px 6px">Parts de marché émergentes (transition)</td><td><input id="aca-cat-A-2" type="number" step="0.05" value="0.4" style="width:60px;text-align:right"></td><td><input id="aca-cat-O-2" type="number" step="0.5"  value="40.0" style="width:70px;text-align:right"></td><td><input id="aca-cat-E-2" type="number" step="0.05" value="0.25" style="width:60px;text-align:right"></td><td style="text-align:right;font-weight:600" id="aca-cat-out-2">—</td></tr><tr><td style="padding:4px 6px">Talents & capital humain climat</td><td><input id="aca-cat-A-3" type="number" step="0.05" value="0.5" style="width:60px;text-align:right"></td><td><input id="aca-cat-O-3" type="number" step="0.5"  value="20.0" style="width:70px;text-align:right"></td><td><input id="aca-cat-E-3" type="number" step="0.05" value="0.3" style="width:60px;text-align:right"></td><td style="text-align:right;font-weight:600" id="aca-cat-out-3">—</td></tr><tr><td style="padding:4px 6px">Capital relationnel (alliances)</td><td><input id="aca-cat-A-4" type="number" step="0.05" value="0.4" style="width:60px;text-align:right"></td><td><input id="aca-cat-O-4" type="number" step="0.5"  value="15.0" style="width:70px;text-align:right"></td><td><input id="aca-cat-E-4" type="number" step="0.05" value="0.2" style="width:60px;text-align:right"></td><td style="text-align:right;font-weight:600" id="aca-cat-out-4">—</td></tr><tr><td style="padding:4px 6px">Options stratégiques (M&A, désinvest.)</td><td><input id="aca-cat-A-5" type="number" step="0.05" value="0.3" style="width:60px;text-align:right"></td><td><input id="aca-cat-O-5" type="number" step="0.5"  value="50.0" style="width:70px;text-align:right"></td><td><input id="aca-cat-E-5" type="number" step="0.05" value="0.35" style="width:60px;text-align:right"></td><td style="text-align:right;font-weight:600" id="aca-cat-out-5">—</td></tr></tbody>
+          <tfoot><tr style="border-top:1px solid var(--brd2);font-weight:700">
+            <td style="padding-top:8px">Total catalogue</td><td></td><td></td><td></td>
+            <td style="text-align:right;padding-right:6px;color:#0a8" id="aca-cat-sum">—</td>
+          </tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
 
 </div><!-- end right -->
 </div><!-- end layout -->
@@ -2913,7 +3027,7 @@ function updateProofLyapunov(){
 // ═══════════════════════════════════════════
 // TABS
 // ═══════════════════════════════════════════
-var TIDS=['mc','maha','loop','quint','map','bp','proof','pci'];
+var TIDS=['mc','maha','loop','quint','map','bp','proof','pci','igcc','aca'];
 function switchTab(name){
   document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('on',TIDS[i]===name);});
   document.querySelectorAll('.tc').forEach(function(c){c.classList.toggle('on',c.id==='tc-'+name);});
@@ -4488,6 +4602,117 @@ if (document.readyState === 'loading') {
 } else {
   setTimeout(function() { try { updatePCI(); } catch (e) {} }, 100);
 }
+
+
+// ════════════════════════════════════════════════════════════════════════════
+// MODULES IGCC + ACA (ajoutés par patch)
+// ════════════════════════════════════════════════════════════════════════════
+
+// ════════════ Module IGCC ════════════
+function computeIGCC() {
+  var dtObs  = parseFloat(document.getElementById('igcc-dt-obs').value)  || 0;
+  var dtSafe = parseFloat(document.getElementById('igcc-dt-safe').value) || 0;
+  var dtCrit = parseFloat(document.getElementById('igcc-dt-crit').value) || 3;
+  var dtPar  = parseFloat(document.getElementById('igcc-dt-paris').value)|| 1.5;
+  var eeiObs = parseFloat(document.getElementById('igcc-eei-obs').value) || 0;
+  var eeiCrit= parseFloat(document.getElementById('igcc-eei-crit').value)|| 2;
+  var denom  = dtCrit - dtSafe;
+  var I = (denom > 0) ? 10 * Math.max(0, Math.min(1, (dtObs - dtSafe)/denom)) : 0;
+  var S = (denom > 0) ? 10 * Math.max(0, Math.min(1, (dtPar - dtSafe)/denom)) : 5;
+  var Pi= (eeiCrit > 0) ? Math.min(1, Math.max(0, eeiObs / eeiCrit)) : 0;
+  return {I:I, S:S, Pi:Pi};
+}
+function refreshIGCC() {
+  var r = computeIGCC();
+  document.getElementById('igcc-out-I').textContent  = r.I.toFixed(2);
+  document.getElementById('igcc-out-S').textContent  = r.S.toFixed(2);
+  document.getElementById('igcc-out-Pi').textContent = r.Pi.toFixed(3);
+}
+function applyIGCC() {
+  var r = computeIGCC();
+  // Écrit dans le state global ST : indice I et proximité limites Pi
+  if (typeof ST !== 'undefined') {
+    ST.I = r.I;
+    ST.proxLim = r.Pi;
+    // Resynchroniser les sliders qui pilotent I et proxLim
+    var sI = document.getElementById('sI'); if (sI) sI.value = r.I;
+    var vI = document.getElementById('vI');
+    if (vI) { vI.textContent = r.I.toFixed(1); vI.style.color = r.I >= (typeof S_SEUIL!=='undefined'?S_SEUIL:5) ? '#ff3355' : '#00e5ff'; }
+    var sProx = document.getElementById('sProx'); if (sProx) sProx.value = r.Pi;
+    var vProx = document.getElementById('vProx'); if (vProx) vProx.textContent = r.Pi.toFixed(2);
+    if (typeof updateAll === 'function') updateAll();
+  }
+  var st = document.getElementById('igcc-status');
+  if (st) {
+    var now = new Date(); var hh = String(now.getHours()).padStart(2,'0'), mm = String(now.getMinutes()).padStart(2,'0');
+    st.textContent = '✓ Appliqué — I=' + r.I.toFixed(2) + ', Π=' + r.Pi.toFixed(2) + '  (' + hh + ':' + mm + ')';
+    st.style.color = '#0a8';
+  }
+}
+['igcc-dt-obs','igcc-dt-safe','igcc-dt-crit','igcc-dt-paris','igcc-eei-obs','igcc-eei-crit'].forEach(function(id){
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('input', refreshIGCC);
+});
+document.getElementById('igcc-apply').addEventListener('click', applyIGCC);
+refreshIGCC();
+
+
+// ════════════ Module ACA ════════════
+function computeACA() {
+  var A = (typeof ST !== 'undefined' && typeof ST.tau === 'number') ? ST.tau : 0;
+  var E = (typeof ST !== 'undefined' && typeof ST.deni === 'number') ? ST.deni : 0;
+  var O = parseFloat(document.getElementById('aca-O').value) || 0;
+  var ACA = A * O * (1 - E);
+  // Catalogue
+  var sumCat = 0;
+  for (var i = 0; i < 6; i++) {
+    var ai = parseFloat(document.getElementById('aca-cat-A-'+i).value) || 0;
+    var oi = parseFloat(document.getElementById('aca-cat-O-'+i).value) || 0;
+    var ei = parseFloat(document.getElementById('aca-cat-E-'+i).value) || 0;
+    var vi = ai * oi * (1 - ei);
+    sumCat += vi;
+    var cell = document.getElementById('aca-cat-out-'+i);
+    if (cell) cell.textContent = vi.toFixed(2);
+  }
+  return {A:A, E:E, O:O, ACA:ACA, sumCat:sumCat};
+}
+function refreshACA() {
+  var r = computeACA();
+  document.getElementById('aca-A').textContent = r.A.toFixed(2);
+  document.getElementById('aca-E').textContent = r.E.toFixed(2);
+  document.getElementById('aca-main').textContent = r.ACA.toFixed(2);
+  document.getElementById('aca-cat-sum').textContent = r.sumCat.toFixed(2);
+  // Bilan net : lecture du PCI courant (computePCI si défini)
+  var pciStock = 0;
+  try {
+    if (typeof computePCI === 'function') {
+      var p = computePCI();
+      pciStock = (p && typeof p.stockT === 'number') ? p.stockT : 0;
+    }
+  } catch (e) { pciStock = 0; }
+  document.getElementById('aca-pci-ref').textContent = pciStock.toFixed(2);
+  var bnp = r.sumCat - pciStock;
+  var bnpEl = document.getElementById('aca-bnp');
+  bnpEl.textContent = (bnp >= 0 ? '+' : '') + bnp.toFixed(2);
+  bnpEl.style.color = bnp >= 0 ? '#0a8' : '#e44';
+}
+// Listeners sur tous les inputs ACA
+['aca-O'].concat(Array.from({length:6}, function(_,i){return ['aca-cat-A-'+i,'aca-cat-O-'+i,'aca-cat-E-'+i]}).flat())
+  .forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', refreshACA);
+  });
+// Hook non-destructif sur updateAll pour resynchroniser ACA quand tau ou deni change
+(function() {
+  if (typeof updateAll === 'function') {
+    var _origUpdAA = updateAll;
+    updateAll = function() {
+      _origUpdAA.apply(this, arguments);
+      try { refreshACA(); } catch (e) {}
+    };
+  }
+})();
+refreshACA();
 
 </script>
 <!-- ════════ Modale "À propos du cadre" — Préambule épistémologique ════════ -->
