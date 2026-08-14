@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CRISOnomics — L'invertoscope du risque</title>
+<title>Invertoscope pandémie — coût de l'inaction sanitaire</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -130,10 +130,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);transition:b
 
   <div class="topbar">
     <div class="brand">
-      <span class="eyebrow">CRISOnomics · thèse d'isomorphisme thermodynamique</span>
-      <h1>🔭 Le modèle de coût de l'inaction — L'invertoscope du risque : le <em>Théorème de Filiation Naturelle</em> comme « lunettes à vision inversée »<br><span style="font-size:0.6em;font-style:italic;font-weight:400;opacity:0.85">Instanciation par la théorie de coûtenance du risque physique en contexte de polycrise</span></h1>
+      <span class="eyebrow">Instanciation pandémie · thèse d'isomorphisme dissipatif</span>
+      <h1>🦠 Le modèle de coût de l'inaction sanitaire — L'invertoscope du risque : le <em>Théorème de Filiation Naturelle</em> appliqué à la pandémie<br><span style="font-size:0.6em;font-style:italic;font-weight:400;opacity:0.85">Instanciation par la théorie de coûtenance du risque sanitaire en contexte de polycrise</span></h1>
       <div class="theorem-exergue" style="font-family:var(--disp);font-style:italic;color:var(--muted);font-size:13px;line-height:1.55;margin-top:10px;padding:10px 14px;border-left:2px solid var(--bridge);max-width:820px;background:rgba(0,0,0,0.02);border-radius:0 8px 8px 0"><strong style="color:var(--text);font-style:normal">Théorème de filiation naturelle.</strong> Pour tout système naturel S — physique, chimique ou biologique — de trajectoire X(t), tant que la chaîne causale reliant X(t) au coût C(t) demeure entièrement naturelle, il existe un opérateur de filiation F tel que C(t) = F[X(t)]. Le coût n'est pas une variable ajustée sur des données passées : il est une conséquence dérivée de la dynamique du système qui le produit.</div>
-      <div class="sub">Quatre récits, une seule physique. Le même système Terre → France, les mêmes correspondances thermodynamiques, mais <strong>quatre instants ou signes de décision</strong> relatifs au seuil de bascule. L'atome du modèle est le triplet <strong>montant × timing × espace</strong> : le montant investi est le levier (borné à τ_max=67 %), le timing décide du régime, l'échelle spatiale décide de la portée, et le <strong>signe de l'action</strong> — bonne ou retournée — peut faire basculer τ en négatif. Choisissez un récit ci-dessous et voyez la même physique produire quatre destins.</div>
+      <div class="sub">Quatre récits, une seule biologie. Le même écosystème sanitaire mondial → France, les mêmes correspondances entre dynamique épidémique et coût, mais <strong>quatre instants ou signes de décision</strong> relatifs au seuil de saturation hospitalière. L'atome du modèle est le triplet <strong>montant × timing × espace</strong> : le montant investi est le levier (préparation, dépistage, isolement, vaccination), le timing décide du régime, l'échelle spatiale décide de la portée (locale, nationale, transnationale — car un virus ne connaît pas les frontières), et le <strong>signe de l'action</strong> — bonne ou retournée — peut faire basculer la trajectoire en négatif. Choisissez un récit ci-dessous et voyez la même biologie produire quatre destins.</div>
     </div>
     <div class="controls">
       <button class="ctrl-btn" id="playBtn">⏸ Pause</button>
@@ -170,13 +170,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);transition:b
 
   <div class="stage">
     <div class="stage-head">
-      <div class="side-label clim">Physique du climat<span class="lg" id="climTitle">—</span></div>
+      <div class="side-label clim">Biologie de l'épidémie<span class="lg" id="climTitle">—</span></div>
       <div class="center-eq" id="centerEq">—</div>
       <div class="side-label cost">Physique du coût<span class="lg" id="costTitle">—</span></div>
     </div>
     <p class="thesis" id="thesis">—</p>
     <div class="split">
-      <div class="pane left"><span class="tag" id="climTag">climat</span><canvas id="cvL"></canvas>
+      <div class="pane left"><span class="tag" id="climTag">épidémie</span><canvas id="cvL"></canvas>
         <div class="num" id="climNum"></div><div class="cap" id="climCap"></div></div>
       <div class="pane right"><span class="tag" id="costTag">coût</span><canvas id="cvR"></canvas>
         <div class="num" id="costNum"></div><div class="cap" id="costCap"></div></div>
@@ -187,7 +187,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);transition:b
 
   <div class="footer-note">
     <b>espace</b> = pause · <b>← →</b> = naviguer · cliquer une correspondance pour y sauter<br>
-    la marque <span style="color:var(--bridge);font-family:var(--mono)">≡</span> au centre du split marque l'identité mathématique entre les deux mondes · valeurs climat calibrées IGCC 2025 · valeurs coût issues du classeur homéodynamique
+    la marque <span style="color:var(--bridge);font-family:var(--mono)">≡</span> au centre du split marque l'identité mathématique entre les deux mondes · valeurs épidémie calibrées ordre de grandeur COVID-19 · valeurs coût issues de la structure homéodynamique
   </div>
 </div>
 
@@ -198,7 +198,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);transition:b
 /* ═══════════════════════════════════════════════════════════════════
    TROIS RÉCITS — l'atome du modèle est (montant × timing RELATIF AU SEUIL).
    Le timing d'action par rapport à S sépare les trois régimes ;
-   le montant investi (τ, borné à 67 %) est le levier ; la VOP trace le
+   le montant investi (τ, borné à τ_max) est le levier ; la VOP trace le
    terme croisé (Prop. 5) : ce que l'argent tardif ne rachète pas.
    SC 0 = inaction (jamais d'action) · 1 = action AVANT le seuil · 2 = action APRÈS la bascule
 ═══════════════════════════════════════════════════════════════════ */
@@ -269,22 +269,22 @@ const STAGES=[];
 STAGES.push({
   dur:REDUCED?9000:8500,
   nodeN:'00', nodeClim:'Structure', nodeCost:'Structure', nodeEq:'dissipative',
-  climTitle:'Terre hors équilibre',
+  climTitle:'Écosystème sanitaire hors équilibre',
   costTitle:'Organisation hors équilibre',
-  centerEq:'même équation : <b>flux entrant − flux dissipé = accumulation</b>',
-  thesis:"L'atmosphère terrestre n'est pas un système fermé à l'équilibre : elle est traversée par un flux solaire de 340 W/m² qui, s'il n'était pas dissipé en rayonnement infrarouge, l'échaufferait indéfiniment. Prigogine a montré qu'un tel système ne peut exister qu'en <strong>structure dissipative</strong> — un ordre entretenu par un flux, jamais par un stock. Le postulat de CRISOnomics : une organisation exposée à des chocs climatiques est <strong>exactement de la même nature</strong>. Ce que la Terre fait avec l'énergie, l'organisation le fait avec le capital.",
-  climTag:'coupe atmosphérique — flux radiatif',
+  centerEq:'même équation : <b>flux pathogène entrant − capacité de soin = charge accumulée</b>',
+  thesis:"L'écosystème sanitaire mondial n'est pas un système fermé à l'équilibre : il est traversé par un flux permanent de pathogènes émergents — mutations virales, sauts d'espèces (zoonoses), résistances antimicrobiennes. Si ce flux n'était pas dissipé par la capacité de soin, l'immunité collective et les gestes barrières, il saturerait indéfiniment le système. Prigogine a montré qu'un tel système ne peut exister qu'en <strong>structure dissipative</strong> — un ordre entretenu par un flux, jamais par un stock. Le postulat : une organisation exposée à des chocs sanitaires est <strong>exactement de la même nature</strong>. Ce que l'écosystème sanitaire fait avec le flux pathogène, l'organisation le fait avec le capital.",
+  climTag:'coupe épidémiologique — flux pathogène',
   costTag:'coupe organisationnelle — flux financier',
-  climNum:['flux entrant','énergie radiative absorbée'],
-  costNum:['flux entrant','forçage stochastique brut'],
-  climCap:'ce qui n\u2019est pas réémis chauffe le système',
+  climNum:['flux entrant','pathogènes émergents'],
+  costNum:['flux entrant','forçage sanitaire brut'],
+  climCap:'ce qui n\u2019est pas dissipé sature le système',
   costCap:'ce qui n\u2019est pas dissipé accumule le coût',
   stats:[
-    {c:'clim',n:'340 W/m²',l:'entrée solaire'},
-    {c:'clim',n:'1,8 W/m²',l:'EEI — non dissipé'},
+    {c:'clim',n:'~5/an',l:'pathogènes émergents'},
+    {c:'clim',n:'charge résiduelle',l:'non dissipée'},
     {c:'bridge',n:'≡',l:'même équation'},
-    {c:'cost',n:'τ_max = 67 %',l:'dissipation plafond'},
-    {c:'cost',n:'33 %',l:'CI irréductible'}
+    {c:'cost',n:'τ ≤ τ_max',l:'plafond de dissipation'},
+    {c:'cost',n:'CI',l:'résiduel irréductible'}
   ],
   draw(t,c){
     const p=clamp(t/7500,0,1);
@@ -330,12 +330,12 @@ function drawEarthDissip(ctx,w,h,p,t,c){
   ctx.beginPath(); ctx.arc(cx,cy,R*0.3+pulse*4,0,7);
   ctx.fillStyle='rgba('+c.dangerR+','+(0.35+0.2*pulse)+')'; ctx.fill();
   ctx.font='700 10px '+MONO; ctx.fillStyle=c.text; ctx.textAlign='center';
-  ctx.fillText('EEI',cx,cy+3);
+  ctx.fillText('charge',cx,cy+3);
   // etiquettes
   ctx.textAlign='left'; ctx.font='9.5px '+MONO; ctx.fillStyle=c.dim;
-  ctx.fillText('solaire →',12,h*0.11);
+  ctx.fillText('pathogènes →',12,h*0.11);
   ctx.textAlign='right';
-  ctx.fillStyle='rgba('+c.warnR+',0.9)'; ctx.fillText('← IR',w-12,h*0.11);
+  ctx.fillStyle='rgba('+c.warnR+',0.9)'; ctx.fillText('← dissipation soin',w-12,h*0.11);
 }
 function drawOrgDissip(ctx,w,h,p,t,c){
   ctx.clearRect(0,0,w,h);
@@ -382,19 +382,19 @@ function drawOrgDissip(ctx,w,h,p,t,c){
 /* ── 1 · ÉCHELLE : TERRE → FRANCE (GeoJSON réel) ── */
 STAGES.push({
   dur:REDUCED?20000:20000,
-  nodeN:'01', nodeClim:'Système Terre', nodeCost:'Territoire France', nodeEq:'global → local',
-  climTitle:'Le système Terre',
-  costTitle:'Le territoire exposé',
-  centerEq:"<b>le forçage global descend sur un territoire qui l'encaisse</b>",
-  thesis:"La physique du coût s'incarne sur un territoire. À gauche, le <strong>système Terre</strong> — le forçage climatique planétaire. À droite, la <strong>France</strong>, qui reçoit ce forçage et voit sa <strong>vulnérabilité monter</strong>. Sans parti pris : les sept périls défilent, chacun sur sa géographie réelle — tempêtes sur la façade atlantique, chaleur dans la vallée du Rhône, feux sur l'arc méditerranéen, inondations au Nord et sur la Côte d'Azur. La teinte <strong>diffuse depuis chaque foyer</strong>, locale d'abord, puis nationale à l'approche du seuil — car c'est le facteur d'amplification A_Σ = e^{Σ·Πₜ} qui monte, pas seulement le nombre de chocs. Le vert→rouge est une <strong>échelle de vulnérabilité systémique CRISOnomics</strong> (inspirée des paliers de vigilance, mais lue en euros), et non la vigilance officielle Météo-France.",
-  climTag:'contours réels · Natural Earth 110m',
-  costTag:'contour réel · vulnérabilité diffusive',
+  nodeN:'01', nodeClim:'Écosystème mondial', nodeCost:'Nation exposée', nodeEq:'global → local',
+  climTitle:'L\'écosystème sanitaire mondial',
+  costTitle:'La France, dans un système ouvert',
+  centerEq:"<b>le flux pathogène global traverse les frontières et rencontre une nation</b>",
+  thesis:"La biologie du coût s'incarne sur un territoire national — mais un virus ne connaît pas les frontières. À gauche, l'<strong>écosystème sanitaire mondial</strong> : réservoirs animaux, zones de contact humain-faune, mobilité globale, résistance antimicrobienne. À droite, la <strong>France</strong>, qui reçoit ce flux <strong>en tant que système ouvert</strong> — voyageurs, chaînes d'approvisionnement médical, aliments, aérosols, coopération scientifique. Les grandes familles de pathogènes défilent : zoonoses respiratoires, arbovirus (dengue, chikungunya), résistances bactériennes, réémergences vaccinables, pathogènes alimentaires. La vulnérabilité <strong>diffuse depuis chaque foyer</strong>, locale d'abord, puis nationale à l'approche du seuil de saturation hospitalière — car c'est le facteur d'amplification A_Σ = e^{Σ·Πₜ} qui monte, pas seulement le nombre de foyers. Le vert→rouge est une <strong>échelle de vulnérabilité sanitaire systémique</strong>, lue en coût économique-social.",
+  climTag:'écosystème sanitaire mondial ouvert',
+  costTag:'vulnérabilité sanitaire diffusive',
   climNum:['',''],
   costNum:['',''],
   climCap:'',
   costCap:'',
   stats:[
-    {c:'clim',n:'7 périls',l:'chacun sa géographie'},
+    {c:'clim',n:'5 familles',l:'chaque pathogène sa dynamique'},
     {c:'bridge',n:'A_Σ ↑',l:'amplification aux seuils'},
     {c:'cost',n:'local → national',l:'diffusion de vulnérabilité'}
   ],
@@ -403,16 +403,16 @@ STAGES.push({
     drawFrance(ctxR,cvR.clientWidth,cvR.clientHeight,t,c);
   },
   scenOverride:[
-    { thesis:"<strong>Récit 1 — Inaction.</strong> On n'agit pas. Le forçage planétaire monte, franchit le seuil S, et la vulnérabilité de la France <strong>diffuse depuis chaque foyer puis se généralise au rouge</strong> — l'hystérèse verrouille, la porte se ferme. Les sept périls défilent sur leur géographie réelle ; à chaque franchissement, le coût CI et la VOP montent ensemble. C'est la trajectoire du non-agir : la teinte ne reflue jamais." },
-    { costTitle:'Le territoire préservé',
+    { thesis:"<strong>Récit 1 — Inaction.</strong> On n'agit pas. Le flux pathogène franchit les frontières, monte, franchit le seuil de saturation hospitalière S, et la vulnérabilité de la France <strong>diffuse depuis chaque foyer puis se généralise au rouge</strong> — l'hystérèse civilisationnelle verrouille, la porte se ferme. Les familles de pathogènes défilent ; à chaque franchissement, le coût sanitaire CI et la VOP montent ensemble. C'est la trajectoire du non-agir : la teinte ne reflue jamais." },
+    { costTitle:'La nation préservée',
       centerEq:"<b>on agit avant le seuil — la vulnérabilité reflue</b>",
-      thesis:"<strong>Récit 2 — Action à temps.</strong> L'adaptation s'active <strong>avant</strong> que le forçage n'atteigne le seuil. La vulnérabilité de la France monte, puis <strong>reflue vers le vert</strong> dès que la dissipation prend le dessus : l'hystérèse ne se verrouille jamais, la porte reste ouverte, la VOP reste nulle. Le même territoire, les mêmes périls, mais le coût est écrêté et se restabilise. C'est la preuve que le montant investi n'a de valeur que <strong>du bon côté du seuil</strong>." },
-    { costTitle:'Le territoire cicatrisé',
-      centerEq:"<b>on agit, mais après la bascule — la cicatrice reste</b>",
-      thesis:"<strong>Récit 3 — Action trop tardive.</strong> On agit, mais <strong>après</strong> le franchissement. La vulnérabilité rougit d'abord, puis reflue <strong>partiellement</strong> quand l'adaptation se met en place — mais l'hystérèse a déjà verrouillé : la <strong>VOP reste positive</strong>. Le coût physique baisse un peu, les options de correction, elles, ne se rouvrent pas. Même argent, même effort qu'au récit 2, mais dépensé du <strong>mauvais côté du seuil</strong> : la cicatrice ne s'efface plus." },
-    { costTitle:'Le territoire retourné',
+      thesis:"<strong>Récit 2 — Action à temps.</strong> La préparation sanitaire (dépistage précoce, stocks stratégiques de vaccins et de contre-mesures, coopération scientifique internationale, One Health) s'active <strong>avant</strong> que le flux pathogène n'atteigne le seuil de saturation. La vulnérabilité monte, puis <strong>reflue vers le vert</strong> dès que la capacité de soin prend le dessus : l'hystérèse ne se verrouille jamais, la VOP reste nulle. La même nation, les mêmes pathogènes, mais le coût est écrêté. C'est la preuve que le montant investi n'a de valeur que <strong>du bon côté du seuil</strong>." },
+    { costTitle:'La nation cicatrisée',
+      centerEq:"<b>on agit, mais après la saturation — la cicatrice reste</b>",
+      thesis:"<strong>Récit 3 — Action trop tardive.</strong> On agit, mais <strong>après</strong> le franchissement du seuil hospitalier. La vulnérabilité rougit d'abord, puis reflue <strong>partiellement</strong> quand la réponse s'organise (couvre-feux, vaccination de masse, réquisitions) — mais l'hystérèse civilisationnelle a déjà verrouillé : la <strong>VOP reste positive</strong>. Le coût sanitaire baisse un peu, les options de correction précoce (dépistage systématique, isolement précoce, vaccination ciblée avant vague) ne se rouvrent plus. Même effort qu'au récit 2, mais dépensé du <strong>mauvais côté du seuil</strong>." },
+    { costTitle:'La nation aggravée',
       centerEq:"<b>l'action se retourne — τ_eff devient négatif</b>",
-      thesis:"<strong>Récit 4 — Mal-action.</strong> On investit tôt, on croit bien faire — mais l'action a un effet induit qui <strong>dépasse son gain dissipatif</strong> : plus de forçage, exposition amplifiée, verrouillage précoce. Le τ effectif devient <strong>négatif</strong> — l'action ajoute au coût au lieu de le retrancher. La vulnérabilité de la France <strong>rougit encore plus vite qu'en inaction</strong> : le remède est pire que le mal. C'est le versant sombre de la modulation civilisationnelle — physiquement défini par un bilan de signe, non par un jugement moral." }
+      thesis:"<strong>Récit 4 — Mal-action.</strong> On agit tôt, on croit bien faire — mais l'action a un effet induit qui <strong>dépasse son gain sanitaire</strong> : confinement disproportionné entraînant recul du dépistage d'autres pathologies (cancers, maladies cardiovasculaires), campagne vaccinale mal ciblée générant défiance durable, mesures contradictoires produisant relâchement collectif. Le τ effectif devient <strong>négatif</strong> — l'action ajoute au coût au lieu de le retrancher. La vulnérabilité <strong>rougit encore plus vite qu'en inaction</strong> : le remède est pire que le mal. C'est le versant sombre de la modulation civilisationnelle — physiquement défini par un bilan de signe, non par un jugement moral." }
   ]
 });
 // Globe : projection orthographique d'un vrai jeu de contours mondiaux, en rotation.
@@ -462,7 +462,7 @@ function drawGlobe(ctx,w,h,t,c){
     ctx.strokeStyle='rgba('+c.costR+','+(0.6*(1-pulse))+')'; ctx.lineWidth=1.5; ctx.stroke();
   }
   ctx.fillStyle=c.dim; ctx.font='9.5px '+MONO; ctx.textAlign='center';
-  ctx.fillText('forçage climatique planétaire',cx,cy+R+22);
+  ctx.fillText('flux pathogène mondial',cx,cy+R+22);
 }
 // France : contour réel + vulnérabilité DIFFUSIVE pilotée par la physique.
 // Chaque péril allume ses foyers géographiques réels ; la teinte diffuse depuis le foyer,
@@ -474,13 +474,11 @@ const FR_ZONES={
 };
 // (nom affiché, foyers, événement français emblématique de calibration)
 const FR_PERILS=[
-  {code:'VEN', label:'Tempêtes',        ev:'Ciaran, Kirk',   foyers:['atlantique','bretagne']},
-  {code:'CAN', label:'Vagues de chaleur',ev:'canicules',      foyers:['rhone','centre']},
-  {code:'INO', label:'Inondations',     ev:'Alex, Pas-de-Calais',foyers:['nord','cote_azur']},
-  {code:'RGA', label:'Retrait argiles', ev:'sécheresses',     foyers:['sudouest','centre']},
-  {code:'FEU', label:'Feux de forêt',   ev:'Gironde, Var',    foyers:['medit','sudouest']},
-  {code:'STH', label:'Stress thermique',ev:'chaleur chronique',foyers:['rhone','sudouest']},
-  {code:'GTE', label:'Glissements',     ev:'reliefs',         foyers:['alpes']}
+  {code:'ZOO', label:'Zoonoses respiratoires',ev:'grippe aviaire, SARS',foyers:['nord','atlantique']},
+  {code:'ARB', label:'Arbovirus',            ev:'dengue, chikungunya', foyers:['medit','rhone']},
+  {code:'AMR', label:'Résistances bactériennes',ev:'BMR, tuberculose',foyers:['centre','sudouest']},
+  {code:'VAC', label:'Réémergences vaccinables',ev:'rougeole, coqueluche',foyers:['bretagne','sudouest']},
+  {code:'ALI', label:'Pathogènes alimentaires',ev:'listériose, E. coli',foyers:['nord','centre']}
 ];
 function drawFrance(ctx,w,h,t,c){
   ctx.clearRect(0,0,w,h);
@@ -510,7 +508,7 @@ function drawFrance(ctx,w,h,t,c){
   const p=clamp(t/18000,0,1);
   // I_t monte de 3,5 vers 8,5 (comme la trajectoire quinquennale) ; seuil S=5
   const It=lerp(3.5,8.5,p), S=5;
-  // proximité aux limites planétaires Pi_t (calibrée IGCC ≈ 0,90 au max)
+  // proximité aux limites sanitaires Pi_t (calibrage indicatif)
   const Pit=clamp((It-3.5)/(8.5-3.5),0,1)*0.9;
   const Sigma=1.6; // sensibilité
   const A_Sigma=Math.exp(Sigma*Pit);          // ton facteur d'amplification e^{Σ·Π}
@@ -553,7 +551,7 @@ function drawFrance(ctx,w,h,t,c){
   // rayon de diffusion : grandit avec la vulnérabilité (local → national)
   const baseR=scale*0.6, maxR=scale*4.2;
   const diffuseR=lerp(baseR,maxR,vuln);
-  // couleur selon niveau : vert(bridge)→jaune(warn)→rouge(danger) — échelle CRISOnomics
+  // couleur selon niveau : vert(bridge)→jaune(warn)→rouge(danger) — échelle de vulnérabilité
   function vulnColor(level,a){
     // level 0..1 → interp bridge→warn→danger
     let r1,r2,mix;
@@ -610,7 +608,7 @@ function drawFrance(ctx,w,h,t,c){
   ctx.font='9px '+MONO; ctx.fillStyle=c.dim;
   ctx.fillText('foyer : '+peril.ev,ox,padY+11);
 
-  // ── ÉCHELLE DE VULNÉRABILITÉ (paliers, assumée CRISOnomics) ──
+  // ── ÉCHELLE DE VULNÉRABILITÉ (paliers indicatifs) ──
   const lx=w-88, ly=padY+6, lh=h*0.34, lw=10;
   const lg=ctx.createLinearGradient(0,ly+lh,0,ly);
   lg.addColorStop(0,'rgba('+c.bridgeR+',0.9)');
@@ -654,23 +652,23 @@ function drawFrance(ctx,w,h,t,c){
 /* ── 2 · BILAN ÉNERGÉTIQUE ── */
 STAGES.push({
   dur:REDUCED?9000:8000,
-  nodeN:'02', nodeClim:'Bilan Terre', nodeCost:'Bilan CI', nodeEq:'F − 𝓗 = Δ',
-  climTitle:"Déséquilibre énergétique",
+  nodeN:'02', nodeClim:'Bilan sanitaire', nodeCost:'Bilan CI', nodeEq:'F − 𝓗 = Δ',
+  climTitle:"Déficit de capacité de soin",
   costTitle:"Énergie libre de Helmholtz",
-  centerEq:'<b>EEI</b> ↔ <b>VAN(CI)</b> — même quantité, deux unités',
-  thesis:"Le déséquilibre énergétique de la Terre (Earth's Energy Imbalance) mesure ce que la planète absorbe en excès du rayonnement qu'elle réémet : 1,8 W/m² qui, cumulés, mesurent exactement le chauffage anthropique. Georgescu-Roegen a montré que le maintien d'une organisation hors équilibre requiert de la même façon une <strong>énergie libre</strong> — la VAN du coût de l'inaction est cette quantité, exprimée en euros. Ce n'est pas une image : c'est la même fonction d'état.",
-  climTag:"bilan radiatif — IGCC 2025",
-  costTag:"bilan financier — CRISOnomics",
-  climNum:['déséquilibre','énergie retenue hors équilibre'],
+  centerEq:'<b>Δ charge</b> ↔ <b>VAN(CI)</b> — même quantité, deux unités',
+  thesis:"Le déficit sanitaire mesure ce qu'un système de santé absorbe en excès de sa capacité effective de soin : cas non traités, diagnostics manqués, vaccinations différées, tests non réalisés. Cumulé, ce déficit mesure la charge résiduelle qui pèse sur la nation, exactement comme l'EEI mesure le chauffage cumulé de la Terre. Georgescu-Roegen a montré que le maintien d'une organisation hors équilibre requiert une <strong>énergie libre</strong> — la VAN du coût de l'inaction sanitaire est cette quantité, exprimée en euros. Ce n'est pas une image : c'est la même fonction d'état.",
+  climTag:"bilan sanitaire — inspiré OMS/ECDC",
+  costTag:"bilan financier — instanciation pandémie",
+  climNum:['déficit','charge non dissipée'],
   costNum:['énergie libre','capital retenu hors équilibre'],
-  climCap:'le résidu du bilan mesure le chauffage',
+  climCap:'le résidu du bilan mesure la charge',
   costCap:'le résidu du bilan mesure le coût',
   stats:[
-    {c:'clim',n:'340,0',l:'entrant (W/m²)'},
-    {c:'clim',n:'−338,2',l:'sortant (W/m²)'},
+    {c:'clim',n:'100 %',l:'cas incidents'},
+    {c:'clim',n:'−τ',l:'capacité soin'},
     {c:'bridge',n:'−',l:''},
     {c:'cost',n:'F',l:'forçage (M€/an)'},
-    {c:'cost',n:'𝓗[τ·F]',l:'dissipé par adaptation'}
+    {c:'cost',n:'𝓗[τ·F]',l:'dissipé par capacité soin'}
   ],
   draw(t,c){ drawBalance(ctxL,cvL.clientWidth,cvL.clientHeight,t,c,'clim'); drawBalance(ctxR,cvR.clientWidth,cvR.clientHeight,t,c,'cost'); }
 });
@@ -679,10 +677,10 @@ function drawBalance(ctx,w,h,t,c,side){
   const isClim=side==='clim';
   const col = isClim?c.clim:c.cost;
   const colR = isClim?c.climR:c.costR;
-  const inLabel = isClim?'solaire':'forçage';
-  const outLabel = isClim?'IR':'𝓗 (adapt.)';
-  const inVal = isClim?340:100;
-  const outVal = isClim?338.2:67; // 67 % dissipé = τ_max
+  const inLabel = isClim?'cas incidents':'forçage';
+  const outLabel = isClim?'soin (τ)':'𝓗 (capacité)';
+  const inVal = isClim?100:100;
+  const outVal = isClim?67:67; // 67 % dissipé = τ_max
   const eei = inVal-outVal;
   const p=clamp(t/6500,0,1), e=ease(p);
   // barre entrée
@@ -691,99 +689,157 @@ function drawBalance(ctx,w,h,t,c,side){
   ctx.fillStyle=c.line; rr(ctx,padL,barY,maxW,barH,8); ctx.fill();
   rr(ctx,padL,barY,inVal*scale*e,barH,8); ctx.fillStyle='rgba('+colR+',0.85)'; ctx.fill();
   ctx.font='700 11px '+MONO; ctx.fillStyle=c.text; ctx.textAlign='left';
-  ctx.fillText(inLabel+' → '+fmt(inVal*e,1)+(isClim?' W/m²':''),padL,barY-8);
+  ctx.fillText(inLabel+' → '+fmt(inVal*e,1)+(isClim?' %':''),padL,barY-8);
   // barre sortie (négative visuelle)
   const barY2=h*0.5;
   ctx.fillStyle=c.line; rr(ctx,padL,barY2,maxW,barH,8); ctx.fill();
   rr(ctx,padL,barY2,outVal*scale*e,barH,8); ctx.fillStyle='rgba('+c.bridgeR+',0.85)'; ctx.fill();
-  ctx.fillStyle=c.text; ctx.fillText('− '+outLabel+' → '+fmt(outVal*e,1)+(isClim?' W/m²':' %'),padL,barY2-8);
-  // reste : EEI / CI résiduel
+  ctx.fillStyle=c.text; ctx.fillText('− '+outLabel+' → '+fmt(outVal*e,1)+(isClim?' %':' %'),padL,barY2-8);
+  // reste : déficit sanitaire / CI résiduel
   const eeiY=h*0.82;
   ctx.font='9.5px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='left';
-  ctx.fillText(isClim?'= EEI (excès non dissipé)':'= CI (résiduel irréductible)',padL,eeiY-14);
+  ctx.fillText(isClim?'= déficit (charge non dissipée)':'= CI (résiduel irréductible)',padL,eeiY-14);
   const pulse=0.7+0.3*Math.sin(t*0.003);
   ctx.fillStyle='rgba('+c.dangerR+','+(0.75*pulse)+')';
   rr(ctx,padL,eeiY-6,eei*scale*e*(isClim?1:0.44),16,6); ctx.fill();
   ctx.font='700 12px '+MONO; ctx.fillStyle=c.danger; ctx.textAlign='left';
-  ctx.fillText((isClim?fmt(eei*e,2)+' W/m²':fmt(33*e,0)+' %'), padL+eei*scale*e*(isClim?1:0.44)+8, eeiY+7);
+  ctx.fillText((isClim?fmt(33*e,0)+' %':fmt(33*e,0)+' %'), padL+eei*scale*e*(isClim?1:0.44)+8, eeiY+7);
 }
 
 /* ── 2 · CONVECTION / RÉTROACTIONS ── */
 STAGES.push({
   dur:REDUCED?9000:8500,
-  nodeN:'03', nodeClim:'Convection', nodeCost:'Rétroactions', nodeEq:'ẋ = f(x, x)',
-  climTitle:'Cellules de Hadley',
+  nodeN:'03', nodeClim:'Dynamique SEIR', nodeCost:'Rétroactions', nodeEq:'ẋ = f(x, x)',
+  climTitle:'Cycle épidémique',
   costTitle:'Boucles antagonistes',
   centerEq:'<b>autoorganisation par rétroactions couplées (+/−)</b>',
-  thesis:"Dans un système dissipatif traversé par un gradient, la matière ne diffuse pas : elle s'auto-organise en cellules de convection — Hadley pour l'atmosphère, Bénard en laboratoire. Deux flux antagonistes s'y couplent, l'un montant, l'autre descendant. Le modèle homéodynamique reproduit la <strong>même topologie</strong> : boucle pro-cyclique de polycrise (rétroaction positive, montante) contre boucle hormétique (rétroaction négative, descendante). Ce ne sont pas deux forces exogènes qui s'annulent, c'est <strong>un couplage endogène</strong> qui structure le régime.",
-  climTag:'circulation atmosphérique',
-  costTag:'circulation du capital',
-  climNum:['convection','deux flux qui s\u2019auto-organisent'],
-  costNum:['couplage','polycrise ⟷ hormèse'],
-  climCap:'le gradient structure la circulation',
+  thesis:"Dans un système dissipatif traversé par un gradient de contagion, l'infection ne diffuse pas linéairement : elle s'auto-organise en cycles épidémiques — Susceptibles → Exposés → Infectés → Rétablis → (Susceptibles à nouveau après perte d'immunité). Deux flux antagonistes s'y couplent : la contagion (rétroaction positive, R₀ > 1) et l'immunité acquise ou les gestes barrières (rétroaction négative, R_eff qui décroît). Le modèle homéodynamique reproduit la <strong>même topologie</strong> : boucle pro-cyclique de propagation contre boucle hormétique de préparation. Ce ne sont pas deux forces exogènes qui s'annulent, c'est <strong>un couplage endogène</strong> qui structure le régime épidémique.",
+  climTag:'cycle SEIR — modèle Kermack-McKendrick',
+  costTag:'circulation du capital sanitaire',
+  climNum:['SEIR','quatre compartiments couplés'],
+  costNum:['couplage','propagation ⟷ préparation'],
+  climCap:'le gradient de contagion structure le cycle',
   costCap:'le couplage structure le régime de coût',
   stats:[
-    {c:'clim',n:'ΔT ≈ 40 K',l:'gradient équateur-pôle'},
+    {c:'clim',n:'R₀ ≈ 2-5',l:'reproduction de base'},
     {c:'bridge',n:'≡',l:'même topologie'},
-    {c:'cost',n:'ρ_p = 0,4',l:'gain polycrise'},
-    {c:'cost',n:'τ ≤ 67 %',l:'plafond hormèse'}
+    {c:'cost',n:'ρ_p',l:'gain propagation'},
+    {c:'cost',n:'τ ≤ τ_max',l:'plafond préparation'}
   ],
   draw(t,c){ drawConvect(ctxL,cvL.clientWidth,cvL.clientHeight,t,c,'clim'); drawConvect(ctxR,cvR.clientWidth,cvR.clientHeight,t,c,'cost'); }
 });
 function drawConvect(ctx,w,h,t,c,side){
   ctx.clearRect(0,0,w,h);
   const isClim=side==='clim';
-  const hot=isClim?'255,180,50':c.warnR; // équateur / injection
-  const cold=isClim?c.climR:c.bridgeR;    // pôle / dissipation
-  // trois cellules côte à côte
-  const n=3, cw=w/n;
-  for(let i=0;i<n;i++){
-    const cx=cw*(i+0.5);
-    const dir=i%2===0?1:-1;
-    for(let k=0;k<8;k++){
-      const ph=(t*0.0007+k*0.12+i*0.4)%1;
-      const rx=cw*0.32, ry=h*0.32;
-      const ang=ph*Math.PI*2*dir;
-      const x=cx+Math.cos(ang)*rx, y=h*0.5+Math.sin(ang)*ry;
-      const going = Math.sin(ang)*dir<0;
-      ctx.beginPath(); ctx.arc(x,y,2.4,0,7);
-      ctx.fillStyle='rgba('+(going?hot:cold)+',0.75)'; ctx.fill();
-      // trainée
-      for(let s=1;s<=3;s++){
-        const ang2=ang-s*0.08*dir;
-        const x2=cx+Math.cos(ang2)*rx, y2=h*0.5+Math.sin(ang2)*ry;
-        ctx.beginPath(); ctx.arc(x2,y2,2-s*0.4,0,7);
-        ctx.fillStyle='rgba('+(going?hot:cold)+','+(0.5-s*0.13)+')'; ctx.fill();
-      }
+  if(isClim){
+    // ── SEIR : 4 compartiments qui s'échangent des flux ──
+    const R0=2.5;
+    const p=(t*0.00025)%1;
+    // Dynamique SEIR analytique simplifiée (approximation)
+    // S diminue, E puis I gonflent puis R monte
+    const S = 1 - 0.85/(1+Math.exp(-8*(p-0.35)));
+    const E = 0.15*Math.exp(-Math.pow((p-0.35)/0.13,2));
+    const I = 0.25*Math.exp(-Math.pow((p-0.50)/0.16,2));
+    const R = 0.85/(1+Math.exp(-8*(p-0.55)));
+    // Positions des 4 compartiments
+    const boxW = w*0.19, boxH = h*0.34, gap = (w - 4*boxW)/5;
+    const y0 = h*0.28;
+    const compartments=[
+      {label:'S', full:'Susceptibles', v:S, col:'#7ddba6'},
+      {label:'E', full:'Exposés',      v:E*3, col:'#ffcf5e'},
+      {label:'I', full:'Infectés',     v:I*3, col:'#ff6b6b'},
+      {label:'R', full:'Rétablis',     v:R,   col:'#5eb1ff'}
+    ];
+    // Boîtes
+    compartments.forEach(function(cp,i){
+      const x = gap + i*(boxW+gap);
+      // cadre
+      ctx.strokeStyle='rgba('+c.gridR+',0.4)'; ctx.lineWidth=1.5;
+      rr(ctx,x,y0,boxW,boxH,6); ctx.stroke();
+      // remplissage proportionnel
+      const fillH = clamp(cp.v,0,1)*boxH;
+      ctx.fillStyle=cp.col+'cc';
+      rr(ctx,x,y0+boxH-fillH,boxW,fillH,6); ctx.fill();
+      // étiquette
+      ctx.font='700 20px '+DISP; ctx.fillStyle=c.text; ctx.textAlign='center';
+      ctx.fillText(cp.label, x+boxW/2, y0-8);
+      ctx.font='9px '+MONO; ctx.fillStyle=c.dim;
+      ctx.fillText(cp.full, x+boxW/2, y0+boxH+14);
+      // valeur
+      ctx.font='700 11px '+MONO; ctx.fillStyle=c.text;
+      ctx.fillText(fmt(clamp(cp.v,0,1)*100,0)+' %', x+boxW/2, y0+boxH-6);
+    });
+    // Flèches de transition (S→E→I→R)
+    for(let i=0;i<3;i++){
+      const x1 = gap + i*(boxW+gap) + boxW;
+      const x2 = gap + (i+1)*(boxW+gap);
+      const y = y0 + boxH/2;
+      ctx.strokeStyle='rgba('+c.bridgeR+',0.7)'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(x1+2,y); ctx.lineTo(x2-6,y); ctx.stroke();
+      // flèche
+      ctx.beginPath(); ctx.moveTo(x2-6,y-4); ctx.lineTo(x2,y); ctx.lineTo(x2-6,y+4); ctx.closePath();
+      ctx.fillStyle='rgba('+c.bridgeR+',0.7)'; ctx.fill();
+      // taux
+      ctx.font='9px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='center';
+      const rates=['βSI','σ','γ'];
+      ctx.fillText(rates[i], (x1+x2)/2, y-8);
     }
-    // marqueur de rotation
-    ctx.strokeStyle='rgba('+c.gridR+',0.15)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.ellipse(cx,h*0.5,cw*0.32,h*0.32,0,0,7); ctx.stroke();
+    // R₀ affiché en haut
+    ctx.font='700 12px '+MONO; ctx.fillStyle=c.text; ctx.textAlign='left';
+    ctx.fillText('R₀ = '+R0.toFixed(1), 14, 20);
+    // légende bas
+    ctx.font='9.5px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='center';
+    ctx.fillText('β = contagion · σ = incubation · γ = guérison', w/2, h-8);
+  } else {
+    // ── Boucles antagonistes : propagation vs préparation ──
+    const hot=c.warnR;
+    const cold=c.bridgeR;
+    const n=2, cw=w/n;
+    for(let i=0;i<n;i++){
+      const cx=cw*(i+0.5);
+      const dir=i===0?1:-1;
+      const label = i===0 ? 'propagation (+)' : 'préparation (−)';
+      const col = i===0 ? hot : cold;
+      for(let k=0;k<8;k++){
+        const ph=(t*0.0007+k*0.12)%1;
+        const rx=cw*0.32, ry=h*0.28;
+        const ang=ph*Math.PI*2*dir;
+        const x=cx+Math.cos(ang)*rx, y=h*0.5+Math.sin(ang)*ry;
+        ctx.beginPath(); ctx.arc(x,y,3,0,7);
+        ctx.fillStyle='rgba('+col+',0.8)'; ctx.fill();
+        for(let s=1;s<=3;s++){
+          const ang2=ang-s*0.09*dir;
+          const x2=cx+Math.cos(ang2)*rx, y2=h*0.5+Math.sin(ang2)*ry;
+          ctx.beginPath(); ctx.arc(x2,y2,2.5-s*0.5,0,7);
+          ctx.fillStyle='rgba('+col+','+(0.5-s*0.13)+')'; ctx.fill();
+        }
+      }
+      ctx.strokeStyle='rgba('+c.gridR+',0.15)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.ellipse(cx,h*0.5,cw*0.32,h*0.28,0,0,7); ctx.stroke();
+      ctx.font='700 10px '+MONO; ctx.fillStyle=c.text; ctx.textAlign='center';
+      ctx.fillText(label, cx, h-12);
+    }
+    ctx.font='9.5px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='center';
+    ctx.fillText('couplage endogène ⟷', w/2, 18);
   }
-  // bandes source/puits
-  ctx.fillStyle='rgba('+hot+',0.15)'; ctx.fillRect(0,h*0.86,w,h*0.14);
-  ctx.fillStyle='rgba('+cold+',0.15)'; ctx.fillRect(0,0,w,h*0.14);
-  ctx.font='9.5px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='center';
-  ctx.fillText(isClim?'équateur (chaud)':'chocs (injection Φ⁺)',w/2,h-8);
-  ctx.fillText(isClim?'pôle (froid)':'adaptation (dissipation Φ⁻)',w/2,14);
 }
 
 /* ── 3 · BIFURCATION / TIPPING ── */
 STAGES.push({
   dur:REDUCED?9000:8500,
   nodeN:'04', nodeClim:'Bifurcation', nodeCost:'Bascule R1→R2', nodeEq:'σ(I−S)',
-  climTitle:'AMOC · calotte polaire',
+  climTitle:'Saturation hospitalière',
   costTitle:'Bascule de régime',
   centerEq:"σ(x) = <b>1/(1+e<sup>−k(x−S)</sup>)</b> — la même sigmoïde",
-  thesis:"Les points de bascule climatiques (AMOC, calotte du Groenland, Amazonie) ne sont pas des seuils binaires : la théorie de la bifurcation les décrit par une <strong>sigmoïde continue</strong>, où l'état stable disparaît quand le paramètre de contrôle franchit un pli. CRISOnomics reprend cette même sigmoïde — <strong>lettre pour lettre</strong> — pour pondérer le régime catastrophique R2. Le pli climatique ΔT = 1,5°C se traduit exactement en I = S = 5. Un seul changement : l'unité de l'axe.",
-  climTag:'diagramme de bifurcation — écarts au forçage',
+  thesis:"Les points de bascule sanitaires (saturation des lits de réanimation, dépassement du R_eff critique, effondrement de la chaîne de tri) ne sont pas des seuils binaires : la théorie de la bifurcation les décrit par une <strong>sigmoïde continue</strong>, où l'état stable disparaît quand le paramètre de contrôle franchit un pli. Sous le seuil : mortalité maîtrisée, coût linéaire. Au-dessus : mortalité qui s'accélère parce que les soins deviennent impossibles, coût qui explose non-linéairement. Le modèle reprend cette même sigmoïde — <strong>lettre pour lettre</strong> — pour pondérer le régime catastrophique R2. Le pli sanitaire (~100 % capacité réa) se traduit exactement en I = S = 5. Un seul changement : l'unité de l'axe.",
+  climTag:'diagramme de bifurcation — saturation réa',
   costTag:'diagramme de régime — écarts au coût',
-  climNum:['pli','le seuil de bifurcation'],
+  climNum:['pli','le seuil de saturation'],
   costNum:['I = S','le même pli, autre axe'],
-  climCap:'l\u2019état stable disparaît au franchissement',
+  climCap:'la capacité de soin s\u2019effondre au franchissement',
   costCap:'le régime bascule au franchissement',
   stats:[
-    {c:'clim',n:'ΔT=1,5°C',l:'seuil physique'},
+    {c:'clim',n:'100 % réa',l:'seuil hospitalier'},
     {c:'bridge',n:'σ(·)',l:'même fonction'},
     {c:'cost',n:'S=5',l:'seuil calibré'},
     {c:'cost',n:'k_c=5',l:'pente identique'}
@@ -800,7 +856,7 @@ function drawSigmoid(ctx,w,h,p,t,c,side){
   const col=isClim?c.clim:c.cost, colR=isClim?c.climR:c.costR;
   const padL=40, padR=20, padT=40, padB=44;
   const iw=w-padL-padR, ih=h-padT-padB;
-  const S=isClim?1.5:5, k=isClim?4:1.5, xmax=isClim?3:10, xmin=0;
+  const S=isClim?1.0:5, k=isClim?4:1.5, xmax=isClim?2:10, xmin=0;
   function sg(x){return 1/(1+Math.exp(-k*(x-S)));}
   // axes
   ctx.strokeStyle=c.line; ctx.lineWidth=1;
@@ -811,7 +867,7 @@ function drawSigmoid(ctx,w,h,p,t,c,side){
   ctx.beginPath(); ctx.moveTo(sx,padT); ctx.lineTo(sx,padT+ih);
   ctx.strokeStyle='rgba('+c.dangerR+',0.5)'; ctx.setLineDash([4,4]); ctx.stroke(); ctx.setLineDash([]);
   ctx.font='9.5px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='center';
-  ctx.fillText(isClim?'S = 1,5°C':'S = 5,0',sx,padT-9);
+  ctx.fillText(isClim?'S = 100 % (saturation)':'S = 5,0',sx,padT-9);
   // courbe sigmoïde
   ctx.beginPath();
   for(let px=0;px<=iw;px+=2){
@@ -829,31 +885,31 @@ function drawSigmoid(ctx,w,h,p,t,c,side){
   ctx.strokeStyle=c.text; ctx.lineWidth=1; ctx.stroke();
   // valeur affichée
   ctx.font='700 11px '+MONO; ctx.textAlign='left'; ctx.fillStyle=c.text;
-  const lbl=isClim?fmt(xNow,2)+' °C':'I = '+fmt(xNow,2);
+  const lbl=isClim?fmt(xNow*100,0)+' % réa':'I = '+fmt(xNow,2);
   ctx.fillText(lbl+'  →  σ = '+fmt(sg(xNow),3), padL+8, padT+18);
   // labels axes
   ctx.font='9px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='center';
-  ctx.fillText(isClim?'ΔT (°C)':'I_t',padL+iw/2,padT+ih+22);
+  ctx.fillText(isClim?'occupation réa (ratio)':'I_t',padL+iw/2,padT+ih+22);
   ctx.save(); ctx.translate(isClim?padL-28:padL-14,padT+ih/2); ctx.rotate(-Math.PI/2);
-  ctx.fillText(isClim?'P(bascule)':'w₂(I)',0,0); ctx.restore();
+  ctx.fillText(isClim?'P(saturation)':'w₂(I)',0,0); ctx.restore();
 }
 
 /* ── 4 · HYSTÉRÈSE ── */
 STAGES.push({
   dur:REDUCED?9500:9000,
   nodeN:'05', nodeClim:'Hystérèse', nodeCost:'Markov', nodeEq:'∮ ≠ 0',
-  climTitle:'Fonte irréversible',
+  climTitle:'Hystérèse civilisationnelle',
   costTitle:'Régime verrouillé',
   centerEq:'<b>même boucle d\'hystérèse</b> — pas de retour par le même chemin',
-  thesis:"Quand la calotte du Groenland fond, l'albédo local chute : la surface sombre absorbe plus d'énergie, ce qui accélère la fonte. Même si la température redescend, la calotte ne se reforme pas — le système suit un <strong>autre chemin au retour</strong>. C'est l'hystérèse thermodynamique. Le modèle homéodynamique implémente exactement la même mémoire d'état : une fois R2 atteint, w₂ᴹ reste à 0,98 même si Iₜ redescend. La chaîne de Markov n'est pas une astuce actuarielle — c'est le codage informatique <strong>d'un phénomène physique réel</strong>.",
-  climTag:'diagramme d\'état — surface glacée',
+  thesis:"Quand une pandémie majeure traverse une société, la civilisation ne revient pas à son état antérieur. La santé mentale se dégrade durablement, la dette publique reste, les systèmes hospitaliers restructurés, la défiance institutionnelle acquise, les comportements sociaux modifiés, les chaînes d'approvisionnement réorganisées. Même si le virus disparaît, la société suit un <strong>autre chemin au retour</strong>. C'est l'hystérèse civilisationnelle. Le modèle homéodynamique implémente exactement la même mémoire d'état : une fois R2 atteint (post-saturation), w₂ᴹ reste à 0,98 même si l'incidence Iₜ redescend. La chaîne de Markov n'est pas une astuce actuarielle — c'est le codage informatique <strong>d'un phénomène biophysique et social réel</strong>.",
+  climTag:'diagramme d\'état — société traversée',
   costTag:'diagramme d\'état — régime CI',
-  climNum:['verrouillé','l\u2019état ne se reforme pas'],
+  climNum:['verrouillé','la société ne se reforme pas'],
   costNum:['verrouillé','le régime ne revient pas'],
   climCap:'le retour ne suit pas le chemin de l\u2019aller',
   costCap:'le retour ne suit pas le chemin de l\u2019aller',
   stats:[
-    {c:'clim',n:'ΔT_montée ≠ ΔT_descente',l:''},
+    {c:'clim',n:'I_montée ≠ I_descente',l:''},
     {c:'bridge',n:'∮',l:'aire non nulle'},
     {c:'cost',n:'ε ≈ 0,02',l:'proba de retour R2→R1'}
   ],
@@ -920,33 +976,33 @@ function drawHyster(ctx,w,h,p,t,c,side){
   ctx.strokeStyle=c.text; ctx.lineWidth=1; ctx.stroke();
   // flèches directionnelles
   ctx.fillStyle=c.dim; ctx.font='9.5px '+MONO; ctx.textAlign='center';
-  ctx.fillText(isClim?'ΔT →':'I →', padL+iw*0.75, padT+ih+22);
+  ctx.fillText(isClim?'incidence I →':'I →', padL+iw*0.75, padT+ih+22);
   ctx.save(); ctx.translate(isClim?padL-28:padL-14,padT+ih/2); ctx.rotate(-Math.PI/2);
-  ctx.fillText(isClim?'fraction glacée':'w₂ᴹ',0,0); ctx.restore();
+  ctx.fillText(isClim?'état civilisationnel':'w₂ᴹ',0,0); ctx.restore();
   // état
   ctx.font='700 11px '+MONO; ctx.textAlign='left';
   ctx.fillStyle=branch==='up'?col:c.danger;
-  ctx.fillText(branch==='up'?(isClim?'refroidissement':'régime stable'):(isClim?'verrouillé — pas de reformation':'verrouillé — R2 irréversible'), padL+8, padT+18);
+  ctx.fillText(branch==='up'?(isClim?'vague montante':'régime stable'):(isClim?'société transformée — pas de retour':'verrouillé — R2 irréversible'), padL+8, padT+18);
 }
 
 /* ── 5 · MÉMOIRE LONGUE / HURST ── */
 STAGES.push({
   dur:REDUCED?9000:8500,
   nodeN:'06', nodeClim:'Mémoire Hurst', nodeCost:'Caputo α=2−2H', nodeEq:'α = 2−2H',
-  climTitle:'Persistance des séries climatiques',
+  climTitle:'Persistance des séries épidémiques',
   costTitle:'Dérivée fractionnaire',
-  centerEq:'<b>H > 0,5 (climat)</b> ⟺ <b>α < 1 (opérateur de Caputo)</b>',
-  thesis:"Les séries climatiques (températures, précipitations) présentent depuis longtemps un exposant de Hurst H > 0,5 : elles sont <strong>persistantes</strong>, gardent la mémoire de leur passé, contredisent l'hypothèse d'indépendance des séries actuarielles standard. La physique correcte pour représenter cette mémoire est le calcul fractionnaire — la dérivée de Caputo d'ordre α = 2−2H. Le modèle homéodynamique utilise <strong>exactement cet opérateur</strong> : il n'est pas ajouté par exotisme, il est <strong>la seule mathématique compatible</strong> avec ce que les séries climatiques disent d'elles-mêmes.",
-  climTag:'autocorrélation d\'une série de température',
+  centerEq:'<b>H > 0,5 (épidémie)</b> ⟺ <b>α < 1 (opérateur de Caputo)</b>',
+  thesis:"Les séries épidémiologiques (incidences, hospitalisations, mortalité) présentent un exposant de Hurst H > 0,5 : elles sont <strong>persistantes</strong>, gardent la mémoire de leur passé — la vague d'aujourd'hui dépend de l'immunité laissée par les vagues précédentes, elle-même façonnée par leurs propres antécédents. Elles contredisent l'hypothèse d'indépendance des pandémies successives, si commode aux modèles actuariels. La physique correcte pour représenter cette mémoire immunitaire est le calcul fractionnaire — la dérivée de Caputo d'ordre α = 2−2H. Le modèle homéodynamique utilise <strong>exactement cet opérateur</strong> : il n'est pas ajouté par exotisme, il est <strong>la seule mathématique compatible</strong> avec ce que les séries épidémiques disent d'elles-mêmes.",
+  climTag:'autocorrélation d\'une série d\'incidence',
   costTag:"noyau de Mittag-Leffler (facteur d'actualisation)",
   climNum:['persistance','le passé pèse sur le présent'],
   costNum:['mémoire','le passé pèse sur le coût'],
   climCap:'décorrélation lente, en loi de puissance',
   costCap:'le lointain garde du poids (queue lourde)',
   stats:[
-    {c:'clim',n:'H ≈ 0,75',l:'exposant de Hurst'},
-    {c:'bridge',n:'α = 0,5',l:'ordre de Caputo'},
-    {c:'cost',n:'+27 %',l:'prime de mémoire'}
+    {c:'clim',n:'H > 0,5',l:'exposant de Hurst (à calibrer)'},
+    {c:'bridge',n:'α < 1',l:'ordre de Caputo'},
+    {c:'cost',n:'mémoire longue',l:'queue lourde héritée'}
   ],
   draw(t,c){
     const p=clamp(t/7500,0,1);
@@ -1018,19 +1074,19 @@ function drawMemory(ctx,w,h,p,c,side){
 /* ── 6 · ATTRACTEUR ── */
 STAGES.push({
   dur:REDUCED?10000:9500,
-  nodeN:'07', nodeClim:'Lorenz', nodeCost:'Attracteur R2', nodeEq:'λ_α > 0',
-  climTitle:'Attracteur de Lorenz',
+  nodeN:'07', nodeClim:'Chaos épidémique', nodeCost:'Attracteur R2', nodeEq:'λ_α > 0',
+  climTitle:'Sensibilité aux conditions initiales',
   costTitle:'Attracteur fractal du coût',
   centerEq:"<b>même signature</b> — λ > 0, trajectoires bornées mais chaotiques",
-  thesis:"Lorenz a montré en 1963 qu'un système atmosphérique simplifié, dès qu'il traverse un seuil, devient sensible aux conditions initiales : ses trajectoires se séparent, mais restent bornées sur un attracteur étrange de dimension fractale. Le modèle homéodynamique produit la <strong>même signature</strong> au franchissement du seuil R1→R2 : quatre trajectoires perturbées de δ=0,001 se séparent visiblement après la bascule. Fidèle aux formules du classeur (Φ⁻ = τ·CI), la dissipation hormétique peut ensuite ramener le système vers un régime borné une fois τ à son plafond — la structure ne diverge pas à l'infini, elle explore un attracteur.",
-  climTag:'projection (x,z) du système de Lorenz',
+  thesis:"La propagation épidémique présente une <strong>sensibilité extrême aux conditions initiales</strong> quand elle traverse le seuil critique de reproduction (R_eff proche de 1). Les modèles SIR avec forçage saisonnier, les dynamiques multi-souches, la théorie du branching en épidémiologie documentent tous des attracteurs étranges de dimension fractale. Un super-diffuseur peut bifurquer une trajectoire ; un variant émergeant d'un événement aléatoire peut faire diverger deux scénarios initialement identiques ; un patient-zéro non identifié peut décaler l'ensemble de la vague. Les trajectoires restent pourtant bornées — elles explorent un attracteur, elles ne divergent pas à l'infini. Le modèle homéodynamique produit la <strong>même signature</strong> au franchissement du seuil R1→R2 : quatre trajectoires perturbées de δ=0,001 se séparent visiblement après la bascule. La dissipation par capacité de soin peut ensuite ramener le système vers un régime borné.",
+  climTag:'projection (x,z) — système chaotique',
   costTag:'trajectoires CI(t) · récit courant',
   climNum:['',''],
   costNum:['',''],
   climCap:'',
   costCap:'',
   stats:[
-    {c:'clim',n:'d_H ≈ 2,06',l:'Hausdorff attracteur Lorenz'},
+    {c:'clim',n:'d_H fractal',l:'dimension attracteur'},
     {c:'bridge',n:'≡',l:'sensibilité aux C.I.'},
     {c:'cost',n:'d_m = 1+α',l:'dimension de mémoire'}
   ],
@@ -1252,8 +1308,8 @@ STAGES.push({
   nodeN:'08', nodeClim:'Alerte', nodeCost:'Alerte', nodeEq:'τ_L → ∞',
   climTitle:'Ralentissement critique',
   costTitle:'Le coût qui clignote',
-  centerEq:"<b>le système prévient avant le point de non-retour</b> — τ_L = 1/|λ| → ∞",
-  thesis:"Avant de basculer, un système dissipatif <strong>prévient</strong>. À l'approche d'un point de bascule, il met de plus en plus de temps à se remettre d'une perturbation — c'est le <strong>ralentissement critique</strong> (Scheffer, Lenton), mesurable par la montée de l'autocorrélation et de la variance. On le lit sur les carottes glaciaires avant les basculements passés. Le modèle homéodynamique <strong>hérite automatiquement</strong> de ce signal : quand λ_α → 0 (soit I → S), le temps de retour τ_L = 1/|λ_α| diverge. Un décideur peut donc surveiller la variance d'une trajectoire de coût comme un climatologue surveille celle d'une température. <strong>Un modèle linéaire ne clignote jamais avant de casser. Celui-ci, si — parce qu'il a la bonne physique.</strong>",
+  centerEq:"<b>le système prévient avant la saturation</b> — τ_L = 1/|λ| → ∞",
+  thesis:"Avant de basculer, un système épidémique <strong>prévient</strong>. À l'approche du seuil de saturation hospitalière, le temps de retour à l'équilibre s'allonge — c'est le <strong>ralentissement critique</strong> (Scheffer, Lenton), mesurable dans les séries d'incidence par la montée de l'autocorrélation et de la variance. On le lit sur les données wastewater (charge virale eaux usées), les délais de tri aux urgences, la variance des R_eff régionaux. Le modèle homéodynamique <strong>hérite automatiquement</strong> de ce signal : quand λ_α → 0 (soit I → S), le temps de retour τ_L = 1/|λ_α| diverge. Un décideur peut donc surveiller la variance d'une trajectoire de coût sanitaire comme un épidémiologiste surveille celle d'un R_eff. <strong>Un modèle linéaire ne clignote jamais avant de casser. Celui-ci, si — parce qu'il a la bonne biologie.</strong>",
   climTag:'perturbations d\u2019un système près du seuil',
   costTag:'perturbations du coût près du seuil',
   climNum:['',''],
@@ -1337,7 +1393,7 @@ function drawEWS(ctx,w,h,t,c,side){
   ctx.strokeStyle=c.text; ctx.lineWidth=1; ctx.stroke();
   // libellé du puits
   ctx.font='9.5px '+MONO; ctx.fillStyle=c.dim; ctx.textAlign='center';
-  ctx.fillText(isClim?'état climatique (perturbé)':'coût CI (perturbé)',w/2,padT+ih*0.9+22);
+  ctx.fillText(isClim?'état épidémique (perturbé)':'coût CI (perturbé)',w/2,padT+ih*0.9+22);
 
   // ── PANNEAU INFÉRIEUR : jauge τ_L et signal décideur ──
   const gy=h*0.66;
@@ -1400,11 +1456,11 @@ function drawEWS(ctx,w,h,t,c,side){
 /* ── 8 · SYNTHÈSE ── */
 STAGES.push({
   dur:REDUCED?11000:10000,
-  nodeN:'09', nodeClim:'Terre', nodeCost:'Firme', nodeEq:'même physique',
-  climTitle:'Structure dissipative — Terre',
+  nodeN:'09', nodeClim:'Épidémie', nodeCost:'Firme', nodeEq:'même biologie',
+  climTitle:'Structure dissipative — épidémie',
   costTitle:'Structure dissipative — organisation',
   centerEq:"<b>ce n'est pas une analogie · c'est une identité mathématique</b>",
-  thesis:"Huit propriétés physiques du système Terre — bilan énergétique, convection, bifurcation, hystérèse, mémoire longue, attracteur chaotique, <strong>signal d'alerte précoce</strong> et dissipation irréductible — se retrouvent point pour point dans CRISOnomics avec <strong>les mêmes équations, les mêmes constantes structurelles, les mêmes signatures dynamiques</strong>. Le modèle n'est pas un modèle actuariel augmenté d'options climatiques. C'est un <strong>modèle physique</strong> qui a pour objet le coût, et qui reconnaît que le coût, comme la Terre, ne peut se maintenir que hors équilibre — et qu'il prévient avant de basculer. Ce que la physique du climat calcule en W/m², CRISOnomics le calcule en euros — c'est la même énergie libre, comptée dans une autre unité.",
+  thesis:"Huit propriétés physiques et biologiques du système épidémique — bilan cas/soin, cycle SEIR, seuil de saturation, hystérèse civilisationnelle, mémoire immunitaire, chaos épidémique, <strong>signal d'alerte précoce</strong> et dissipation irréductible — se retrouvent point pour point dans le modèle du coût sanitaire avec <strong>les mêmes équations, les mêmes constantes structurelles, les mêmes signatures dynamiques</strong>. Le modèle n'est pas un modèle actuariel augmenté d'options pandémiques. C'est un <strong>modèle physique</strong> qui a pour objet le coût sanitaire, et qui reconnaît que le coût, comme l'épidémie, ne peut se maintenir que hors équilibre — et qu'il prévient avant de basculer. Ce que l'épidémiologie calcule en cas incidents, l'instanciation pandémie du théorème le calcule en euros — c'est la même énergie libre, comptée dans une autre unité.",
   climTag:'',
   costTag:'',
   climNum:['',''],
@@ -1418,14 +1474,14 @@ function drawSynth(ctx,w,h,t,c,side){
   ctx.clearRect(0,0,w,h);
   const isClim=side==='clim';
   const items=[
-    ['bilan énergétique','EEI','VAN(CI)'],
-    ['convection','Hadley','P\u209C ⟷ 𝓗'],
-    ['bifurcation','σ(ΔT−1,5°C)','σ(I−S)'],
-    ['hystérèse','albédo','w₂ᴹ'],
-    ['mémoire','H > 0,5','α = 2−2H'],
-    ['attracteur','Lorenz','R2 fractal'],
-    ['alerte précoce','slowing down','τ_L → ∞'],
-    ['irréductibilité','2° principe','τ_max = 67 %']
+    ['bilan cas/soin','déficit','VAN(CI)'],
+    ['cycle épidémique','SEIR','P\u209C ⟷ 𝓗'],
+    ['bifurcation','σ(I−saturation)','σ(I−S)'],
+    ['hystérèse civilisation.','société transformée','w₂ᴹ'],
+    ['mémoire immunitaire','H > 0,5','α = 2−2H'],
+    ['attracteur','chaos épidémique','R2 fractal'],
+    ['alerte précoce','wastewater, R_eff','τ_L → ∞'],
+    ['irréductibilité','soin borné','τ ≤ τ_max']
   ];
   const padX=24, padTop=30, rowH=(h-padTop-30)/items.length;
   const p=clamp(t/9000,0,1);
@@ -1448,14 +1504,14 @@ function drawSynth(ctx,w,h,t,c,side){
 STAGES.push({
   dur:REDUCED?12000:11000,
   nodeN:'10', nodeClim:'État du système', nodeCost:'Cours de bourse', nodeEq:'physique ⇒ prix',
-  climTitle:'État du système physique',
+  climTitle:'État du système épidémique',
   costTitle:'Le cours de bourse',
-  centerEq:"<b>la physique produit un signal financier observable</b>",
-  thesis:"Le régime que la physique du système prédit — inassurabilité, VAN explosive, verrouillage — ne reste pas invisible. Il se matérialise, tôt ou tard, dans un observable public : le <strong>cours de bourse</strong>. La vitesse de cette matérialisation dépend du <strong>déni de marché</strong> ; sa direction, elle, est prédite par le modèle. Point d'ancrage réel : Orange (EPA:ORA) à <strong>16,35 €</strong> le 22 juillet 2026 — un point observable, non contestable, à partir duquel on lit ce que la physique impose à chaque récit.",
-  climTag:'attracteur — régime physique',
-  costTag:'Euronext — projection illustrative',
+  centerEq:"<b>la biologie produit un signal financier observable</b>",
+  thesis:"Le régime que la dynamique épidémique prédit — inassurabilité sanitaire, VAN explosive, verrouillage civilisationnel — ne reste pas invisible. Il se matérialise dans <strong>plusieurs observables publics</strong> : la surmortalité, la saturation hospitalière, la dette publique de santé, et — plus tardivement mais lisiblement — le <strong>cours de bourse</strong> des secteurs exposés (aviation, tourisme, événementiel, immobilier commercial, assureurs santé). Ce panneau illustre l'observable boursier parce qu'il est public, daté et coté ; mais l'observable premier d'une pandémie reste la santé humaine. La vitesse de matérialisation boursière dépend du <strong>déni de marché</strong> ; sa direction, elle, est prédite par le modèle. Point d'ancrage illustratif : un titre exposé au risque sanitaire à <strong>16,35 €</strong> — un point observable à partir duquel on lit ce que la biologie impose à chaque récit.",
+  climTag:'attracteur — régime épidémique',
+  costTag:'bourse (parmi observables : mortalité, saturation, dette)',
   climNum:['',''],
-  costNum:['16,35 €','22/07/2026 — ancrage'],
+  costNum:['16,35 €','ancrage titre exposé'],
   climCap:'',
   costCap:'',
   stats:[
@@ -1469,17 +1525,17 @@ STAGES.push({
   },
   scenOverride:[
     { costTitle:'Le décrochage brutal',
-      centerEq:"<b>inaction reconnue ⇒ décote pleine</b>",
-      thesis:"<strong>Récit 1 — Inaction.</strong> Le marché finit par reconnaître ce que la physique disait depuis le début : l'inassurabilité est atteinte, la VAN est explosive, la firme sort du domaine où une prime finie peut couvrir ses pertes. Le cours <strong>décroche brutalement</strong> et se stabilise à un niveau significativement inférieur au point d'ancrage. Ce décrochage n'est pas une prédiction chiffrée — c'est la conséquence attendue de l'inassurabilité dans un marché informé." },
+      centerEq:"<b>inaction sanitaire reconnue ⇒ décote pleine</b>",
+      thesis:"<strong>Récit 1 — Inaction.</strong> Le marché finit par reconnaître ce que la biologie disait depuis le début : la saturation hospitalière est atteinte, la VAN sanitaire est explosive, l'entreprise exposée sort du domaine où une prime finie peut couvrir ses pertes. Le cours <strong>décroche brutalement</strong> et se stabilise à un niveau significativement inférieur au point d'ancrage. Ce décrochage n'est pas une prédiction chiffrée — c'est la conséquence attendue de l'inassurabilité dans un marché informé." },
     { costTitle:'La valorisation préservée',
       centerEq:"<b>action anticipée ⇒ cours stable</b>",
-      thesis:"<strong>Récit 2 — Action à temps.</strong> L'adaptation s'est activée avant le seuil : le régime R1 est préservé, l'assurabilité reste tenable, le marché ne voit pas de raison de sanctionner. Le cours reste <strong>stable</strong>, voire se valorise légèrement — les acteurs récompensent l'anticipation. Le triplet montant × timing × espace produit sa signature boursière : rester du bon côté du seuil ne coûte rien en bourse." },
+      thesis:"<strong>Récit 2 — Action à temps.</strong> La préparation sanitaire s'est activée avant le seuil : le régime R1 est préservé, l'assurabilité reste tenable, le marché ne voit pas de raison de sanctionner. Le cours reste <strong>stable</strong>, voire se valorise légèrement — les acteurs récompensent l'anticipation. Le triplet montant × timing × espace produit sa signature boursière : rester du bon côté du seuil ne coûte rien en bourse." },
     { costTitle:'La cicatrice boursière',
       centerEq:"<b>action tardive ⇒ décrochage partiel</b>",
-      thesis:"<strong>Récit 3 — Action tardive.</strong> L'entreprise a fini par agir — mais après la bascule. Le cours <strong>décroche</strong> au moment du franchissement, comme dans le récit 1, puis <strong>remonte partiellement</strong> quand l'action se déclenche. Il ne rattrape jamais le point d'ancrage : la VOP a une signature boursière. Même argent, même effort qu'au récit 2, mais dépensé du mauvais côté du seuil — le marché n'oublie pas." },
+      thesis:"<strong>Récit 3 — Action tardive.</strong> L'entreprise a fini par s'adapter — mais après la vague. Le cours <strong>décroche</strong> au moment du franchissement de la saturation hospitalière, comme dans le récit 1, puis <strong>remonte partiellement</strong> quand l'adaptation se déclenche. Il ne rattrape jamais le point d'ancrage : la VOP a une signature boursière. Même argent, même effort qu'au récit 2, mais dépensé du mauvais côté du seuil — le marché n'oublie pas." },
     { costTitle:'La sanction préventive',
-      centerEq:"<b>mal-action anticipée ⇒ sanction précoce</b>",
-      thesis:"<strong>Récit 4 — Mal-action.</strong> L'entreprise agit tôt, communique son plan — mais le marché, qui voit les effets induits (émissions supplémentaires, verrouillage, exposition aggravée), sanctionne <strong>avant même l'inaction reconnue</strong>. Le cours <strong>décroche précocement</strong> et plus profondément que dans le récit 1 : la mal-action n'est pas pardonnée comme l'inaction, parce qu'elle démontre une compréhension physique erronée du système. Le remède est pire que le mal, et le marché le sait — la signature boursière est un décrochage sans rebond." }
+      centerEq:"<b>mal-action sanitaire ⇒ sanction précoce</b>",
+      thesis:"<strong>Récit 4 — Mal-action.</strong> L'entreprise agit tôt, communique son plan de continuité — mais le marché, qui voit les effets induits (mesures disproportionnées, mauvais ciblage, défiance générée), sanctionne <strong>avant même l'inaction reconnue</strong>. Le cours <strong>décroche précocement</strong> et plus profondément que dans le récit 1 : la mal-action n'est pas pardonnée comme l'inaction, parce qu'elle démontre une compréhension biologique erronée du système. Le remède est pire que le mal, et le marché le sait — la signature boursière est un décrochage sans rebond." }
   ]
 });
 
@@ -1572,14 +1628,14 @@ function drawStockTraj(ctx,w,h,t,c){
   ctx.textAlign='right';
   ctx.fillText('16,35 €', marginL-6, anchorY+3);
   ctx.textAlign='left';
-  ctx.fillText('22/07/2026', marginL, h-marginB+15);
+  ctx.fillText('t = 0', marginL, h-marginB+15);
   ctx.textAlign='right';
-  ctx.fillText('horizon →', w-marginR, h-marginB+15);
+  ctx.fillText('horizon pandémie →', w-marginR, h-marginB+15);
 
   // note "projection illustrative"
   ctx.font='italic 9.5px '+MONO; ctx.fillStyle=c.dim;
   ctx.textAlign='right';
-  ctx.fillText('projection illustrative', w-marginR-2, marginT+2);
+  ctx.fillText('bourse secteur exposé · projection illustrative', w-marginR-2, marginT+2);
 
   // construction de la trajectoire selon le récit
   const N=140;
@@ -1688,12 +1744,12 @@ function drawStockTraj(ctx,w,h,t,c){
 STAGES.push({
   dur: REDUCED?14000:16000,
   nodeN:'11', nodeClim:'Réseau', nodeCost:'Multi-agents', nodeEq:'⇄',
-  climTitle:'Le monde est multi-agents',
-  costTitle:'Le coût devient systémique',
-  centerEq:"<b>résilience individuelle ≠ résilience systémique</b>",
-  thesis:"L'entité pilotée ne vit pas seule. Cinq voisines anonymes évoluent en parallèle, chacune avec sa propre trajectoire de récit. Elles sont reliées à la centrale et entre elles par des <strong>canaux physiques</strong> — eau, énergie, ressource, infrastructure — qui propagent les dégradations. En périphérie, des <strong>perturbations conventionnelles</strong> (choc politique, rupture de marché, choc géopolitique) peuvent injecter dans les canaux physiques, sans y appartenir. Le théorème gouverne la propagation, pas l'origine des chocs.<br><br><strong>L'action adéquate d'une entité ne garantit pas son assurabilité si son environnement systémique devient lui-même non résilient.</strong>",
-  climTag:'réseau physique — 6 nœuds, 6 canaux',
-  costTag:'CI(t) centrale · influencée par le système',
+  climTitle:'Le monde sanitaire est multi-agents',
+  costTitle:'Le coût sanitaire devient systémique',
+  centerEq:"<b>résilience nationale ≠ résilience systémique mondiale</b>",
+  thesis:"La nation pilotée ne vit pas seule. Cinq voisines anonymes évoluent en parallèle, chacune avec sa propre trajectoire de récit. Elles sont reliées à la nation-centrale et entre elles par des <strong>canaux physiques sanitaires</strong> — voyageurs, chaînes d'approvisionnement médical, coopération scientifique, données épidémiologiques partagées, populations frontalières, réservoirs animaux communs — qui propagent les dégradations. En périphérie, des <strong>perturbations conventionnelles</strong> (rétention d'informations par un pays, rupture d'approvisionnement en réactifs, décision politique de fermeture des frontières) peuvent injecter dans les canaux physiques, sans y appartenir. Le théorème gouverne la propagation, pas l'origine des chocs.<br><br><strong>L'action adéquate d'une nation ne garantit pas son assurabilité sanitaire si son environnement mondial devient lui-même non résilient.</strong>",
+  climTag:'réseau sanitaire — 6 nœuds, 6 canaux',
+  costTag:'CI(t) nation · influencée par le système',
   climNum:['',''],
   costNum:['',''],
   climCap:'',
@@ -1727,12 +1783,12 @@ function drawStage11Net(ctx,w,h,t,c){
     // Canaux physiques attribués : chaque canal a un type
     // 0=centrale, 1..5=voisines
     const canaux=[
-      {a:0,b:1,type:'eau',col:'#5eb1ff'},
-      {a:0,b:2,type:'énergie',col:'#ffcf5e'},
-      {a:0,b:3,type:'infrastr.',col:'#c8a2ff'},
-      {a:1,b:4,type:'ressource',col:'#7ddba6'},
-      {a:2,b:5,type:'eau',col:'#5eb1ff'},
-      {a:3,b:4,type:'énergie',col:'#ffcf5e'}
+      {a:0,b:1,type:'voyageurs',col:'#5eb1ff'},
+      {a:0,b:2,type:'appro médical',col:'#ffcf5e'},
+      {a:0,b:3,type:'coop scientif.',col:'#c8a2ff'},
+      {a:1,b:4,type:'frontière',col:'#7ddba6'},
+      {a:2,b:5,type:'données épidémio',col:'#ff8fa3'},
+      {a:3,b:4,type:'réservoirs anim.',col:'#ffb87c'}
     ];
     // État initial de chaque agent selon SCENARIO de la centrale
     // Chaque voisine a son propre récit initial (mix)
@@ -1742,9 +1798,9 @@ function drawStage11Net(ctx,w,h,t,c){
     const p=clamp(t/12000,0,1);
     // Chocs conventionnels aux temps 0.3, 0.55, 0.8 (proportion de p)
     const chocs=[
-      {t:0.28,cible:1,label:'choc politique'},
-      {t:0.52,cible:4,label:'rupture marché'},
-      {t:0.78,cible:2,label:'choc géopolitique'}
+      {t:0.28,cible:1,label:'fermeture frontières'},
+      {t:0.52,cible:4,label:'rupture réactifs'},
+      {t:0.78,cible:2,label:'rétention données'}
     ];
     // État de chaque agent : cost (0..1), regime (index dans recits)
     const etats=[];
