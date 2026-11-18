@@ -442,7 +442,7 @@ footer{background:var(--bg);border-top:1px solid var(--bord);padding:7px 20px;di
   <div class="actions">
     <button class="btn icon" id="theme-tg" onclick="toggleTheme()" title="Clair/sombre">☾</button>
     <button class="btn" onclick="openModal('m-sources')">Sources</button>
-    <button class="btn" onclick="runDemo()">Démo</button>
+    <button class="btn" id="demo-btn" onclick="toggleDemo()">Démo</button>
   </div>
 </header>
 
@@ -2068,13 +2068,23 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') document.que
 // DÉMO — ralentie pour lecture par décideur non-technique
 // ============================================================
 let demoRunning = false;
+let demoStop = false;
+function toggleDemo() {
+  if (demoRunning) { demoStop = true; } else { runDemo(); }
+}
 async function runDemo() {
   if (demoRunning) return;
   demoRunning = true;
+  demoStop = false;
   const badge = document.getElementById('demo-badge');
   badge.classList.add('on');
+  const btn = document.getElementById('demo-btn');
+  if (btn) btn.textContent = 'Stop';
   const text = document.getElementById('demo-text');
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const sleep = ms => new Promise((r, j) => {
+    const t = setInterval(() => { if (demoStop) { clearInterval(t); j(new Error('STOP')); } }, 100);
+    setTimeout(() => { clearInterval(t); r(); }, ms);
+  });
   try {
     goHome();
     text.textContent = 'Théorème de Filiation Naturelle : C(t) = F[X(t)]';
@@ -2131,12 +2141,20 @@ async function runDemo() {
     openRegime();
     text.textContent = 'Régime déjà là — la dette prudentielle cachée est empirique, sur climat et cyber';
     await sleep(6500);
+    openEcart();
+    text.textContent = 'Écart structurel — le coût morpho-adapté est de l\'ordre de N fois le coût standard';
+    await sleep(6000);
     goHome();
     text.textContent = 'Théorème de Filiation Naturelle — vérifié sur toutes ses conséquences';
     await sleep(4500);
+  } catch(e) {
+    // interruption utilisateur
   } finally {
     badge.classList.remove('on');
     demoRunning = false;
+    demoStop = false;
+    if (btn) btn.textContent = 'Démo';
+    goHome();
   }
 }
 
