@@ -330,6 +330,27 @@ main{overflow:hidden;position:relative}
 /* RÉGIME DÉJÀ LÀ */
 #view-regime{display:none;height:100%;grid-template-rows:auto 1fr;background:var(--bg)}
 #view-regime.active{display:grid}
+#view-ecart{display:none;height:100%;grid-template-rows:auto 1fr;background:var(--bg)}
+#view-ecart.active{display:grid}
+.ecart-viz{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:40px;max-width:900px;margin:30px auto 20px;padding:0 40px}
+.ecart-bar-group{display:flex;flex-direction:column;align-items:center;gap:8px}
+.ecart-bar{width:110px;border-radius:3px 3px 0 0}
+.ecart-bar.standard{height:50px;background:#c8ccd1;border:1.5px solid #5a6268}
+.ecart-bar.filial{height:220px;background:var(--dy);border:1.5px solid var(--dy)}
+.ecart-bar-label-top{font-family:'Roboto Mono',monospace;font-size:14px;font-weight:700;color:var(--t1)}
+.ecart-bar-label-bottom{font-size:13px;font-weight:600;color:var(--t1);margin-top:8px}
+.ecart-bar-sub{font-size:11px;font-style:italic;color:var(--t2)}
+.ecart-factor{display:flex;flex-direction:column;align-items:center;padding:0 20px}
+.ecart-factor-x{font-size:64px;font-weight:800;color:var(--dy);line-height:1}
+.ecart-factor-sub{font-size:12px;font-style:italic;color:var(--t2);margin-top:6px}
+.ecart-formula{text-align:center;padding:18px 0 25px;border-bottom:1px solid var(--bord);margin-bottom:25px}
+.ecart-formula-eq{font-family:'Roboto Mono',monospace;font-size:20px;font-weight:600;color:var(--t1);margin-bottom:6px}
+.ecart-formula-sub{font-size:12px;font-style:italic;color:var(--t2)}
+.ecart-impl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+.ecart-impl{background:var(--pan);border:1px solid var(--bord);border-radius:4px;padding:14px 16px;display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start}
+.ecart-impl-num{font-family:'Roboto Mono',monospace;font-size:14px;font-weight:700;color:var(--dy)}
+.ecart-impl-title{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:4px;grid-column:2}
+.ecart-impl-text{font-size:12px;color:var(--t2);grid-column:2;line-height:1.45}
 .regime-header{background:var(--panel);border-bottom:1px solid var(--bord);padding:11px 20px;display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center}
 .regime-title{display:flex;align-items:center;gap:12px}
 .regime-title .ic{font-size:22px}
@@ -455,8 +476,9 @@ footer{background:var(--bg);border-top:1px solid var(--bord);padding:7px 20px;di
       <div class="inst-card" onclick="openRecits()" style="border-color:var(--r2)"><span class="ico">🔭</span><div class="cat">Trichotomie</div><div class="n">Récits climat</div><div class="desc">Split-screen isomorphique. Quatre récits : inaction, à temps, tardive, mal-action.</div><div class="props">Triplet<br>montant × timing × espace</div></div>
       <div class="inst-card" onclick="openBoucle()" style="border-color:var(--mo)"><span class="ico">⟲</span><div class="cat">Fermeture causale</div><div class="n">Boucle d'action</div><div class="desc">L'action informée par le coût rétroagit sur le générateur. Cinq exemples empiriques.</div><div class="props">C(t) → Action → X(t)<br>théorème étendu</div></div>
       <div class="inst-card" onclick="openRegime()" style="border-color:var(--th)"><span class="ico">⏱</span><div class="cat">Diagnostic présent</div><div class="n">Régime déjà là</div><div class="desc">Dette prudentielle cachée — même mécanisme sur climat et cyber.</div><div class="props">Dette cachée<br>cas documentés</div></div>
+      <div class="inst-card" onclick="openEcart()" style="border-color:var(--dy)"><span class="ico">⇅</span><div class="cat">Écart structurel</div><div class="n">Facteur N</div><div class="desc">Le coût morpho-adapté est de l'ordre de N fois le coût standard. Pas une marge, un facteur.</div><div class="props">C_filial ≈ N × C_standard<br>N &gt; 1 structurellement</div></div>
     </div>
-    <div class="home-footer">Quatre <strong>substrats</strong> instanciés (Forme · Dynamique · Audit) et quatre <strong>vues transversales</strong> qui démontrent la portée générique du théorème.</div>
+    <div class="home-footer">Quatre <strong>substrats</strong> instanciés (Forme · Dynamique · Audit) et cinq <strong>vues transversales</strong> qui démontrent la portée générique du théorème.</div>
   </div>
 </div>
 
@@ -735,6 +757,73 @@ footer{background:var(--bg);border-top:1px solid var(--bord);padding:7px 20px;di
     </div>
     <div class="regime-summary">
       <strong>Diagnostic transversal.</strong> Le même mécanisme structurel opère sur les deux substrats : bascule R1→R2 physique documentée, comptabilisation prudentielle inchangée, dette qui migre silencieusement vers l'État. La <em>dette prudentielle cachée</em> n'est ni une fatalité climatique ni une exception cyber — c'est une <em>conséquence morphologique</em> qui traverse les substrats dès que le modèle est dysmorphique. C'est exactement ce que Caroline Hillairet nomme "corrélation extrême qui fragilise le fondement mutualisant de l'assurance" (Caisse des Dépôts, mars 2026).
+    </div>
+  </div>
+</div>
+
+<!-- ÉCART STRUCTUREL -->
+<div class="view" id="view-ecart">
+  <div class="regime-header">
+    <div class="regime-title"><span class="ic">⇅</span><div class="txt"><div class="cat">Écart structurel</div><div class="nm">Coût morpho-adapté ≈ N × Coût standard</div></div></div>
+    <div style="text-align:center;font-size:11px;color:var(--t2);font-style:italic">Le facteur N déplace la décision — l'anomalie en pourcentage ne la déplace pas</div>
+    <div style="width:80px"></div>
+  </div>
+  <div class="regime-body">
+    <div class="regime-intro">
+      <strong>L'écart entre la voie standard et la voie morpho-adaptée est un <em>facteur multiplicatif</em>, pas une marge de correction.</strong> Les débats actuels sur les anomalies des modèles standards (sous-estimation de X%, biais de Y%, erreurs de calibration) supposent implicitement que si l'anomalie était corrigée, la décision changerait. C'est faux dans beaucoup de cas pratiques : une anomalie en pourcentage se dissout dans les grandes sommes. Un facteur multiplicatif, lui, <em>change la nature de la décision</em>.
+    </div>
+
+    <!-- Visualisation centrale : 2 barres + ×N -->
+    <div class="ecart-viz">
+      <div class="ecart-bar-group">
+        <div class="ecart-bar-label-top">1</div>
+        <div class="ecart-bar standard"></div>
+        <div class="ecart-bar-label-bottom">C_standard</div>
+        <div class="ecart-bar-sub">voie actuarielle classique</div>
+      </div>
+      <div class="ecart-factor">
+        <div class="ecart-factor-x">× N</div>
+        <div class="ecart-factor-sub">facteur structurel</div>
+      </div>
+      <div class="ecart-bar-group">
+        <div class="ecart-bar-label-top">N</div>
+        <div class="ecart-bar filial"></div>
+        <div class="ecart-bar-label-bottom">C_filial</div>
+        <div class="ecart-bar-sub">voie morpho-adaptée</div>
+      </div>
+    </div>
+
+    <div class="ecart-formula">
+      <div class="ecart-formula-eq">C<sub>filial</sub> ≈ N × C<sub>standard</sub></div>
+      <div class="ecart-formula-sub">N &gt; 1 structurellement — la voie standard sous-évalue systématiquement</div>
+    </div>
+
+    <!-- Grille 4 implications -->
+    <div class="ecart-impl-grid">
+      <div class="ecart-impl">
+        <div class="ecart-impl-num">01</div>
+        <div class="ecart-impl-title">Sous-évaluation structurelle</div>
+        <div class="ecart-impl-text">Le coût réel du risque dérivé d'un système naturel est structurellement sous-évalué par la voie standard.</div>
+      </div>
+      <div class="ecart-impl">
+        <div class="ecart-impl-num">02</div>
+        <div class="ecart-impl-title">Arbitrages faussés</div>
+        <div class="ecart-impl-text">Les arbitrages économiques entre action et inaction sont faussés en faveur de l'inaction.</div>
+      </div>
+      <div class="ecart-impl">
+        <div class="ecart-impl-num">03</div>
+        <div class="ecart-impl-title">Capital prudentiel insuffisant</div>
+        <div class="ecart-impl-text">Le capital prudentiel mobilisé couvre une fraction du risque effectif.</div>
+      </div>
+      <div class="ecart-impl">
+        <div class="ecart-impl-num">04</div>
+        <div class="ecart-impl-title">Dette systémique cachée</div>
+        <div class="ecart-impl-text">La dette systémique cachée s'accumule au rythme du régime installé, jusqu'à devenir brutalement visible.</div>
+      </div>
+    </div>
+
+    <div class="regime-summary">
+      <strong>L'écart n'est pas une marge d'incertitude — c'est un décalage d'objet.</strong> Un modèle qui ne préserve pas les propriétés du générateur ne modélise pas ce générateur ; il modélise un autre objet qu'il appelle du même nom. Ce décalage ne se résorbe pas par calibration fine — il exige un changement de cadre. <em>On ne peut pas être responsable de ce qu'on ne mesure pas.</em>
     </div>
   </div>
 </div>
@@ -1574,6 +1663,7 @@ function openPolycrise() {
   document.getElementById('view-recits').classList.remove('active');
   document.getElementById('view-boucle').classList.remove('active');
   document.getElementById('view-regime').classList.remove('active');
+  document.getElementById('view-ecart').classList.remove('active');
   document.getElementById('view-polycrise').classList.add('active');
   document.getElementById('crumb-home').classList.remove('active');
   document.getElementById('crumb-inst').textContent = 'Polycrise couplée';
@@ -1684,6 +1774,7 @@ function openRecits() {
   document.getElementById('view-polycrise').classList.remove('active');
   document.getElementById('view-boucle').classList.remove('active');
   document.getElementById('view-regime').classList.remove('active');
+  document.getElementById('view-ecart').classList.remove('active');
   document.getElementById('view-recits').classList.add('active');
   document.getElementById('crumb-home').classList.remove('active');
   document.getElementById('crumb-inst').textContent = 'Récits climat';
@@ -1745,6 +1836,7 @@ function openBoucle() {
   document.getElementById('view-polycrise').classList.remove('active');
   document.getElementById('view-recits').classList.remove('active');
   document.getElementById('view-regime').classList.remove('active');
+  document.getElementById('view-ecart').classList.remove('active');
   document.getElementById('view-boucle').classList.add('active');
   document.getElementById('crumb-home').classList.remove('active');
   document.getElementById('crumb-inst').textContent = "Boucle d'action";
@@ -1793,6 +1885,7 @@ function openRegime() {
   document.getElementById('view-polycrise').classList.remove('active');
   document.getElementById('view-recits').classList.remove('active');
   document.getElementById('view-boucle').classList.remove('active');
+  document.getElementById('view-ecart').classList.remove('active');
   document.getElementById('view-regime').classList.add('active');
   document.getElementById('crumb-home').classList.remove('active');
   document.getElementById('crumb-inst').textContent = 'Régime déjà là';
@@ -1800,6 +1893,20 @@ function openRegime() {
   document.getElementById('sep-inst').style.display = 'inline';
   renderRegimeEvents(document.getElementById('regime-events-climat'), REGIME_EVENTS_CLIMAT);
   renderRegimeEvents(document.getElementById('regime-events-cyber'), REGIME_EVENTS_CYBER);
+}
+
+function openEcart() {
+  document.getElementById('view-home').classList.remove('active');
+  document.getElementById('view-instance').classList.remove('active');
+  document.getElementById('view-polycrise').classList.remove('active');
+  document.getElementById('view-recits').classList.remove('active');
+  document.getElementById('view-boucle').classList.remove('active');
+  document.getElementById('view-regime').classList.remove('active');
+  document.getElementById('view-ecart').classList.add('active');
+  document.getElementById('crumb-home').classList.remove('active');
+  document.getElementById('crumb-inst').textContent = 'Écart structurel';
+  document.getElementById('crumb-inst').style.display = 'inline';
+  document.getElementById('sep-inst').style.display = 'inline';
 }
 
 // ============================================================
@@ -1851,6 +1958,7 @@ function goHome() {
   document.getElementById('view-recits').classList.remove('active');
   document.getElementById('view-boucle').classList.remove('active');
   document.getElementById('view-regime').classList.remove('active');
+  document.getElementById('view-ecart').classList.remove('active');
   document.getElementById('crumb-home').classList.add('active');
   document.getElementById('crumb-inst').style.display = 'none';
   document.getElementById('sep-inst').style.display = 'none';
@@ -1886,6 +1994,7 @@ function openInstance(id) {
   document.getElementById('view-recits').classList.remove('active');
   document.getElementById('view-boucle').classList.remove('active');
   document.getElementById('view-regime').classList.remove('active');
+  document.getElementById('view-ecart').classList.remove('active');
   document.getElementById('view-instance').classList.add('active');
 
   // S'assurer que tab-forme est actif AVANT de construire les charts (sinon canvas ont dimension 0)
